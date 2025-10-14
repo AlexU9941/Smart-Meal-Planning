@@ -1,3 +1,4 @@
+package smart_meal_planner;
 class LogOutController {
     public void handleLogOut() {
         // Logic to log out the user
