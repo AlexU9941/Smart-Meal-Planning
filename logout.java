@@ -1,6 +1,10 @@
 class LogOutController {
+    private boolean isLoggedIn;
+
     public void handleLogOut() {
-        // Logic to log out the user
+
+        isLoggedIn = false; // Simulate successful logout
+
         System.out.println("User logged out successfully.");
     }
 
