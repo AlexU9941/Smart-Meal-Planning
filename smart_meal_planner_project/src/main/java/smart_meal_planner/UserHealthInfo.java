@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class UserHealthInfo {
+class UserHealthInfo extends User{
     private int userId;
     private int heightFt;
     private int heightIn;
