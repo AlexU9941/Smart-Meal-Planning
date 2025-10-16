@@ -24,7 +24,8 @@ export default function CreateAccountForm() {
     }
 
     try {
-      const res = await axios.post('/api/create-account', formData);
+      //const res = await axios.post('/api/create-account', formData);
+      const res = await axios.post('http://localhost:8080/api/create-account', formData);
       setMessage('Account created successfully!');
       // Redirect to login
     } catch (err) {

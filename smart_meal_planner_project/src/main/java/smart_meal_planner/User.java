@@ -1,3 +1,4 @@
+package smart_meal_planner;
 import java.util.Date;
 import java.util.UUID;
 
@@ -20,7 +21,9 @@ public class User {
 
     private String salt; //used in password hashing. want to store for verification purposes
 
-    User(String email, String username, String password)
+    public User() {} // Needed for Spring to map JSON
+
+    public User(String email, String username, String password)
     {
         this.email = email; 
         this.username = username; 
