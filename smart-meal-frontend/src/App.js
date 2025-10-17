@@ -1,10 +1,9 @@
-import React from 'react';
-import './App.css';
-import CreateAccountForm from './CreateAccountForm';
+import React from "react";
+import CreateAccountForm from "./CreateAccountForm";
 
 function App() {
   return (
-    <div className="App" style={{ padding: '2rem' }}>
+    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
       <h1>Smart Meal Planner</h1>
       <CreateAccountForm />
     </div>
