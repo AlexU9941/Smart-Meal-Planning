@@ -1,5 +1,12 @@
-import org.springframework.http.ResponseEntity;
+package smart_meal_planner.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
+import smart_meal_planner.model.User;
+import smart_meal_planner.service.DatabaseCommunicator;
 
 @RestController
 @RequestMapping("/healthinfo")
@@ -17,7 +24,7 @@ class HealthInfoController{
         }
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/{uid}")
     public ResponseEntity<String> updateHealthInfo(@PathVariable int userId, @RequestBody UserHealthInfo info) {
         uploadManager.updateHealthInfo(userId, info);
         if (!uploadManager.isValid(info)) {
@@ -26,13 +33,13 @@ class HealthInfoController{
         return ResponseEntity.ok("Health info updated successfully.");
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{uid}")
     public ResponseEntity<UserHealthInfo> getHealthInfo(@PathVariable int userId) {
         UserHealthInfo info = HealthInfoUploadManager.getHealthInfo(userId);
         return ResponseEntity.ok(info);
     }
    
-   @DeleteMapping("/{userId}") 
+   @DeleteMapping("/{uid}") 
    public ResponseEntity<String> deleteHealthInfo(@PathVariable int userId) {
        uploadManager.deleteHealthInfo(userId);
        return ResponseEntity.ok("Health info deleted successfully.");

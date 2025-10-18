@@ -1,4 +1,8 @@
 class HealthInfoUploadManager {
+
+    @Autowired
+    private DatabaseCommunicator dbCommunicator;
+
     // UserHealthInfo -> void
     // Upload the health info to the database. Check for valid data before uploading.
     public void uploadHealthInfo(UserHealthInfo info) {
