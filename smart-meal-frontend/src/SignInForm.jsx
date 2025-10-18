@@ -18,7 +18,7 @@ export default function SignInForm() {
     }
 
     try {
-      const res = await axios.post('/api/sign-in', formData);
+      const res = await axios.post('http://localhost:8080/api/sign-in', formData);
       setMessage('Signed in successfully!');
       // Redirect to home page
     } catch (err) {
