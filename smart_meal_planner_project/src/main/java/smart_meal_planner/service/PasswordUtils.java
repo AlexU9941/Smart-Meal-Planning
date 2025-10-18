@@ -1,4 +1,4 @@
-package smart_meal_planner;
+package smart_meal_planner.service;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;

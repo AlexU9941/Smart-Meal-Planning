@@ -1,4 +1,2 @@
 smart_meal_planner\LogOutController.class
-smart_meal_planner\User.class
-smart_meal_planner\PasswordUtils.class
 smart_meal_planner\controller\CreateAccountController.class
