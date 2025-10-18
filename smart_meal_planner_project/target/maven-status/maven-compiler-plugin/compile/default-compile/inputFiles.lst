@@ -1,5 +1,7 @@
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\CreateAccountController.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\logout.java
-C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\PasswordUtils.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\User.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\DatabaseCommunicator.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\PasswordUtils.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\SmartMealPlannerApplication.java
-C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\User.java
