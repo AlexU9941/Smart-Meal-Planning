@@ -67,5 +67,30 @@ public class DatabaseCommunicator{
         return userRepository.save(user);
     }
 
+
+    public User authenticateUser(String username, String password)
+    {
+       // System.out.println("Authenticating user: " + username); //TEMP LOG
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+        throw new IllegalArgumentException("Username and password cannot be empty.");
+        }
+
+        User user = userRepository.findByUsername(username); 
+       // System.out.println("Found user: " + user); //TEMP LOG
+        if (user == null)
+        {
+            throw new RuntimeException("User not found with username: " + username);
+        }
+
+        String hashedInput = PasswordUtils.hashPassword(password, user.getSalt());
+
+        //Compare hashes
+        if (!hashedInput.equals(user.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        return user; 
+
+    }
 }
 

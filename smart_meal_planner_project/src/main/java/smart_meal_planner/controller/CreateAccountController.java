@@ -11,7 +11,7 @@ import smart_meal_planner.service.DatabaseCommunicator;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000") // allow your React dev server to connect
+@CrossOrigin(origins = "http://localhost:3000") // allow React dev server to connect
 public class CreateAccountController {
     // private String attemptUsername; 
     // private String attemptPassword;
@@ -42,7 +42,7 @@ public class CreateAccountController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         } catch (Exception e) {
             // Unexpected issue
-            e.printStackTrace();
+            //e.printStackTrace();
            return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
