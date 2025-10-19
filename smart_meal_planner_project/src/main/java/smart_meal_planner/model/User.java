@@ -85,6 +85,11 @@ public class User {
     {
         return password; 
     }
+
+    public String getSalt()
+    {
+        return salt; 
+    }
     
     /*SETTERS*/
     //called when the User changes their personal/account information in the application
