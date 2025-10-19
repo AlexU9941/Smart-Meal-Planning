@@ -43,7 +43,7 @@ public class SignInController
     }
 
     //may need to rework later
-    @PostMapping("/logout")
+    @PostMapping("/log-out")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         request.getSession().invalidate();
         return ResponseEntity.ok("Logged out");
