@@ -29,8 +29,6 @@ export default function UpdateHealthInfo({ apiBase = "" }) {
                 body: JSON.stringify({
                     height: form.height,
                     weight: form.weight,
-                    age: form.age,
-                    sex: form.sex,
                     activityLevel: form.activityLevel,
                     allergies: form.allergies
                 })
@@ -56,11 +54,9 @@ export default function UpdateHealthInfo({ apiBase = "" }) {
             <div style={rowStyle}>
                 <input name="height" placeholder="Height" value={form.height} onChange={onChange} style={inputStyle} />
                 <input name="weight" placeholder="Weight" value={form.weight} onChange={onChange} style={inputStyle} />
-                <input name="age" placeholder="Age" value={form.age} onChange={onChange} style={inputStyle} />
             </div>
 
             <div style={rowStyle}>
-                <input name="sex" placeholder="Sex" value={form.sex} onChange={onChange} style={inputStyle} />
                 <select name="activityLevel" value={form.activityLevel} onChange={onChange} style={inputStyle}>
                     <option value="">Select activity level</option>
                     <option value="sedentary">Sedentary</option>

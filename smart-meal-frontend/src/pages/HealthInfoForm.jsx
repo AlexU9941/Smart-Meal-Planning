@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default function HealthInfoForm() {
   const [formData, setFormData] = useState({
-    height: '', weight: '', age: '', sex: '', activity: '', allergies: ''
+    heightFt: '', heightIn: '', weight: '', sex: '', activity: '', allergies: ''
   });
   const [message, setMessage] = useState('');
 
@@ -22,10 +22,16 @@ export default function HealthInfoForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input name="height" placeholder="Height" onChange={handleChange} />
-      <input name="weight" placeholder="Weight" onChange={handleChange} />
-      <input name="age" placeholder="Age" onChange={handleChange} />
-      <input name="sex" placeholder="Sex" onChange={handleChange} />
+      <input name="heightFt" placeholder="Height (Feet)" onChange={handleChange} />
+      <input name="heightIn" placeholder="Height (Inches)" onChange={handleChange} />
+      <input name="weight" placeholder="Weight (lbs)" onChange={handleChange} />
+      <input name="dob" type="date" placeholder="Date of Birth" />
+      <select name="sex" onChange={handleChange}>
+        <option value="">Select sex</option>
+        <option value="male">male</option>
+        <option value="female">female</option>
+        <option value="other">prefer not to say</option>
+      </select>
       <select name="activity" onChange={handleChange}>
         <option value="">Select activity level</option>
         <option value="light">Light</option>
