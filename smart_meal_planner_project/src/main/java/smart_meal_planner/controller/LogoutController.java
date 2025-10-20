@@ -7,8 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
-public class AuthController {
-
+public class LogoutController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         request.getSession().invalidate();

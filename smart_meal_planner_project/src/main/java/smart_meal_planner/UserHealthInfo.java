@@ -18,20 +18,20 @@ import java.util.ArrayList;
     @Column(nullable=false)
     private int weight;
 
-    @Column(nullable=false, length=10)
+    @Column(nullable=false)
     private String sex;
 
-    @Column(nullable=false, length=50)
+    @Column(nullable=false)
     private String weeklyActivityLevel;
 
-    @Column(legnth=100)
+    @Column
     private List<String> allergies;
     
     // Constructor to initialize all fields
     public UserHealthInfo() {}
 
     // Getter to return the values of each field
-    public int getUserId() {
+    public long getUID() {
         return uid;
     }
     public int getHeightFt() {
@@ -54,8 +54,8 @@ import java.util.ArrayList;
     }
 
     // Setters to set the values of each field
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserId(long uid) {
+        this.uid = uid;
     }
     public void setHeightFt(int heightFt) {
         this.heightFt = heightFt;
