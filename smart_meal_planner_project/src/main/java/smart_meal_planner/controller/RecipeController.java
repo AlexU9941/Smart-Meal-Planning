@@ -1,6 +1,6 @@
 package smart_meal_planner.controller;
+import smart_meal_planner.model.MealPlan;
 
-import java.util.List;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import smart_meal_planner.service.RecipeSearchRequest;
 import smart_meal_planner.service.RecipeService;
+import smart_meal_planner.model.MealPlan; 
 
 @RestController
 public class RecipeController {
@@ -20,7 +21,7 @@ public class RecipeController {
     //Will need to update to match RecipeService method signature
     //or create multiple endpoints for different search criteria
     @PostMapping("/recipes")
-    public String getRecipes(@RequestBody RecipeSearchRequest request) {
+    public MealPlan getRecipes(@RequestBody RecipeSearchRequest request) {
         return recipeService.findRecipeByIngredients(request.getIngredients(), request.getMaxPrice());
     }
 
