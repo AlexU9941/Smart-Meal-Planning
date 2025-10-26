@@ -22,10 +22,11 @@ public class SmartMealPlannerApplication {
 
         MealPlan plan = recipeService.findRecipeByIngredients(
             Arrays.asList("chicken", "rice", "broccoli"),
-            500.0
+            //Arrays.asList("chicken"),
+            1000.0
         );
 
-        plan.printMealPlan();
+        System.out.println(plan.printMealPlan());
 
 
     }

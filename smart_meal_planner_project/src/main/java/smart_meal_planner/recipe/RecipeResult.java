@@ -1,6 +1,10 @@
 package smart_meal_planner.recipe;
 
+import java.util.List;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RecipeResult {
@@ -17,6 +21,27 @@ public class RecipeResult {
     private double pricePerServing;
 
     private String[] dishTypes; 
+
+    @JsonProperty("extendedIngredients")
+    private List<Ingredient> extendedIngredients; 
+
+
+    private int score; 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RecipeResult that = (RecipeResult) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+
 
     public int getId() {
         return id;
@@ -58,7 +83,11 @@ public class RecipeResult {
         return dishTypes;
     }
 
-  
+    public int getScore() { return score; }
+
+    public List<Ingredient> getExtendedIngredients() {
+        return extendedIngredients;
+    }
 
     public void setId(int id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
@@ -70,4 +99,7 @@ public class RecipeResult {
     public void setServings(double servings) { this.servings = servings; }
     public void setPricePerServing(double pricePerServing) { this.pricePerServing = pricePerServing; }
     public void setDishTypes(String[] dishTypes) { this.dishTypes = dishTypes; }
+    public void setScore(int score) { this.score = score; }
+    public void setExtendedIngredients(List<Ingredient> extendedIngredients) {this.extendedIngredients = extendedIngredients; }
+    
 }
