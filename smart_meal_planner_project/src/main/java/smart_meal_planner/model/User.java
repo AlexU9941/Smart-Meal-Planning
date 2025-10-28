@@ -1,25 +1,47 @@
-package smart_meal_planner;
+package smart_meal_planner.model;
 import java.util.Date;
 import java.util.UUID;
+import jakarta.persistence.*;
+import smart_meal_planner.service.PasswordUtils;
 
-
+@Entity
+@Table(name = "user")
 public class User {
-    private int userID; //MOST LIKElY will change to be database primary key
-    private static int idCounter = 1; 
-    private String email;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long UID;  
+    
+    //private static int idCounter = 1; 
+    
+    @Column(nullable = false, unique = true, length = 32)
     private String username;
+    
+    @Column(name = "user_password", nullable = false, length = 512)
     private String password; //stores hashed password
+
+    @Column(nullable = false, unique = true, length = 255)
+    private String email;
+    
+    @Column(length = 32)
     private String fname; 
+   
+    @Column(length = 32)
     private String lname;  
+    
+    @Temporal(TemporalType.DATE)
     private Date dob; 
-    private String sex; 
+    
+    @Column(length = 512)
+    private String salt; //used in password hashing. want to store for verification purposes
+
     private boolean accountEnabled; 
 
     private String sessionID; 
     private static int sessionCounter = 1; 
     private boolean isActive; 
 
-    private String salt; //used in password hashing. want to store for verification purposes
+
+
 
     public User() {} // Needed for Spring to map JSON
 
@@ -27,14 +49,15 @@ public class User {
     {
         this.email = email; 
         this.username = username; 
+        this.password = password; 
         //this.password = password; 
         
-        salt = PasswordUtils.generateSalt(); 
-        String hashedPassword = PasswordUtils.hashPassword(password, salt);
-        this.password = hashedPassword; 
+       // salt = PasswordUtils.generateSalt(); 
+        //String hashedPassword = PasswordUtils.hashPassword(password, salt);
+        //this.password = hashedPassword; 
 
        //TEMP - will probably change to be database Primary Key 
-       userID = idCounter++; //set userId to idCounter value then increment for uniqueness
+       //userID = idCounter++; //set userId to idCounter value then increment for uniqueness
     }
 
     /*GETTERS */
@@ -58,8 +81,14 @@ public class User {
         return dob;
     }
 
-    public String getSex() {
-        return sex;
+    public String getPassword()
+    {
+        return password; 
+    }
+
+    public String getSalt()
+    {
+        return salt; 
     }
     
     /*SETTERS*/
@@ -74,8 +103,8 @@ public class User {
     }
 
     public void setPassword(String password) {
-        String hashedPassword = PasswordUtils.hashPassword(password, salt);
-        this.password = hashedPassword;
+        //String hashedPassword = PasswordUtils.hashPassword(password, salt);
+        this.password = password;
     }
 
     public void setFname(String fname) {
@@ -90,10 +119,16 @@ public class User {
         this.dob = dob;
     }
 
-    public void setSex(String sex)
+    public void setSalt(String salt)
     {
-        this.sex=sex; 
+        this.salt = salt; 
     }
+
+
+    // public void setSex(String sex)
+    // {
+    //     this.sex=sex; 
+    // }
 
 
     //called whenever user logs in. 
