@@ -1,7 +1,26 @@
 C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\CreateAccountController.java
+<<<<<<< Updated upstream
 C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\LogoutController.java
 C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\logout.java
 C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\PasswordUtils.java
 C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\SmartMealPlannerApplication.java
 C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\User.java
 C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\UserHealthInfo.java
+=======
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\RecipeController.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\SignInController.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\logout.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\MealDay.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\MealPlan.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\User.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\Ingredient.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeResult.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeSearchResponse.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserRepository.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\DatabaseCommunicator.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\PasswordUtils.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeSearchRequest.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeService.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\WebClientConfig.java
+C:\Users\abbyh\OneDrive\Git\Demo\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\SmartMealPlannerApplication.java
+>>>>>>> Stashed changes
