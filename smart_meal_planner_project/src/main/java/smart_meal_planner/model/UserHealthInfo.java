@@ -1,4 +1,5 @@
 package smart_meal_planner;
+import java.io.*;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
