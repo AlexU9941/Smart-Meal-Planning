@@ -1,6 +1,4 @@
-package smart_meal_planner;
-
-import smart_meal_planner.model.User;
+package smart_meal_planner.model;
 import jakarta.persistence.*;
 import java.util.List;
 
