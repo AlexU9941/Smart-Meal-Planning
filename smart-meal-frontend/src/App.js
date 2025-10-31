@@ -1,6 +1,6 @@
 import React from "react";
-import CreateAccountForm from "./CreateAccountForm";
-import SignInForm from "./SignInForm";
+import CreateAccountForm from "./pages/CreateAccountForm";
+import SignInForm from "./pages/SignInForm";
 
 function App() {
   return (
