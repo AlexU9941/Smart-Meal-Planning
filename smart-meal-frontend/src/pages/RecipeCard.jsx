@@ -4,7 +4,7 @@ import axios from 'axios';
 const RecipeCard = ({ recipe, onFavorite }) => {
   const handleFavorite = async () => {
     try {
-      await axios.post('/api/favorites', { recipeId: recipe.id });
+      await axios.post('http://localhost:8080/api/favorites', { recipeId: recipe.id });
       onFavorite(recipe);
       alert('Recipe saved to favorites!');
     } catch (error) {

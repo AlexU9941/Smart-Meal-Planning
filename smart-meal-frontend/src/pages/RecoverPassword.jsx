@@ -8,7 +8,7 @@ const RecoverPassword = () => {
 
   const handleRecover = async () => {
     try {
-      const response = await axios.post('/api/recover-password', { email, username });
+      const response = await axios.post('http://localhost:8080/api/recover-password', { email, username });
       setMessage(response.data.message);
     } catch (error) {
       setMessage(error.response?.data?.error || 'Connection failed. Try again later.');

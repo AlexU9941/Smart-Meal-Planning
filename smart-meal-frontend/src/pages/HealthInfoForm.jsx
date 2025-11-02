@@ -10,15 +10,39 @@ export default function HealthInfoForm() {
 
   const handleChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
+  //   try {
+  //     await axios.post('http://localhost:8080/api/health-info', formData);
+  //     setMessage('Health information saved.');
+  //   } catch (err) {
+  //     console.error(err);
+  //     setMessage('Database connection failed.');
+  //   }
+  // };
   const handleSubmit = async e => {
     e.preventDefault();
+
     try {
-      await axios.post('/api/health-info', formData);
+      // Split allergies by comma if non-empty, else send empty array
+      const allergiesList = formData.allergies
+        ? formData.allergies.split(',').map(a => a.trim())
+        : [];
+
+      //const uid = localStorage.getItem('uid');
+      const email = localStorage.getItem("email") 
+      await axios.post('http://localhost:8080/api/health-info', {
+        ...formData,
+        allergies: allergiesList,
+        email
+      });
+
       setMessage('Health information saved.');
     } catch (err) {
-      setMessage('Database connection failed.');
+      console.error(err);
+      setMessage('Failed to save health information.');
     }
-  };
+};
 
   return (
     <form onSubmit={handleSubmit}>

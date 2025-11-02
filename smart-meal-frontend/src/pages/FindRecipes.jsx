@@ -14,7 +14,7 @@ const FindRecipes = () => {
     }
 
     try {
-      const response = await axios.get('/api/recipes/search', {
+      const response = await axios.get('http://localhost:8080/api/recipes/search', {
         params: { name, budget }
       });
 

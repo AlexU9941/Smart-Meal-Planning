@@ -5,7 +5,7 @@ const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/favorites')
+    axios.get('http://localhost:8080/api/favorites')
       .then(res => setFavorites(res.data))
       .catch(() => alert('Failed to load favorites.'));
   }, []);

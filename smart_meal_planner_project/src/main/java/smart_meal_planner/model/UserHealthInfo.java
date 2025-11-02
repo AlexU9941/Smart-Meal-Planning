@@ -4,9 +4,18 @@ import java.util.List;
 
 @Entity
 @Table(name = "User_Health_Info")
-@DiscriminatorValue("HEALTH_INFO")
-@PrimaryKeyJoinColumn(name = "UID")
-public class UserHealthInfo extends User {
+//@DiscriminatorValue("HEALTH_INFO")
+// @PrimaryKeyJoinColumn(name = "UID")
+//public class UserHealthInfo extends User {  //don't extend user 
+public class UserHealthInfo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long uid;
+
+    @OneToOne
+    @JoinColumn(name = "uid", referencedColumnName = "uid")
+    private User user;
 
     @Column(nullable = false)
     private int heightFt;
@@ -31,6 +40,10 @@ public class UserHealthInfo extends User {
     @Column(name = "allergy")
     private List<String> allergies;
 
+    //connect to user via email
+    @Column(nullable = false, unique = true, length = 255)
+    private String email;
+
     public UserHealthInfo() {}
 
     // Getters
@@ -40,6 +53,9 @@ public class UserHealthInfo extends User {
     public String getSex() { return sex; }
     public String getWeeklyActivityLevel() { return weeklyActivityLevel; }
     public List<String> getAllergies() { return allergies; }
+    public User getUser() {return user; }
+    public String getEmail() {return email;} 
+
 
     // Setters
     public void setHeightFt(int heightFt) { this.heightFt = heightFt; }
@@ -48,4 +64,6 @@ public class UserHealthInfo extends User {
     public void setSex(String sex) { this.sex = sex; }
     public void setWeeklyActivityLevel(String weeklyActivityLevel) { this.weeklyActivityLevel = weeklyActivityLevel; }
     public void setAllergies(List<String> allergies) { this.allergies = allergies; }
+    public void setUser(User user) {this.user = user;  }
+    public void setEmail(String email) {this.email = email;}
 }

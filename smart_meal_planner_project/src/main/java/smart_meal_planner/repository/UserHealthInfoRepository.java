@@ -8,6 +8,7 @@ import smart_meal_planner.model.UserHealthInfo;
 
 @Repository
 public interface UserHealthInfoRepository extends JpaRepository<UserHealthInfo, Long> {
-    UserHealthInfo findByUID(Long uid);
+    //UserHealthInfo findByUID(Long uid);
+    UserHealthInfo findByUser_UID(Long UID);
     UserHealthInfo findByEmail(String email); 
 }
