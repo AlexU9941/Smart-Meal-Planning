@@ -36,22 +36,24 @@ public class UserHealthInfoController {
     //     }
     // }
 
-    @PostMapping("/health-info")
-    public ResponseEntity<?> addHealthInfo(@RequestBody UserHealthInfo dto) {
-        User user = userRepository.findByEmail(dto.getEmail());
-        if (user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
+    //@PostMapping("/health-info")
+    @PostMapping
+    public ResponseEntity<?> addHealthInfo(@RequestBody UserHealthInfo info) {
+        // Find user by email
+        User user = userRepository.findByEmail(info.getEmail());
 
-        UserHealthInfo info = new UserHealthInfo();
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User not found for email: " + info.getEmail());
+        }
+
+        // Link the user to this health info
         info.setUser(user);
-        info.setHeightFt(dto.getHeightFt());
-        info.setHeightIn(dto.getHeightIn());
-        info.setWeight(dto.getWeight());
-        info.setSex(dto.getSex());
-        info.setWeeklyActivityLevel(dto.getWeeklyActivityLevel());
-        info.setAllergies(dto.getAllergies());
 
+        // Save it
         service.saveUserHealthInfo(info);
-        return ResponseEntity.ok("Health info saved");
+
+        return ResponseEntity.ok("Health info saved successfully");
     }
 
 

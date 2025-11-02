@@ -4,7 +4,13 @@ import axios from 'axios';
 
 export default function HealthInfoForm() {
   const [formData, setFormData] = useState({
-    heightFt: '', heightIn: '', weight: '', sex: '', activity: '', allergies: ''
+    heightFt: '',
+    heightIn: '',
+    weight: '',
+    sex: '',
+    weeklyActivityLevel: '',
+    allergies: '',
+    dateOfBirth: ''
   });
   const [message, setMessage] = useState('');
 
@@ -29,13 +35,26 @@ export default function HealthInfoForm() {
         ? formData.allergies.split(',').map(a => a.trim())
         : [];
 
+        console.log("Sending email:", localStorage.getItem("email"));
       //const uid = localStorage.getItem('uid');
-      const email = localStorage.getItem("email") 
-      await axios.post('http://localhost:8080/api/health-info', {
-        ...formData,
-        allergies: allergiesList,
-        email
-      });
+      //const email = localStorage.getItem("email") 
+      // await axios.post('http://localhost:8080/api/health-info', {
+      //   ...formData,
+      //   allergies: allergiesList,
+      //   email
+      // });
+
+      await axios.post("http://localhost:8080/api/health-info", {
+      heightFt: formData.heightFt,
+      heightIn: formData.heightIn,
+      weight: formData.weight,
+      sex: formData.sex,
+      weeklyActivityLevel: formData.weeklyActivityLevel,
+      allergies: allergiesList,
+      dateOfBirth: formData.dateOfBirth,
+      email: localStorage.getItem("email")
+    });
+
 
       setMessage('Health information saved.');
     } catch (err) {
@@ -49,14 +68,14 @@ export default function HealthInfoForm() {
       <input name="heightFt" placeholder="Height (Feet)" onChange={handleChange} />
       <input name="heightIn" placeholder="Height (Inches)" onChange={handleChange} />
       <input name="weight" placeholder="Weight (lbs)" onChange={handleChange} />
-      <input name="dob" type="date" placeholder="Date of Birth" />
+      <input name="dateOfBirth" type="date" placeholder="Date of Birth" onChange={handleChange} />
       <select name="sex" onChange={handleChange}>
         <option value="">Select sex</option>
         <option value="male">male</option>
         <option value="female">female</option>
         <option value="other">prefer not to say</option>
       </select>
-      <select name="activity" onChange={handleChange}>
+      <select name="weeklyActivityLevel" onChange={handleChange}>
         <option value="">Select activity level</option>
         <option value="light">Light</option>
         <option value="moderate">Moderate</option>

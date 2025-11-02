@@ -20,7 +20,17 @@ export default function SignInForm() {
     try {
       const res = await axios.post('http://localhost:8080/api/sign-in', formData);
       const user = res.data;   // contains UID
-      localStorage.setItem('uid', user.uid);  // store UID for later use
+
+      console.log("Response data:", user); // See exactly what comes back
+
+
+      if (user.email) {
+      localStorage.setItem('email', user.email);
+      console.log("Saving email:", user.email);
+      } else {
+        console.warn("⚠️ No email returned from backend!");
+      }
+
       setMessage('Signed in successfully!');
       // Redirect to home page
     } catch (err) {

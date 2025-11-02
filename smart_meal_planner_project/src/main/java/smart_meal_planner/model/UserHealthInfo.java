@@ -1,5 +1,7 @@
 package smart_meal_planner.model;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -10,11 +12,12 @@ import java.util.List;
 public class UserHealthInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
     @OneToOne
-    @JoinColumn(name = "uid", referencedColumnName = "uid")
+    @MapsId // tells Hibernate to use the User's ID as this entity's ID
+    @JoinColumn(name = "uid")
     private User user;
 
     @Column(nullable = false)
@@ -40,6 +43,9 @@ public class UserHealthInfo {
     @Column(name = "allergy")
     private List<String> allergies;
 
+    @Column(nullable = false)
+    private LocalDate dateOfBirth;
+
     //connect to user via email
     @Column(nullable = false, unique = true, length = 255)
     private String email;
@@ -55,6 +61,7 @@ public class UserHealthInfo {
     public List<String> getAllergies() { return allergies; }
     public User getUser() {return user; }
     public String getEmail() {return email;} 
+    public LocalDate getDateOfBirth() {return dateOfBirth;}
 
 
     // Setters
@@ -66,4 +73,5 @@ public class UserHealthInfo {
     public void setAllergies(List<String> allergies) { this.allergies = allergies; }
     public void setUser(User user) {this.user = user;  }
     public void setEmail(String email) {this.email = email;}
+    public void setDateOfBirth(LocalDate dateOfBirth) {this.dateOfBirth = dateOfBirth;}
 }

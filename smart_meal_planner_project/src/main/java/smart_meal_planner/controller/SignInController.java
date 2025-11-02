@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +39,14 @@ public class SignInController
             User user = dbCommunicator.authenticateUser(username,password);
             signInSuccess = true;  
             request.getSession(true).setAttribute("user", user); //store login status
-            return ResponseEntity.ok("Login successful for user: " + user.getUsername());
+
+            // Return a subset of fields (avoid sending password!)
+            Map<String, Object> response = new HashMap<>();
+            response.put("username", user.getUsername());
+            response.put("email", user.getEmail()); 
+
+            //return ResponseEntity.ok("Login successful for user: " + user.getUsername());
+            return ResponseEntity.ok(response);
            
         }
         catch (RuntimeException e) {
