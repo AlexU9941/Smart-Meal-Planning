@@ -5,6 +5,7 @@ import RecipeCard from "./RecipeCard";
 import RecoverPassword from "./RecoverPassword";
 import FindRecipes from "./FindRecipes";
 import HealthInfoForm from "./HealthInfoForm";
+import IngredientInput from "../components/IngredientInput";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
        {/* <RecoverPassword /> */}
         {/* <FindRecipes /> */}
         <HealthInfoForm />
+        <IngredientInput />
         {/* <RecipeCard /> */}
     </div>
   );
