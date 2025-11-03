@@ -27,7 +27,7 @@ const IngredientInput = ({ onIngredientsSaved }) => {
     setError(null);
 
     try {
-      const response = await axios.post("/api/ingredients", { ingredients });
+      const response = await axios.post("/api/ingredients", ingredients );
       setLoading(false);
       if (onIngredientsSaved) onIngredientsSaved(response.data);
       alert("Ingredients saved successfully!");
