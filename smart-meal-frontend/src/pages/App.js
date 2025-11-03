@@ -5,7 +5,7 @@ import RecipeCard from "./RecipeCard";
 import RecoverPassword from "./RecoverPassword";
 import FindRecipes from "./FindRecipes";
 import HealthInfoForm from "./HealthInfoForm";
-import IngredientInput from "../components/IngredientInput";
+import IngredientInput from "./IngredientInput";
 
 function App() {
   return (
