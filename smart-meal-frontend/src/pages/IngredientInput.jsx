@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const IngredientInput = ({ onIngredientsSaved }) => {
-  const [ingredients, setIngredients] = useState([{ name: "", quantity: "", unit: "" }]);
+export default function IngredientInput({ onIngredientsSaved }) {
+  const [ingredients, setIngredients] = useState([
+    { name: "", quantity: "", unit: "" },
+  ]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Update one ingredient’s field
   const handleChange = (index, event) => {
     const { name, value } = event.target;
     const updated = [...ingredients];
@@ -13,27 +16,34 @@ const IngredientInput = ({ onIngredientsSaved }) => {
     setIngredients(updated);
   };
 
+  // Add a new blank row
   const addIngredient = () => {
     setIngredients([...ingredients, { name: "", quantity: "", unit: "" }]);
   };
 
+  // Remove one row
   const removeIngredient = (index) => {
     setIngredients(ingredients.filter((_, i) => i !== index));
   };
 
+  // Submit all ingredients together
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post("/api/ingredients", ingredients );
+      const response = await axios.post(
+        "http://localhost:8080/api/ingredients",
+        ingredients
+      );
       setLoading(false);
       if (onIngredientsSaved) onIngredientsSaved(response.data);
-      alert("Ingredients saved successfully!");
+      alert("✅ All ingredients saved successfully!");
     } catch (err) {
       setLoading(false);
-      setError("Failed to save ingredients. Please try again.");
+      console.error("Error saving ingredients:", err);
+      setError("❌ Failed to save ingredients. Please try again.");
     }
   };
 
@@ -95,13 +105,11 @@ const IngredientInput = ({ onIngredientsSaved }) => {
           disabled={loading}
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
         >
-          {loading ? "Saving..." : "Save"}
+          {loading ? "Saving..." : "Save All"}
         </button>
       </div>
 
       {error && <p className="text-red-600 text-center">{error}</p>}
     </form>
   );
-};
-
-export default IngredientInput;
+}

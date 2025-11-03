@@ -6,17 +6,19 @@ import RecoverPassword from "./RecoverPassword";
 import FindRecipes from "./FindRecipes";
 import HealthInfoForm from "./HealthInfoForm";
 import IngredientInput from "./IngredientInput";
+import Budget from "./Budget";
 
 function App() {
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
       <h1>Smart Meal Planner</h1>
-      {/* <CreateAccountForm /> */}
-       {/* <SignInForm /> */}
+       <CreateAccountForm />
+        <SignInForm /> 
        {/* <RecoverPassword /> */}
         {/* <FindRecipes /> */}
-        <HealthInfoForm />
+        <HealthInfoForm/>
         <IngredientInput />
+        <Budget/>
         {/* <RecipeCard /> */}
     </div>
   );
