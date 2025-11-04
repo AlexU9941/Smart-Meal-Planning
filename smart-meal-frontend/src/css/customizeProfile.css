@@ -1,0 +1,68 @@
+/* Basic styles for the Customize Profile page */
+.customize-profile {
+  max-width: 760px;
+  margin: 1rem auto;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-family: Arial, sans-serif;
+}
+
+.customize-profile h2 {
+  margin-top: 0;
+}
+
+.profile-picture-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.picture-preview {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.picture-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.empty-avatar {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.bio-section textarea {
+  width: 100%;
+  padding: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.bio-meta { text-align: right; font-size: 0.85rem; color: #666; }
+
+.theme-options { display:flex; gap: 0.5rem; margin-top: 0.5rem; }
+.theme-option { padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; border: 1px solid transparent; }
+.theme-option input { margin-right: 0.4rem; }
+.theme-option.active { border-color: #ccc; background: #fafafa; }
+
+.actions { margin-top: 1rem; display:flex; gap: 0.5rem; }
+.actions .save { background: #1976d2; color: white; border: none; padding: 0.5rem 0.9rem; border-radius: 6px; cursor:pointer; }
+.actions .reset { background: #eee; border: none; padding: 0.5rem 0.9rem; border-radius: 6px; cursor:pointer; }
+
+.message { margin-top: 0.75rem; color: #2e7d32; }
+
+/* Theme hooks applied to #root */
+#root.theme-light { background: #f7f8fa; color: #222; }
+#root.theme-dark { background: #121212; color: #eaeaea; }
+#root.theme-colorful { background: linear-gradient(120deg,#ffecd2,#fcb69f); color: #2b2b2b; }
+
