@@ -17,4 +17,5 @@ public class MealDay {
     public RecipeResult getDinner() {
         return dinner;
     }
+     
 }

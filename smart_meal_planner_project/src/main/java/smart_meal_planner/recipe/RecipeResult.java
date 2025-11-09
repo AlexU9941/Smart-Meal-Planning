@@ -25,7 +25,10 @@ public class RecipeResult {
     @JsonProperty("extendedIngredients")
     private List<Ingredient> extendedIngredients; 
 
+    @JsonProperty("nutrition")
+    private Nutrition nutrition; 
 
+  
     private int score; 
 
     @Override
@@ -89,6 +92,11 @@ public class RecipeResult {
         return extendedIngredients;
     }
 
+      public Nutrition getNutritionalInfo() {
+        return nutrition;
+    }
+
+
     public void setId(int id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setImage(String image) { this.image = image; }
@@ -101,5 +109,7 @@ public class RecipeResult {
     public void setDishTypes(String[] dishTypes) { this.dishTypes = dishTypes; }
     public void setScore(int score) { this.score = score; }
     public void setExtendedIngredients(List<Ingredient> extendedIngredients) {this.extendedIngredients = extendedIngredients; }
-    
+    public void setNutritionalInfo(Nutrition nutrition) {
+        this.nutrition = nutrition;
+    }
 }

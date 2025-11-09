@@ -52,6 +52,7 @@ public class RecipeService {
                 .queryParam("addRecipeInformation", true)
                 //.queryParam("type", "lunch")
                 .queryParam("number", requestCount) //# of meals
+                .queryParam("includeNutrition", true)
                 .build())
             .retrieve()
             .bodyToMono(RecipeSearchResponse.class);
