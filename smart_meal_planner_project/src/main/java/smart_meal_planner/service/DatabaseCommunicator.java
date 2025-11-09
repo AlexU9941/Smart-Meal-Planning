@@ -92,5 +92,15 @@ public class DatabaseCommunicator{
         return user; 
 
     }
+
+    public boolean updateUser(User user)
+    {
+        try {
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
 
