@@ -1,0 +1,17 @@
+# Ignore compiled Java classes
+*.class
+
+# Ignore build directories
+/target/
+/build/
+
+# Ignore IDE/project settings
+*.iml
+.idea/
+.vscode/
+
+# Ignore OS files
+.DS_Store
+
+# dependencies
+node_modules/
