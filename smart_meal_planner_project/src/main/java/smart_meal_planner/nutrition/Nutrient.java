@@ -1,4 +1,4 @@
-package smart_meal_planner.recipe;
+package smart_meal_planner.nutrition;
 
 public class Nutrient {
     private String name; 

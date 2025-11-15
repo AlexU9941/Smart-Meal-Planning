@@ -1,4 +1,4 @@
-package smart_meal_planner.recipe;
+package smart_meal_planner.nutrition;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ public class Nutrition {
     private List<Nutrient> nutrients; 
     private CaloricBreakdown caloricBreakdown; 
     private WeightPerServing weightPerServing;
+    
     public List<Nutrient> getNutrients() {
         return nutrients;
     }
