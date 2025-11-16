@@ -6,9 +6,11 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import smart_meal_planner.nutrition.Nutrition;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RecipeResult {
-    private int id;
+    private long id;
     private String title;
     private String image;
     private String sourceUrl; 
@@ -25,7 +27,10 @@ public class RecipeResult {
     @JsonProperty("extendedIngredients")
     private List<Ingredient> extendedIngredients; 
 
+    @JsonProperty("nutrition")
+    private Nutrition nutrition; 
 
+  
     private int score; 
 
     @Override
@@ -43,7 +48,7 @@ public class RecipeResult {
 
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -89,7 +94,12 @@ public class RecipeResult {
         return extendedIngredients;
     }
 
-    public void setId(int id) { this.id = id; }
+      public Nutrition getNutritionalInfo() {
+        return nutrition;
+    }
+
+
+    public void setId(long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setImage(String image) { this.image = image; }
     public void setSourceUrl(String sourceUrl) { this.sourceUrl = sourceUrl; }
@@ -101,5 +111,7 @@ public class RecipeResult {
     public void setDishTypes(String[] dishTypes) { this.dishTypes = dishTypes; }
     public void setScore(int score) { this.score = score; }
     public void setExtendedIngredients(List<Ingredient> extendedIngredients) {this.extendedIngredients = extendedIngredients; }
-    
+    public void setNutritionalInfo(Nutrition nutrition) {
+        this.nutrition = nutrition;
+    }
 }

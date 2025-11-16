@@ -15,7 +15,7 @@ public class IngredientController {
     @Autowired
     private IngredientService service;
 
-    // ✅ Expect a plain list — matches what React sends
+    
     @PostMapping
     public List<IngredientInput> addIngredients(@RequestBody List<IngredientInput> ingredients) {
         return service.saveIngredients(ingredients);
