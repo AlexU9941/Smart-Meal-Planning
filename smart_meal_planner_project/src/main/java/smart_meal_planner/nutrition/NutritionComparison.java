@@ -1,6 +1,7 @@
 package smart_meal_planner.nutrition;
 
 import smart_meal_planner.model.MealPlan;
+import smart_meal_planner.model.NutrientEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,8 +62,8 @@ public class NutritionComparison {
 
         for (MealDay day : mealPlan.getDays()){
             Map<String, Double> combined = mergeNutrients(
-                    day.getLunch().getNutritionalInfo().getNutrients(),
-                    day.getDinner().getNutritionalInfo().getNutrients()
+                    day.getLunch().getNutrition().getNutrients(),
+                    day.getDinner().getNutrition().getNutrients()
             );
            
             for (TrackedNutrient tn : TrackedNutrient.values())
@@ -81,16 +82,16 @@ public class NutritionComparison {
 
 
 
-    public Map<String, Double> mergeNutrients(List<Nutrient> list1, List<Nutrient> list2) {
+    public Map<String, Double> mergeNutrients(List<NutrientEntity> list1, List<NutrientEntity> list2) {
         Map<String, Double> result = new HashMap<>();
 
         // Add first list
-        for (Nutrient n : list1) {
+        for (NutrientEntity n : list1) {
             result.put(n.getName(), n.getAmount());
         }
 
         // Add second list — merge amounts
-        for (Nutrient n : list2) {
+        for (NutrientEntity n : list2) {
             result.merge(n.getName(), n.getAmount(), Double::sum);
         }
 

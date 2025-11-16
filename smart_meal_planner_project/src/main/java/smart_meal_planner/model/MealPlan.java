@@ -1,16 +1,27 @@
 package smart_meal_planner.model;
 
 import java.util.List;
+
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 
 
 import smart_meal_planner.recipe.RecipeResult;
 
-public class MealPlan {
-    List<MealDay> days = new ArrayList<>();
 
+@Entity
+@Table(name = "meal_plan")
+public class MealPlan {
     
-    public MealPlan(List<RecipeResult> lunches, List<RecipeResult> dinners) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL)
+    private List<MealDay> days = new ArrayList<>();
+
+    public MealPlan(List<RecipeEntity> lunches, List<RecipeEntity> dinners) {
         int lunchCount = Math.min(7, lunches.size());
         int dinnerCount = Math.min(7, dinners.size());
 

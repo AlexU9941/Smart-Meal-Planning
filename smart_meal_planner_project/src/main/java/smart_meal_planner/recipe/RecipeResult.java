@@ -10,7 +10,7 @@ import smart_meal_planner.nutrition.Nutrition;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RecipeResult {
-    private int id;
+    private long id;
     private String title;
     private String image;
     private String sourceUrl; 
@@ -48,7 +48,7 @@ public class RecipeResult {
 
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -99,7 +99,7 @@ public class RecipeResult {
     }
 
 
-    public void setId(int id) { this.id = id; }
+    public void setId(long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setImage(String image) { this.image = image; }
     public void setSourceUrl(String sourceUrl) { this.sourceUrl = sourceUrl; }
