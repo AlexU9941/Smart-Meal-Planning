@@ -6,6 +6,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import smart_meal_planner.nutrition.Nutrition;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RecipeResult {
     private int id;
