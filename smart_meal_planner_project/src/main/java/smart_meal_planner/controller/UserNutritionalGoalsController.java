@@ -10,7 +10,7 @@ import smart_meal_planner.model.UserNutritionalGoals;
 import java.util.Optional;
 
 import smart_meal_planner.repository.UserRepository;
-import smart_meal_planner.service.UserNutrtionalGoalsService;
+import smart_meal_planner.service.UserNutritionalGoalsService;
 
 
 @RestController
@@ -21,7 +21,7 @@ public class UserNutritionalGoalsController {
     private UserRepository userRepository; 
 
     @Autowired
-    private UserNutrtionalGoalsService service; 
+    private UserNutritionalGoalsService service; 
 
 
     @PostMapping

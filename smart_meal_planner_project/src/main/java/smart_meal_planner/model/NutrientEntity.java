@@ -72,4 +72,15 @@ public class NutrientEntity {
     public void setNutrition(NutritionEntity nutrition) {
         this.nutrition = nutrition;
     }
+
+
+    public Nutrient toNutrient() {
+        Nutrient nutr = new Nutrient();
+        nutr.setName(this.name);
+        nutr.setAmount(this.amount);
+        nutr.setUnit(this.unit);
+        nutr.setPercentOfDailyNeeds(this.percentOfDailyNeeds);
+        return nutr;
+    }
+
 }

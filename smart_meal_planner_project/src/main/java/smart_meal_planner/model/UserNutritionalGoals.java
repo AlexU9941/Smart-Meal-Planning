@@ -40,7 +40,7 @@ public class UserNutritionalGoals {
     private double dailySodiumGoal; 
 
     //connect to user via email
-    @Column(nullable = false, unique = true, length = 255)
+    @Column(nullable = false, length = 255)
     private String email;
 
 

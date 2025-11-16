@@ -25,7 +25,7 @@ public class IngredientInput {
     
     public IngredientInput() {}
 
-    public IngredientInput(String name, int quantity, String unit) {
+    public IngredientInput(String name, double quantity, String unit) {
         this.name = name;
         this.quantity = quantity;
         this.unit = unit;
@@ -43,6 +43,15 @@ public class IngredientInput {
 
     public String getUnit() { return unit; }
     public void setUnit(String unit) { this.unit = unit; }
+
+    public RecipeEntity getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(RecipeEntity recipe) {
+        this.recipe = recipe;
+    }
+
 
     @Override
     public String toString() {
@@ -63,18 +72,25 @@ public class IngredientInput {
 }
 
 
-public static List<IngredientInput> fromList(List<Ingredient> ingredients, RecipeEntity recipe) {
-    return ingredients.stream()
-            .map(ing -> IngredientInput.fromIngredient(ing, recipe))
-            .collect(Collectors.toList());
-}
-
-    public RecipeEntity getRecipe() {
-        return recipe;
+    public static List<IngredientInput> fromList(List<Ingredient> ingredients, RecipeEntity recipe) {
+        return ingredients.stream()
+                .map(ing -> IngredientInput.fromIngredient(ing, recipe))
+                .collect(Collectors.toList());
     }
 
-    public void setRecipe(RecipeEntity recipe) {
-        this.recipe = recipe;
+    public Ingredient toIngredient() {
+        Ingredient ing = new Ingredient();
+        ing.setName(this.name);
+        ing.setAmount(this.quantity);
+        ing.setUnit(this.unit);
+        return ing;
     }
+
+    public static List<Ingredient> toIngredientList(List<IngredientInput> inputs) {
+        return inputs.stream()
+                    .map(IngredientInput::toIngredient)
+                    .collect(Collectors.toList());
+    }
+
 
 }

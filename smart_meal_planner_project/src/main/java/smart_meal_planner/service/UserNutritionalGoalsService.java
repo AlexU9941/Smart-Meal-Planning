@@ -8,7 +8,7 @@ import smart_meal_planner.model.UserNutritionalGoals;
 import smart_meal_planner.repository.UserNutritionalGoalsRepository;
 
 @Service
-public class UserNutrtionalGoalsService {
+public class UserNutritionalGoalsService {
 
     @Autowired
     private UserNutritionalGoalsRepository repository;

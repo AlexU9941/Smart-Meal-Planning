@@ -18,8 +18,11 @@ public class MealPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<MealDay> days = new ArrayList<>();
+
+    public MealPlan(){}
+
 
     public MealPlan(List<RecipeEntity> lunches, List<RecipeEntity> dinners) {
         int lunchCount = Math.min(7, lunches.size());

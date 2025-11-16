@@ -1,9 +1,15 @@
 package smart_meal_planner.model;
 
 import jakarta.persistence.*;
+import smart_meal_planner.nutrition.CaloricBreakdown;
 import smart_meal_planner.nutrition.Nutrition;
+import smart_meal_planner.nutrition.WeightPerServing;
+
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
 import java.util.List; 
 @Entity
 @Table(name = "nutrition")
@@ -14,8 +20,9 @@ public class NutritionEntity {
     private Long id;
 
     // One-to-many because each recipe has many individual nutrients
+    @JsonIgnore
     @OneToMany(mappedBy = "nutrition", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<NutrientEntity> nutrients;
+    private List<NutrientEntity> nutrients = new ArrayList<>();
 
     // store caloric breakdown if needed
     private Double percentCarbs;
@@ -99,5 +106,35 @@ public class NutritionEntity {
         this.unit = unit;
     }
 
-    
+    public Nutrition toNutrition() {
+    Nutrition n = new Nutrition();
+
+    // Convert nutrients
+    if (this.nutrients != null) {
+        n.setNutrients(this.nutrients.stream()
+            .map(NutrientEntity::toNutrient)  // you need a method in NutrientEntity
+            .collect(Collectors.toList())
+        );
+    }
+
+    // Caloric breakdown
+    if (percentCarbs != null || percentProtein != null || percentFat != null) {
+        CaloricBreakdown cb = new CaloricBreakdown();
+        cb.setPercentCarbs(percentCarbs);
+        cb.setPercentProtein(percentProtein);
+        cb.setPercentFat(percentFat);
+        n.setCaloricBreakdown(cb);
+    }
+
+    // Weight per serving
+    if (amount != null && unit != null) {
+        WeightPerServing wps = new WeightPerServing();
+        wps.setAmount(amount);
+        wps.setUnit(unit);
+        n.setWeightPerServing(wps);
+    }
+
+    return n;
+}
+
 }

@@ -43,4 +43,20 @@ public class MealDay {
         this.mealPlan = mealPlan;
     }
      
+    public void setLunch(RecipeEntity lunch) {
+    this.lunch = lunch;
+    }
+
+    public void setDinner(RecipeEntity dinner) {
+        this.dinner = dinner;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }

@@ -4,6 +4,7 @@ package smart_meal_planner.model;
 import jakarta.persistence.*;
 import smart_meal_planner.recipe.RecipeResult;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class RecipeEntity {
     private List<String> dishTypes;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<IngredientInput> ingredients;
+    private List<IngredientInput> ingredients = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "nutrition_id")

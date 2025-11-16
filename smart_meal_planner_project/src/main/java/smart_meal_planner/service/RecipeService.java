@@ -11,6 +11,7 @@ import smart_meal_planner.recipe.Ingredient;
 import smart_meal_planner.recipe.RecipeResult;
 import smart_meal_planner.recipe.RecipeSearchResponse;
 import smart_meal_planner.repository.RecipeRepository;
+import smart_meal_planner.repository.UserNutritionalGoalsRepository;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,29 +23,49 @@ public class RecipeService {
     private final WebClient webClient;
     private final RecipeRepository recipeRepository;
 
+    //private final UserNutritionalGoalsRepository goalsRepository;
+
     @Value("${spoonacular.api.key}")
     private String apiKey;
 
     public RecipeService(WebClient spoonacularWebClient, RecipeRepository recipeRepository) {
         this.webClient = spoonacularWebClient;
         this.recipeRepository = recipeRepository;
+        //this.goalsRepository = goalsRepository;
     }
 
     /**
      * Finds recipes based on ingredients and max price, then creates a persisted MealPlan.
      */
-    @Transactional
-    public MealPlan findRecipeByIngredients(List<String> ingredients, double maxPrice) {
+     public MealPlan findRecipeByIngredients(List<String> ingredients, double maxPrice) {
         if (ingredients.isEmpty()) {
             throw new IllegalArgumentException("Ingredient list cannot be empty");
         }
 
         String mainIngredient = ingredients.get(0);
         List<String> scoringIngredients = ingredients.subList(1, ingredients.size());
+       
+
+        RecipeSearchResponse response = fetchRecipesFromApi(mainIngredient, maxPrice);
+        if (response == null || response.getResults() == null || response.getResults().isEmpty()) {
+            throw new RuntimeException("No recipes returned from Spoonacular API");
+        }
+
+
+        // Score and sort recipes
+        List<RecipeResult> scoredResults = scoreRecipes(response.getResults(), scoringIngredients);
+
+        // Assign meals and persist
+        return assignMealsAndPersist(scoredResults);
+    }
+
+    /**
+     * Calls Spoonacular API synchronously to get recipes.
+     */
+    private RecipeSearchResponse fetchRecipesFromApi(String mainIngredient, double maxPrice) {
         int requestCount = 50; // fetch more results to ensure variety
 
-        // Fetch recipes from Spoonacular
-        RecipeSearchResponse response = webClient.get()
+        return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/recipes/complexSearch")
                         .queryParam("query", mainIngredient)
@@ -57,45 +78,58 @@ public class RecipeService {
                 .retrieve()
                 .bodyToMono(RecipeSearchResponse.class)
                 .block();
-
-        if (response == null || response.getResults() == null) {
-            throw new RuntimeException("No recipes found from Spoonacular");
-        }
-
-        // Score and sort recipes
-        List<RecipeResult> scoredResults = scoreRecipes(response.getResults(), scoringIngredients);
-
-        // Assign meals and persist
-        return assignMeals(scoredResults);
     }
+
+
 
     /**
      * Scores recipes based on presence of scoring ingredients.
      */
     private List<RecipeResult> scoreRecipes(List<RecipeResult> results, List<String> scoringIngredients) {
+        
         for (RecipeResult recipe : results) {
             int score = 0;
-            if (recipe.getExtendedIngredients() != null) {
-                for (Ingredient ingredient : recipe.getExtendedIngredients()) {
-                    String name = ingredient.getName().toLowerCase();
-                    if (scoringIngredients.stream().anyMatch(i -> name.contains(i.toLowerCase()))) {
-                        score++;
-                    }
-                }
-            }
-            recipe.setScore(score);
-        }
+            score += scoreByIngredient(recipe, scoringIngredients);
 
+            recipe.setScore(score);
+            }
+           
+    
         return results.stream()
                 .sorted(Comparator.comparingInt(RecipeResult::getScore).reversed())
                 .distinct()
                 .collect(Collectors.toList());
     }
 
+
+    private int scoreByIngredient(RecipeResult recipe, List<String> scoringIngredients)
+    {
+        int score = 0; 
+
+        for (Ingredient ingredient : recipe.getExtendedIngredients()) {
+                    String name = ingredient.getName().toLowerCase();
+                    if (scoringIngredients.stream().anyMatch(i -> name.contains(i.toLowerCase()))) {
+                        score+= 5;
+                    }
+                }
+        
+        return score; 
+    }
+
+    //to score by nutrition with current setup would need to compare meal days, maybe do later. 
+    // private int scoreByNutrition(RecipeResult recipe, UserNutritionalGoals goals)
+    // {
+    //     if (recipe.getNutritionalInfo() != null)
+    //     {
+
+    //     }
+    // }
+
+
     /**
      * Converts top scored RecipeResults to RecipeEntity and creates MealPlan.
      */
-    private MealPlan assignMeals(List<RecipeResult> sorted) {
+    private MealPlan assignMealsAndPersist(List<RecipeResult> sorted) {
         List<RecipeResult> top14 = sorted.stream()
                 .limit(14)
                 .collect(Collectors.toList());

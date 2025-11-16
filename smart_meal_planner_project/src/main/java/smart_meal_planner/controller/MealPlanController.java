@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import smart_meal_planner.model.MealPlan;
+import smart_meal_planner.model.MealPlanDTO;
 import smart_meal_planner.model.UserNutritionalGoals;
 import smart_meal_planner.service.MealPlanService;
 
@@ -31,7 +32,7 @@ public class MealPlanController {
         return mealPlanService.getMealPlan(id);
     }
 
-    @GetMapping("/{id}/nutrition-diff")
+    @PostMapping("/{id}/nutrition-diff")
     public double[][] getNutritionDiff(@PathVariable Long id, @RequestBody UserNutritionalGoals goals) {
         return mealPlanService.compareNutrition(id, goals);
     }
