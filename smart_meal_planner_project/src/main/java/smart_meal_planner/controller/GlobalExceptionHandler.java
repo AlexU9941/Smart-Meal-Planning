@@ -1,4 +1,4 @@
-package smart_meal_planner.repository;
+package smart_meal_planner.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

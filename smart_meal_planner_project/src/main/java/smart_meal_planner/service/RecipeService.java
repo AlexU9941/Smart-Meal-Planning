@@ -1,5 +1,13 @@
 package smart_meal_planner.service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +36,7 @@ public class RecipeService {
     @Value("${spoonacular.api.key}")
     private String apiKey;
 
-    public RecipeService(WebClient spoonacularWebClient, RecipeRepository recipeRepository) {
+    public RecipeService(@Qualifier("spoonacularWebClient") WebClient spoonacularWebClient, RecipeRepository recipeRepository) {
         this.webClient = spoonacularWebClient;
         this.recipeRepository = recipeRepository;
         //this.goalsRepository = goalsRepository;
