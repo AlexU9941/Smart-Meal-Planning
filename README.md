@@ -6,18 +6,23 @@ The Smart Meal Planner is a web application designed to assist users in generati
 
 **Features:**
 -Logging In/Out – Users can log in and out of the application easily.
+
 -Profile customization – users can customize their profile's appearance in the app, as well as even resetting preferences as needed.
+
 -Recipe management:
     Find favorite recipes – Users can search for and bookmark, or even create their own, favorite recipes.
     Recipe sharing – Users can share recipes with one another, uploading them into the app, even their favorites as well. 
     Recipe Saving - The application saves favorited recipes by those users.
+
 -Meal Planning
   Create weekly meal plans based on user preferences.
   Auto-Generate Shopping List – Automatically compile ingredients from your meal plan.
   Portion Scaling – Adjust recipes to fit your desired portion size.
+
 -Nutrition Tracking
   Track Nutritional Content – View calories, macronutrients, sugars, and cholesterol for each meal.
   Health Features – Compare meal plans against user health goals.
+
 -Recommendations:
   Find Similar Meals – Get recommendations based on your favorite recipes.
 
