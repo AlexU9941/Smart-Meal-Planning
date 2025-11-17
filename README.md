@@ -1,7 +1,7 @@
 # Smart-Meal-Planning
 Class project for IT326. 
 
-**Overview: **
+**Overview:**
 The Smart Meal Planner is a web application designed to assist users in generating personalized meal plans, track nutritional content, and managing shopping lists. With this app, we aim to make healthy eating simple and convenient. 
 
 **Features:**
@@ -21,29 +21,29 @@ The Smart Meal Planner is a web application designed to assist users in generati
 -Recommendations:
   Find Similar Meals – Get recommendations based on your favorite recipes.
 
-**Tech Stack: **
+**Tech Stack:**
 Frontend: React (JSX), CSS
 Backend: Java, REST API
 Database: MySQL
 Version Control: GitHub.
 
 **Installation steps:**
-**1. Clone our repository with these following commands: **
+**1. Clone our repository with these following commands:**
 
 it clone https://github.com/AlexU9941/Smart-Meal-Planning.git
 cd Smart-Meal-Planning
 
-**2. Set up your Backend: **
+**2. Set up your Backend:**
 
 cd smart_meal_planner_project
 mvn clean install
 mvn spring-boot:run
 
-**3. Set up your Frontend: **
+**3. Set up your Frontend:**
 
 cd smart-meal-frontend
 npm install
 npm start
 
 
-**4. And you should be set!  **
+**4. And you should be set!**
