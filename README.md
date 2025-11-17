@@ -5,6 +5,7 @@ Class project for IT326.
 The Smart Meal Planner is a web application designed to assist users in generating personalized meal plans, track nutritional content, and managing shopping lists. With this app, we aim to make healthy eating simple and convenient. 
 
 **Features:**
+
 -Logging In/Out – Users can log in and out of the application easily.
 
 -Profile customization – users can customize their profile's appearance in the app, as well as even resetting preferences as needed.
