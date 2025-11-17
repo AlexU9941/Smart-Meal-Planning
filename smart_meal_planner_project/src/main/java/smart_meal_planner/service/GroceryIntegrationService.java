@@ -27,9 +27,7 @@ public class GroceryIntegrationService {
         this.accountRepository = accountRepository;
     }
 
-    /**
-     * Links a grocery store account for a user.
-     */
+
     public void linkAccount(String userId, String providerName, OAuthResponse oauth) {
         GroceryStoreProvider provider = providers.get(providerName);
         if (provider == null) {
@@ -46,10 +44,8 @@ public class GroceryIntegrationService {
         accountRepository.save(acc);
     }
 
-    /**
-     * Searches for a list of ingredients for the user's linked grocery account.
-     */
-    public List<GroceryItem> lookupIngredients(String userId, List<String> ingredients) {
+
+    public List<GroceryItem> lookupIngredients(Long userId, List<String> ingredients) {
         GroceryAccount acc = getAccount(userId);
         GroceryStoreProvider provider = providers.get(acc.getProvider());
 
@@ -68,10 +64,7 @@ public class GroceryIntegrationService {
         return provider.searchProducts(ingredients, acc.getAccessToken());
     }
 
-    /**
-     * Builds a checkout redirect URL for the selected items.
-     */
-    public String getCheckoutRedirectUrl(String userId, List<String> productIds) {
+    public String getCheckoutRedirectUrl(Long userId, List<String> productIds) {
         GroceryAccount acc = getAccount(userId);
         GroceryStoreProvider provider = providers.get(acc.getProvider());
 
@@ -82,9 +75,7 @@ public class GroceryIntegrationService {
         return provider.buildCheckoutUrl(productIds, acc.getAccessToken());
     }
 
-    // ----------------- Helper Methods -----------------
-
-    private GroceryAccount getAccount(String userId) {
+    private GroceryAccount getAccount(Long userId) {
         return accountRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Grocery account not linked for user: " + userId));
     }

@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,7 +26,7 @@ public class RecipeService {
     @Value("${spoonacular.api.key}")
     private String apiKey;
 
-    public RecipeService(WebClient spoonacularWebClient) {
+    public RecipeService(@Qualifier("spoonacularWebClient") WebClient spoonacularWebClient) {
         this.webClient = spoonacularWebClient;
     }
 

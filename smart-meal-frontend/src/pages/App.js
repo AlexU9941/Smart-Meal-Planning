@@ -9,7 +9,9 @@ import FindRecipes from "./FindRecipes";
 import HealthInfoForm from "./HealthInfoForm";
 import IngredientInput from "./IngredientInput";
 import Budget from "./Budget";
-
+import ProviderSelector from "./ProviderSelector"; 
+import GrocerySearch from "./GrocerySearch";
+import GroceryPage from "./GroceryPage";
 import "./css/App.css";
 
 const Sidebar = () => {
@@ -24,6 +26,8 @@ const Sidebar = () => {
       <NavLink to="/budget" className={({ isActive }) => (isActive ? "active" : "")}>Budget</NavLink>
       <NavLink to="/find-recipes" className={({ isActive }) => (isActive ? "active" : "")}>Find Recipes</NavLink>
       <NavLink to="/recipe-card" className={({ isActive }) => (isActive ? "active" : "")}>Recipe Card</NavLink>
+      <NavLink to="/grocery" className={({ isActive }) => (isActive ? "active" : "")}>Grocery Integration</NavLink>
+
     </div>
   );
 };
@@ -51,6 +55,7 @@ function App() {
           <Route path="/find-recipes" element={<FindRecipes />} />
           <Route path="/recipe-card" element={<RecipeCard />} />
           <Route path="*" element={<SignInForm />} /> {/* Default route */}
+          <Route path="/grocery" element={<GroceryPage />} />
         </Routes>
       </Layout>
     </Router>

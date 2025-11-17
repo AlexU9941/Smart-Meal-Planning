@@ -21,4 +21,7 @@ public interface GroceryStoreProvider {
 
     // Unique identifier for the store (KROGER, WALMART, etc.)
     String getProviderName();
+
+    // Get authorization URL for OAuth flow
+    String getAuthorizationUrl();
 }

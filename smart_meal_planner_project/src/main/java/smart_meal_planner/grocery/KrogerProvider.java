@@ -1,6 +1,9 @@
 package smart_meal_planner.grocery;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import smart_meal_planner.dto.GroceryItem;
 import smart_meal_planner.dto.OAuthResponse;
 
@@ -9,6 +12,12 @@ import java.util.List;
 
 @Component
 public class KrogerProvider implements GroceryStoreProvider {
+
+    @Value("${kroger.client-id}")
+    private String clientId;
+
+    @Value("${kroger.redirect-uri}")
+    private String redirectUri;
 
     @Override
     public OAuthResponse exchangeAuthCode(String authCode) {
@@ -38,5 +47,14 @@ public class KrogerProvider implements GroceryStoreProvider {
     public String getProviderName() {
         return "KROGER";
     }
-
+    public String getAuthorizationUrl() {
+        String redirectUrl = UriComponentsBuilder.fromHttpUrl("https://api.kroger.com/v1/connect/oauth2/authorize")
+            .queryParam("client_id", clientId)
+            .queryParam("response_type", "code")
+            .queryParam("scope", "product.compact")
+            .queryParam("redirect_uri", redirectUri)
+            .build()
+            .toUriString();
+        return redirectUrl;
+        }
 }

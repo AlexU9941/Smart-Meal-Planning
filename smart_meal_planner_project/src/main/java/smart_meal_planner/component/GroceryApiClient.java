@@ -1,8 +1,5 @@
 package smart_meal_planner.component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

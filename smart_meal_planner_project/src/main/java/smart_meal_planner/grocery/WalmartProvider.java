@@ -37,4 +37,11 @@ public class WalmartProvider implements GroceryStoreProvider {
     public String getProviderName() {
         return "WALMART";
     }
+
+    @Override
+    public String getAuthorizationUrl() {
+        // implement Walmart authorization URL
+        return "https://developer.walmart.com/#/apicenter/marketPlace/latest#oauth";
+    }
+    
 }
