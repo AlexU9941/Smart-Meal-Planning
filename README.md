@@ -36,19 +36,24 @@ Version Control: GitHub.
 **Installation steps:**
 **1. Clone our repository with these following commands:**
 
-it clone https://github.com/AlexU9941/Smart-Meal-Planning.git
+git clone https://github.com/AlexU9941/Smart-Meal-Planning.git
+
 cd Smart-Meal-Planning
 
 **2. Set up your Backend:**
 
 cd smart_meal_planner_project
+
 mvn clean install
+
 mvn spring-boot:run
 
 **3. Set up your Frontend:**
 
 cd smart-meal-frontend
+
 npm install
+
 npm start
 
 
