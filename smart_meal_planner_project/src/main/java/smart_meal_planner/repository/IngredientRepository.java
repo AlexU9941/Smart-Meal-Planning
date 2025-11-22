@@ -6,5 +6,5 @@ import smart_meal_planner.model.IngredientInput;
 public interface IngredientRepository extends JpaRepository<IngredientInput, Long> {
 
     //used during resetting preferences
-    void deleteAllByUserId(Long userId);
+    void deleteAllByUser_UID(Long userId);
 }

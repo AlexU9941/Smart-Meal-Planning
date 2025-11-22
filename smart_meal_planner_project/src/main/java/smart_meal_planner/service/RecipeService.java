@@ -112,9 +112,15 @@ public class RecipeService {
 
     private int scoreByIngredient(RecipeResult recipe, List<String> scoringIngredients)
     {
+        List<Ingredient> ingredients = recipe.getExtendedIngredients();
+        if (ingredients == null)
+        {
+            return 0; 
+        }
+
         int score = 0; 
 
-        for (Ingredient ingredient : recipe.getExtendedIngredients()) {
+        for (Ingredient ingredient : ingredients) {
                     String name = ingredient.getName().toLowerCase();
                     if (scoringIngredients.stream().anyMatch(i -> name.contains(i.toLowerCase()))) {
                         score+= 5;

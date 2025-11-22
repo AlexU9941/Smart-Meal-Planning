@@ -12,6 +12,7 @@ C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_p
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\NutritionController.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\RecipeController.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\RecipeFilterController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\ResetController.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\SignInController.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\UserHealthInfoController.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\UserNutritionalGoalsController.java
@@ -69,6 +70,7 @@ C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_p
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipePersistenceHelper.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeSearchRequest.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\ResetService.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\UserHealthInfoService.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\UserNutritionalGoalsService.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\SmartMealPlannerApplication.java

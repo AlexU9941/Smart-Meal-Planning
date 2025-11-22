@@ -13,5 +13,5 @@ public interface UserNutritionalGoalsRepository extends JpaRepository<UserNutrit
     UserNutritionalGoals findByEmail(String email); 
 
     //used during resetting preferences
-    void deleteByUserId(Long UID);
+    void deleteByUser_UID(Long UID);
 }
