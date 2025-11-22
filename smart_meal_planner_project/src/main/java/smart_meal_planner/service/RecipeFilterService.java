@@ -51,3 +51,4 @@ public class RecipeFilterService {
                java.util.Arrays.asList(recipe.getDishTypes()).contains(timeOfDay);
     }
 }
+

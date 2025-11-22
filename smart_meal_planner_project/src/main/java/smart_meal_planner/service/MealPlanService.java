@@ -2,6 +2,8 @@ package smart_meal_planner.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import smart_meal_planner.dto.MealPlanDTO;
 import smart_meal_planner.model.*;
 import smart_meal_planner.nutrition.NutritionComparison;
 import smart_meal_planner.repository.MealPlanRepository;

@@ -1,71 +1,80 @@
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\component\GroceryApiClient.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\config\WebClientConfig.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\BudgetController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\CreateAccountController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GlobalExceptionHandler.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GroceryAccountController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GroceryController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\IngredientController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\LogoutController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\MealPlanController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\NutritionController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\RecipeController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\SignInController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\UserHealthInfoController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\UserNutritionalGoalsController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\GroceryItem.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\OAuthResponse.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\GroceryStoreProvider.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerProductResponse.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerProvider.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\WalmartProvider.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\Budget.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\GroceryAccount.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\IngredientInput.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\Meal.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\MealDay.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\MealPlan.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\MealPlanDTO.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\NutrientEntity.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\NutritionEntity.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\NutritionInfo.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\RecipeEntity.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\User.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\UserGoals.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\UserHealthInfo.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\UserNutritionalGoals.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\CaloricBreakdown.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\Nutrient.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\Nutrition.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\NutritionComparison.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\WeightPerServing.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\Ingredient.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeResult.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeSearchResponse.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\BudgetRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\GroceryAccountRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\IngredientRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\MealDayRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\MealPlanRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\MealRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\NutritionRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\RecipeRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserHealthInfoRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserNutritionalGoalsRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\BudgetService.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\DatabaseCommunicator.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\GroceryIntegrationService.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\IngredientService.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\MailService.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\MealPlanService.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\NutritionRequest.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\NutritionService.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\PasswordUtils.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeMapper.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipePersistenceHelper.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeSearchRequest.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeService.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\UserHealthInfoService.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\UserNutritionalGoalsService.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\SmartMealPlannerApplication.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\component\GroceryApiClient.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\config\WebClientConfig.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\BudgetController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\CreateAccountController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\FindRecipesController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GlobalExceptionHandler.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GroceryAccountController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GroceryController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\IngredientController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\LogoutController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\MealPlanController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\NutritionController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\RecipeController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\RecipeFilterController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\ResetController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\SignInController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\UserCreatedRecipeController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\UserHealthInfoController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\UserNutritionalGoalsController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\GroceryItem.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\MealPlanDTO.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\OAuthResponse.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\GroceryStoreProvider.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerProductResponse.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerProvider.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\WalmartProvider.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\Budget.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\GroceryAccount.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\IngredientInput.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\Meal.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\MealDay.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\MealPlan.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\NutrientEntity.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\NutritionEntity.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\NutritionInfo.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\RecipeEntity.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\User.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\UserCreatedRecipe.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\UserGoals.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\UserHealthInfo.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\UserNutritionalGoals.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\CaloricBreakdown.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\Nutrient.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\Nutrition.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\NutritionComparison.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\nutrition\WeightPerServing.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\Ingredient.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeResult.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeSearchResponse.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\BudgetRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\GroceryAccountRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\IngredientRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\MealDayRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\MealPlanRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\MealRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\NutritionRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\RecipeRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserCreatedRecipeRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserHealthInfoRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserNutritionalGoalsRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\BudgetService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\DatabaseCommunicator.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\GroceryIntegrationService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\IngredientService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\MailService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\MealPlanService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\NutritionRequest.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\NutritionService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\PasswordUtils.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeFilterService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeMapper.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipePersistenceHelper.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeSearchRequest.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\RecipeService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\ResetService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\UserCreatedRecipeService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\UserHealthInfoService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\UserNutritionalGoalsService.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\SmartMealPlannerApplication.java
