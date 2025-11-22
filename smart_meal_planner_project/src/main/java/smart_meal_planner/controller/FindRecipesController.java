@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import smart_meal_planner.model.MealDay;
 import smart_meal_planner.model.MealPlan;
+import smart_meal_planner.model.RecipeEntity;
 import smart_meal_planner.recipe.RecipeResult;
 import smart_meal_planner.service.RecipeService;
 
@@ -42,17 +43,17 @@ public class FindRecipesController {
         }
 
         // Deduplicate results by id while flattening lunches and dinners
-        Set<Integer> seen = new HashSet<>();
+        Set<Long> seen = new HashSet<>();
         for (MealDay day : mealPlan.getDays()) {
             if (day.getLunch() != null) {
-                RecipeResult r = day.getLunch();
+                RecipeEntity r = day.getLunch();
                 if (!seen.contains(r.getId())) {
                     seen.add(r.getId());
                     response.add(new FindRecipeDto(r));
                 }
             }
             if (day.getDinner() != null) {
-                RecipeResult r = day.getDinner();
+                RecipeEntity r = day.getDinner();
                 if (!seen.contains(r.getId())) {
                     seen.add(r.getId());
                     response.add(new FindRecipeDto(r));
@@ -65,17 +66,17 @@ public class FindRecipesController {
 
     // Simple DTO tailored to the frontend: { id, name, budget }
     public static class FindRecipeDto {
-        private int id;
+        private long id;
         private String name;
         private double budget;
 
-        public FindRecipeDto(RecipeResult r) {
+        public FindRecipeDto(RecipeEntity r) {
             this.id = r.getId();
             this.name = r.getTitle();
             this.budget = r.getPricePerServing();
         }
 
-        public int getId() { return id; }
+        public Long getId() { return id; }
         public String getName() { return name; }
         public double getBudget() { return budget; }
 

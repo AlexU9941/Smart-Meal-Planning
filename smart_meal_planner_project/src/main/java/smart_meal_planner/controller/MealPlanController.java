@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import smart_meal_planner.dto.MealPlanDTO;
 import smart_meal_planner.model.MealPlan;
-import smart_meal_planner.model.MealPlanDTO;
 import smart_meal_planner.model.UserNutritionalGoals;
 import smart_meal_planner.service.MealPlanService;
 
