@@ -36,8 +36,10 @@ public class User {
     @Column(length = 512)
     private String salt; //used in password hashing. want to store for verification purposes
 
-    private boolean accountEnabled; 
+    @Column(name = "location_id")
+    private String locationId;
 
+    private boolean accountEnabled; 
     private String sessionID; 
     private static int sessionCounter = 1; 
     private boolean isActive; 
@@ -142,6 +144,13 @@ public class User {
         isActive = true; 
     }
 
+    public void locationId(String locationId) {
+        this.locationId = locationId;
+    }
+
+    public String locationId() {
+        return locationId;
+    }
 
 }
 

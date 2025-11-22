@@ -12,6 +12,18 @@ const RecipeCard = ({ recipe, onFavorite }) => {
     }
   };
 
+
+const handleSaveForLater = async () => {
+    try {
+      await axios.post('http://localhost:8080/api/saved', { recipeId: recipe.id });
+      onSave(recipe);
+      alert('Recipe saved for later!');
+    } catch (error) {
+      alert('Failed to save recipe for later. Please try again.');
+    }
+  };
+
+  
   return (
     <div className="recipe-card">
       <h3>{recipe.name}</h3>
