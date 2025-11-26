@@ -2,6 +2,7 @@ C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_p
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\config\WebClientConfig.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\BudgetController.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\CreateAccountController.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\FavoriteController.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\FindRecipesController.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GlobalExceptionHandler.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GroceryAccountController.java
@@ -25,6 +26,7 @@ C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_p
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerProvider.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\WalmartProvider.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\Budget.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\Favorite.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\GroceryAccount.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\IngredientInput.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\Meal.java
@@ -48,6 +50,7 @@ C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_p
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeResult.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeSearchResponse.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\BudgetRepository.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\FavoriteRepository.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\GroceryAccountRepository.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\IngredientRepository.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\MealDayRepository.java
@@ -61,6 +64,7 @@ C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_p
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserRepository.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\BudgetService.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\DatabaseCommunicator.java
+C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\FavoriteService.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\GroceryIntegrationService.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\IngredientService.java
 C:\Users\aweso\Desktop\SmartMealPlanner\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\MailService.java

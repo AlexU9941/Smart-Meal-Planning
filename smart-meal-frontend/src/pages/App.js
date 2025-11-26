@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
 
 import CreateAccountForm from "./CreateAccountForm";
@@ -36,8 +36,10 @@ function App() {
         return <CustomizeProfile />;
       case "generate":
         return <GenerateMealPlan />;
+      case "home":
+        return <div>Welcome to Smart Meal Planner!</div>;
       default:
-        return <HealthInfoForm />;
+        return <SignInForm />;
     }
   };
 

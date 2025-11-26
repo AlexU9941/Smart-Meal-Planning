@@ -23,7 +23,7 @@ public class FavoriteService {
             User user = databaseCommunicator.getUserByUsername(username);
             return favoriteRepository.findByUser(user);
         } catch (Exception e) {
-            return List.of();
+            return java.util.Collections.emptyList();
         }
     }
 
