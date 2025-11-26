@@ -5,8 +5,6 @@ smart_meal_planner\grocery\KrogerProductResponse.class
 smart_meal_planner\service\NutritionService.class
 smart_meal_planner\nutrition\NutritionComparison.class
 smart_meal_planner\model\MealPlan.class
-smart_meal_planner\service\RecipeMapper.class
-smart_meal_planner\service\RecipePersistenceHelper.class
 smart_meal_planner\service\GroceryIntegrationService.class
 smart_meal_planner\model\NutritionEntity.class
 smart_meal_planner\service\MealPlanService.class
