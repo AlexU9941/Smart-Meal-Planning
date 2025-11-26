@@ -1,0 +1,14 @@
+package smart_meal_planner.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.stereotype.Repository;
+
+import smart_meal_planner.model.UserHealthInfo;
+
+@Repository
+public interface UserHealthInfoRepository extends JpaRepository<UserHealthInfo, Long> {
+    //UserHealthInfo findByUID(Long uid);
+    UserHealthInfo findByUser_UID(Long UID);
+    UserHealthInfo findByEmail(String email); 
+}
