@@ -54,6 +54,14 @@ function App() {
       </nav>
 
       {renderPage()}
+    </div>
+  );
+}
+
+export default App;
+
+
+
 
 
 // TEMP COMMENTING to see what Srinath's looks like 
