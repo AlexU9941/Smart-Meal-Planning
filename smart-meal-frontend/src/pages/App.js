@@ -15,6 +15,7 @@ import ProviderSelector from "./ProviderSelector";
 import GrocerySearch from "./GrocerySearch";
 import GroceryPage from "./GroceryPage";
 import "./css/App.css";
+import NutritionalTracker from "./NutritionalTracker";
 
 
 function App() {
@@ -36,6 +37,8 @@ function App() {
         return <CustomizeProfile />;
       case "generate":
         return <GenerateMealPlan />;
+      case "nutrition":
+        return <NutritionalTracker />;
       case "home":
         return <div>Welcome to Smart Meal Planner!</div>;
       default:
@@ -53,6 +56,7 @@ function App() {
         <button onClick={() => setPage("health")}>Health Info</button>
         <button onClick={() => setPage("customize")}>Customize Profile</button>
         <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
+        <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
       </nav>
 
       {renderPage()}

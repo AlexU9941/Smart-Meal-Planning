@@ -23,11 +23,21 @@ const GenerateMealPlan = () => {
 
     setPlan(newPlan);
     setMessage("Weekly meal plan generated (placeholders). Replace with backend data later.");
+    try {
+      localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan));
+    } catch (e) {
+      console.error("Failed to save weeklyMealPlan to localStorage", e);
+    }
   };
 
   const clearPlan = () => {
     setPlan(Array.from({ length: 7 }, (_, i) => emptyDay(i)));
     setMessage("");
+    try {
+      localStorage.removeItem("weeklyMealPlan");
+    } catch (e) {
+      console.error("Failed to clear weeklyMealPlan from localStorage", e);
+    }
   };
 
   return (
@@ -53,4 +63,3 @@ const GenerateMealPlan = () => {
 };
 
 export default GenerateMealPlan;
-
