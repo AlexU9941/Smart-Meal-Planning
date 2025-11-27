@@ -16,6 +16,7 @@ import GrocerySearch from "./GrocerySearch";
 import GroceryPage from "./GroceryPage";
 import "./css/App.css";
 import NutritionalTracker from "./NutritionalTracker";
+import TrackHealth from "./TrackHealth";
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
 
   const renderPage = () => {
     switch (page) {
+      case "track":
+        return <TrackHealth />;
       case "create":
         return <CreateAccountForm />;
       case "signin":
@@ -57,6 +60,7 @@ function App() {
         <button onClick={() => setPage("customize")}>Customize Profile</button>
         <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
         <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
+        <button onClick={() => setPage("track")}>Track Health</button>
       </nav>
 
       {renderPage()}
