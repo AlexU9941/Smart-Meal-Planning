@@ -24,6 +24,8 @@ const CustomizeProfile = () => {
   const [theme, setTheme] = useState("light");
   const [picture, setPicture] = useState(null); // base64 string
   const [message, setMessage] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const p = loadProfile();
@@ -68,17 +70,32 @@ const CustomizeProfile = () => {
     setMessage("Profile saved.");
   };
 
-  const handleReset = () => {
+  // open confirmation modal
+  const handleReset = () => setShowConfirm(true);
+
+  // perform reset after confirmation
+  const confirmReset = () => {
     const empty = { bio: "", theme: "light", picture: null };
     setBio(empty.bio);
     setTheme(empty.theme);
     setPicture(empty.picture);
     saveProfile(empty);
+    setShowConfirm(false);
+    setShowToast(true);
+    // also set a small message accessible for screen readers
     setMessage("Profile reset to defaults.");
+    // auto-dismiss toast after 3s
+    setTimeout(() => setShowToast(false), 3000);
   };
+
+  const cancelReset = () => setShowConfirm(false);
 
   return (
     <div className="customize-profile">
+      {/* toast notification */}
+      {showToast && (
+        <div className="toast">Preferences were reset to defaults.</div>
+      )}
       <h2>Customize Profile</h2>
 
       <section className="profile-picture-section">
@@ -131,9 +148,21 @@ const CustomizeProfile = () => {
       </div>
 
       {message && <div className="message">{message}</div>}
+
+      {showConfirm && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Reset preferences?</h3>
+            <p>This will restore your profile preferences to their default values. This action cannot be undone.</p>
+            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+              <button onClick={cancelReset} style={{ padding: '0.5rem 0.8rem' }}>Cancel</button>
+              <button onClick={confirmReset} style={{ padding: '0.5rem 0.8rem', background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 6 }}>Reset</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default CustomizeProfile;
-
