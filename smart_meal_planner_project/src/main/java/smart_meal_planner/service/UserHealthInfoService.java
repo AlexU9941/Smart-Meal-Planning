@@ -20,6 +20,14 @@ public class UserHealthInfoService {
         return repository.findById(uid);
     }
 
+    public UserHealthInfo findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
+    public UserHealthInfo findByUserUID(Long uid) {
+        return repository.findByUser_UID(uid);
+    }
+
     public UserHealthInfo updateUserHealthInfo(Long uid, UserHealthInfo newInfo) {
         return repository.findById(uid).map(existing -> {
             existing.setHeightFt(newInfo.getHeightFt());
