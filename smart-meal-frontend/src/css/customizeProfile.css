@@ -66,3 +66,34 @@
 #root.theme-dark { background: #121212; color: #eaeaea; }
 #root.theme-colorful { background: linear-gradient(120deg,#ffecd2,#fcb69f); color: #2b2b2b; }
 
+/* Toast notification */
+.toast {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background: #323232;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 2000;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1500;
+}
+
+.modal {
+  background: white;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  width: 420px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
