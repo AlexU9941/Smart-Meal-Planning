@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./css/generateMealPlan.css";
+import "../css/generateMealPlan.css";
 
 const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
