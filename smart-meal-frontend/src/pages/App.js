@@ -17,6 +17,7 @@ import GroceryPage from "./GroceryPage";
 import "./css/App.css";
 import NutritionalTracker from "./NutritionalTracker";
 import TrackHealth from "./TrackHealth";
+import PersonalRecipes from "./PersonalRecipes";
 
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
     switch (page) {
       case "track":
         return <TrackHealth />;
+      case "personal":
+        return <PersonalRecipes />;
       case "create":
         return <CreateAccountForm />;
       case "signin":
@@ -61,6 +64,7 @@ function App() {
         <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
         <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
         <button onClick={() => setPage("track")}>Track Health</button>
+        <button onClick={() => setPage("personal")}>Personal Recipes</button>
       </nav>
 
       {renderPage()}
