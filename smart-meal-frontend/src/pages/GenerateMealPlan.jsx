@@ -13,21 +13,50 @@ const GenerateMealPlan = () => {
   const [plan, setPlan] = useState(Array.from({ length: 7 }, (_, i) => emptyDay(i)));
   const [message, setMessage] = useState("");
 
-  const generate = () => {
+  const generate = async() => {
     // For now populate with placeholder meals. Integration with backend will replace this.
-    const newPlan = plan.map((p, i) => ({
-      ...p,
-      lunch: { title: `Lunch: Quick Meal ${i + 1}` },
-      dinner: { title: `Dinner: Hearty Meal ${i + 1}` },
-    }));
+    // const newPlan = plan.map((p, i) => ({
+    //   ...p,
+    //   lunch: { title: `Lunch: Quick Meal ${i + 1}` },
+    //   dinner: { title: `Dinner: Hearty Meal ${i + 1}` },
+    // }));
+    try {
+      const response = await fetch("http://localhost:8080/meal-plans/generate", {
+      method: "POST",
+      headers: {
+      "Content-Type": "application/json" },
+      body: JSON.stringify({ //need to update with real ingredients and budget later
+        ingredients: [],
+        budget: 50
+      })
+      });
+
+      if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Received meal plan data:", data);
+      // Transform backend data to match frontend structure
+      const newPlan = data.days.map((day, index) => ({
+        day: DAYS[index],
+        lunch: day.lunch ? { title: day.lunch.title } : null,
+        dinner: day.dinner ? { title: day.dinner.title } : null,
+      }));
 
     setPlan(newPlan);
-    setMessage("Weekly meal plan generated (placeholders). Replace with backend data later.");
+    setMessage("Weekly meal plan generated!");
     try {
       localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan));
     } catch (e) {
       console.error("Failed to save weeklyMealPlan to localStorage", e);
     }
+  }
+  catch (error) {
+    console.error("Error generating meal plan:", error);
+    setMessage("Failed to generate meal plan. Please try again later.");
+  }
+
+
   };
 
   const clearPlan = () => {

@@ -2,6 +2,7 @@ package smart_meal_planner.model;
 
 import jakarta.persistence.*;
 import smart_meal_planner.nutrition.CaloricBreakdown;
+import smart_meal_planner.nutrition.Nutrient;
 import smart_meal_planner.nutrition.Nutrition;
 import smart_meal_planner.nutrition.WeightPerServing;
 
@@ -136,5 +137,15 @@ public class NutritionEntity {
 
     return n;
 }
+
+    public Double getCalories() {
+    if (nutrients == null) return null;
+
+    return nutrients.stream()
+            .filter(n -> n.getName().equalsIgnoreCase("Calories"))
+            .map(NutrientEntity::getAmount)
+            .findFirst()
+            .orElse(null);
+    }
 
 }

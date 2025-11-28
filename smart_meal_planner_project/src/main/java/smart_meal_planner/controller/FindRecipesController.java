@@ -39,7 +39,7 @@ public class FindRecipesController {
         if (budget == null) budget = 100.0; // default max price if not provided
 
         // Use existing service method by passing the search name as the single ingredient.
-        MealPlan mealPlan = recipeService.findRecipeByIngredients(Collections.singletonList(name), budget);
+        MealPlan mealPlan = recipeService.findRecipeByString(Collections.singletonList(name), budget);
 
         List<FindRecipeDto> response = new ArrayList<>();
         if (mealPlan == null || mealPlan.getDays() == null) {
@@ -86,13 +86,14 @@ public class FindRecipesController {
             @RequestParam(value = "maxCalories", required = false) Double maxCalories
     ) {
         List<RecipeEntity> all = recipeRepository.findAll();
-        List<String> ingredients = null;
+        List<String> ingTemp = null;
         if (ingredientsCsv != null && !ingredientsCsv.isEmpty()) {
-            ingredients = java.util.Arrays.stream(ingredientsCsv.split(","))
+            ingTemp = java.util.Arrays.stream(ingredientsCsv.split(","))
                     .map(String::trim).map(String::toLowerCase)
                     .filter(s -> !s.isEmpty())
                     .collect(Collectors.toList());
         }
+        final List<String> ingredients = ingTemp;
 
         return all.stream().filter(r -> {
             // dietary: check dishTypes contains dietary

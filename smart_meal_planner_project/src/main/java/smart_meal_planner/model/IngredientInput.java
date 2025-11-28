@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
-import smart_meal_planner.recipe.Ingredient;
+import smart_meal_planner.dto.Ingredient;
 import java.util.stream.Collectors;
 
 @Entity

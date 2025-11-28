@@ -1,4 +1,4 @@
-package smart_meal_planner.recipe;
+package smart_meal_planner.dto;
 
 public class Ingredient {
     private String name;
