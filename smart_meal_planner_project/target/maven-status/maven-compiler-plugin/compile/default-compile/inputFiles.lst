@@ -3,8 +3,6 @@ C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planni
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\BudgetController.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\CreateAccountController.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GlobalExceptionHandler.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GroceryAccountController.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\GroceryController.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\IngredientController.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\LogoutController.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\MealPlanController.java
@@ -14,11 +12,11 @@ C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planni
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\UserHealthInfoController.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\controller\UserNutritionalGoalsController.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\GroceryItem.java
+C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\KrogerTokenResponse.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\OAuthResponse.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\GroceryStoreProvider.java
+C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerController.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerProductResponse.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerProvider.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\WalmartProvider.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\Budget.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\GroceryAccount.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\model\IngredientInput.java
@@ -43,7 +41,6 @@ C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planni
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeResult.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\recipe\RecipeSearchResponse.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\BudgetRepository.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\GroceryAccountRepository.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\IngredientRepository.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\MealDayRepository.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\MealPlanRepository.java
@@ -55,7 +52,6 @@ C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planni
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\repository\UserRepository.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\BudgetService.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\DatabaseCommunicator.java
-C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\GroceryIntegrationService.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\IngredientService.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\MailService.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\service\MealPlanService.java

@@ -9,9 +9,8 @@ import FindRecipes from "./FindRecipes";
 import HealthInfoForm from "./HealthInfoForm";
 import IngredientInput from "./IngredientInput";
 import Budget from "./Budget";
-import ProviderSelector from "./ProviderSelector"; 
-import GrocerySearch from "./GrocerySearch";
 import GroceryPage from "./GroceryPage";
+
 import "./css/App.css";
 
 const Sidebar = () => {
