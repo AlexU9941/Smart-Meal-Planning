@@ -11,9 +11,8 @@ import CustomizeProfile from "./CustomizeProfile";
 import GenerateMealPlan from "./GenerateMealPlan";
 import IngredientInput from "./IngredientInput";
 import Budget from "./Budget";
-import ProviderSelector from "./ProviderSelector"; 
-import GrocerySearch from "./GrocerySearch";
 import GroceryPage from "./GroceryPage";
+
 import "./css/App.css";
 import NutritionalTracker from "./NutritionalTracker";
 import TrackHealth from "./TrackHealth";
