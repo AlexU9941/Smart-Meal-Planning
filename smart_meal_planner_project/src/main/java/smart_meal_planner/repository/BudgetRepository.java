@@ -6,4 +6,7 @@ import smart_meal_planner.model.Budget;
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
     // Optional: find budget by user ID
     Budget findByUserId(Long userId);
+
+    //used during resetting preferences
+    void deleteByUserId(Long userId);
 }

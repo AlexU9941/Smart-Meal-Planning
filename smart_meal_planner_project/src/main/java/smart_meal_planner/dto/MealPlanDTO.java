@@ -1,4 +1,4 @@
-package smart_meal_planner.model;
+package smart_meal_planner.dto;
 
 import java.util.List;
 

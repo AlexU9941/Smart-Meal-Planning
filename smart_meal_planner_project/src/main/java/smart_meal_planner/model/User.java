@@ -12,9 +12,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long UID;  
-    
-    //private static int idCounter = 1; 
-    
+        
     @Column(nullable = false, unique = true, length = 32)
     private String username;
     
@@ -54,14 +52,6 @@ public class User {
         this.email = email; 
         this.username = username; 
         this.password = password; 
-        //this.password = password; 
-        
-       // salt = PasswordUtils.generateSalt(); 
-        //String hashedPassword = PasswordUtils.hashPassword(password, salt);
-        //this.password = hashedPassword; 
-
-       //TEMP - will probably change to be database Primary Key 
-       //userID = idCounter++; //set userId to idCounter value then increment for uniqueness
     }
 
     /*GETTERS */
@@ -93,6 +83,10 @@ public class User {
     public String getSalt()
     {
         return salt; 
+    }
+
+    public long getUID() {
+        return UID;
     }
     
     /*SETTERS*/
@@ -127,13 +121,6 @@ public class User {
     {
         this.salt = salt; 
     }
-
-
-    // public void setSex(String sex)
-    // {
-    //     this.sex=sex; 
-    // }
-
 
     //called whenever user logs in. 
     public void enableAccount()

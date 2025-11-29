@@ -1,4 +1,6 @@
 package smart_meal_planner.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import smart_meal_planner.recipe.RecipeResult;
 
@@ -12,6 +14,7 @@ public class MealDay {
 
     @ManyToOne
     @JoinColumn(name = "meal_plan_id")
+    @JsonBackReference
     private MealPlan mealPlan;
 
     @ManyToOne(cascade = CascadeType.ALL)

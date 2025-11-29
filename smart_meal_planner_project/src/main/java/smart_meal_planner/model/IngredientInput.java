@@ -1,9 +1,10 @@
 package smart_meal_planner.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
-import smart_meal_planner.recipe.Ingredient;
+import smart_meal_planner.dto.Ingredient;
 import java.util.stream.Collectors;
 
 @Entity
@@ -21,6 +22,9 @@ public class IngredientInput {
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private RecipeEntity recipe;
+
+    @ManyToOne
+    private User user;
 
     
     public IngredientInput() {}
@@ -73,6 +77,11 @@ public class IngredientInput {
 
 
     public static List<IngredientInput> fromList(List<Ingredient> ingredients, RecipeEntity recipe) {
+       
+        if (ingredients == null) {
+        return new ArrayList<>();
+        }
+       
         return ingredients.stream()
                 .map(ing -> IngredientInput.fromIngredient(ing, recipe))
                 .collect(Collectors.toList());

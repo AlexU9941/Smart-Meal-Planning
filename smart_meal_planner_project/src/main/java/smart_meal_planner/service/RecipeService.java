@@ -15,11 +15,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import reactor.core.publisher.Mono;
 import smart_meal_planner.model.*;
-import smart_meal_planner.recipe.Ingredient;
+import smart_meal_planner.dto.Ingredient;
 import smart_meal_planner.recipe.RecipeResult;
 import smart_meal_planner.recipe.RecipeSearchResponse;
 import smart_meal_planner.repository.RecipeRepository;
 import smart_meal_planner.repository.UserNutritionalGoalsRepository;
+import smart_meal_planner.repository.MealPlanRepository;
+import java.util.Arrays;
+
 
 import java.util.Comparator;
 import java.util.List;
@@ -30,22 +33,24 @@ public class RecipeService {
 
     private final WebClient webClient;
     private final RecipeRepository recipeRepository;
+    private final MealPlanRepository mealPlanRepository;
 
     //private final UserNutritionalGoalsRepository goalsRepository;
 
     @Value("${spoonacular.api.key}")
     private String apiKey;
 
-    public RecipeService(@Qualifier("spoonacularWebClient") WebClient spoonacularWebClient, RecipeRepository recipeRepository) {
+    public RecipeService(@Qualifier("spoonacularWebClient") WebClient spoonacularWebClient, RecipeRepository recipeRepository, MealPlanRepository mealPlanRepository/*, UserNutritionalGoalsRepository goalsRepository*/) {
         this.webClient = spoonacularWebClient;
         this.recipeRepository = recipeRepository;
+        this.mealPlanRepository = mealPlanRepository;
         //this.goalsRepository = goalsRepository;
     }
 
     /**
      * Finds recipes based on ingredients and max price, then creates a persisted MealPlan.
      */
-     public MealPlan findRecipeByIngredients(List<String> ingredients, double maxPrice) {
+     public MealPlan findRecipeByString(List<String> ingredients, double maxPrice) {
         if (ingredients.isEmpty()) {
             throw new IllegalArgumentException("Ingredient list cannot be empty");
         }
@@ -66,6 +71,29 @@ public class RecipeService {
         // Assign meals and persist
         return assignMealsAndPersist(scoredResults);
     }
+
+
+        public MealPlan findRecipeByIngredients(List<Ingredient> ingredients, double maxPrice) {
+            List<String> ingredientNames; 
+
+            if (ingredients.isEmpty()) 
+            {
+              ingredientNames = Arrays.asList("chicken", "beef", "vegetables");
+            }
+            
+            else 
+            {
+            ingredientNames = ingredients.stream()
+                    .filter(Objects::nonNull)
+                    .map(Ingredient::getName)
+                    .collect(Collectors.toList());
+            }
+
+            double price = maxPrice > 0 ? maxPrice : 100; // default max price
+    
+            return findRecipeByString(ingredientNames, price);
+        }
+
 
     /**
      * Calls Spoonacular API synchronously to get recipes.
@@ -112,9 +140,15 @@ public class RecipeService {
 
     private int scoreByIngredient(RecipeResult recipe, List<String> scoringIngredients)
     {
+        List<Ingredient> ingredients = recipe.getExtendedIngredients();
+        if (ingredients == null)
+        {
+            return 0; 
+        }
+
         int score = 0; 
 
-        for (Ingredient ingredient : recipe.getExtendedIngredients()) {
+        for (Ingredient ingredient : ingredients) {
                     String name = ingredient.getName().toLowerCase();
                     if (scoringIngredients.stream().anyMatch(i -> name.contains(i.toLowerCase()))) {
                         score+= 5;
@@ -162,7 +196,7 @@ public class RecipeService {
             day.setMealPlan(mealPlan);
         }
 
-        return mealPlan;
+        return mealPlanRepository.save(mealPlan);
     }
 
     /**
