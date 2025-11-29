@@ -7,8 +7,6 @@ const GroceryPage = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Grocery Store Integration</h1>
-
       {/* Step 1: Kroger OAuth Connect */}
       <ConnectKroger onConnected={() => setConnected(true)} />
 

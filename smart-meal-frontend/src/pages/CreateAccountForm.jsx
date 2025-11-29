@@ -1,5 +1,48 @@
+import React from "react";
+import { useState } from 'react'; 
+import axios from 'axios';  
+export default function CreateAccountForm({ onSignUp }) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
-import { useState } from 'react';
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // TODO: Create account logic here
+    const success = true; // replace with actual signup logic
+
+    if (success) {
+      onSignUp(); // <- call callback to mark user as signed in
+    } else {
+      alert("Account creation failed");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Create Account</h2>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit">Create Account</button>
+    </form>
+  );
+}
+
+export default CreateAccountForm;
+
+/*import { useState } from 'react';
 import axios from 'axios';
 
 export default function CreateAccountForm() {
@@ -46,3 +89,4 @@ export default function CreateAccountForm() {
     </form>
   );
 }
+*/

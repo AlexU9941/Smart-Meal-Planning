@@ -1,4 +1,50 @@
-import { useState } from 'react'; 
+import React, { useState } from "react";
+import axios from "axios";
+
+export default function SignInForm({ onSignIn }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post("http://localhost:8080/api/sign-in", { email, password });
+      if (res.data.success) {
+        onSignIn(); 
+      } else {
+        alert("Invalid credentials");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Sign in failed");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Sign In</h2>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit">Sign In</button>
+    </form>
+  );
+}
+
+
+/*import { useState } from 'react'; 
 import axios from 'axios'; 
 
 
@@ -51,3 +97,4 @@ export default function SignInForm() {
     </form>
   );
 }
+*/
