@@ -1,6 +1,5 @@
 package smart_meal_planner.grocery;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -14,6 +13,7 @@ import smart_meal_planner.dto.OAuthResponse;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Component
@@ -33,9 +33,6 @@ public class KrogerProvider {
     @Value("${kroger.locationId}")
     private String locationId;
 
-    // ---------------------------------------------------------
-    // AUTHORIZATION URL
-    // ---------------------------------------------------------
     public String getAuthorizationUrl() {
         return UriComponentsBuilder
                 .fromHttpUrl("https://api.kroger.com/v1/connect/oauth2/authorize")
@@ -48,10 +45,7 @@ public class KrogerProvider {
                 .toUriString();
     }
 
-    // ---------------------------------------------------------
-    // EXCHANGE AUTH CODE FOR TOKEN
-    // ---------------------------------------------------------
-    public OAuthResponse exchangeAuthCode(String authCode) {
+    /*public OAuthResponse exchangeAuthCode(String authCode) {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "authorization_code");
         form.add("code", authCode);
@@ -61,11 +55,19 @@ public class KrogerProvider {
 
         return callTokenEndpoint(form);
     }
+    */
 
-    // ---------------------------------------------------------
-    // REFRESH ACCESS TOKEN
-    // ---------------------------------------------------------
-    public OAuthResponse refreshToken(String refreshToken) {
+    public OAuthResponse exchangeAuthCode(String authCode) {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("grant_type", "authorization_code");
+        form.add("code", authCode);
+        form.add("redirect_uri", redirectUri);
+
+        return callTokenEndpoint(form);
+    }
+
+
+    /*public OAuthResponse refreshToken(String refreshToken) {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "refresh_token");
         form.add("refresh_token", refreshToken);
@@ -74,8 +76,16 @@ public class KrogerProvider {
 
         return callTokenEndpoint(form);
     }
+    */
+    public OAuthResponse refreshToken(String refreshToken) {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("grant_type", "refresh_token");
+        form.add("refresh_token", refreshToken);
 
-    private OAuthResponse callTokenEndpoint(MultiValueMap<String, String> form) {
+        return callTokenEndpoint(form);
+    }
+
+    /* private OAuthResponse callTokenEndpoint(MultiValueMap<String, String> form) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -96,10 +106,38 @@ public class KrogerProvider {
 
         return oauth;
     }
+    */
 
-    // ---------------------------------------------------------
-    // SEARCH PRODUCTS
-    // ---------------------------------------------------------
+    private OAuthResponse callTokenEndpoint(MultiValueMap<String, String> form) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        // Add Basic Auth
+        String credentials = clientId + ":" + clientSecret;
+        String encodedCredentials = Base64.getEncoder()
+                                        .encodeToString(credentials.getBytes());
+        headers.set("Authorization", "Basic " + encodedCredentials);
+
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(form, headers);
+
+        ResponseEntity<KrogerTokenResponse> res = rest.postForEntity(
+                "https://api.kroger.com/v1/connect/oauth2/token",
+                entity,
+                KrogerTokenResponse.class
+        );
+
+        KrogerTokenResponse body = res.getBody();
+        if (body == null) throw new RuntimeException("Empty token response");
+
+        OAuthResponse oauth = new OAuthResponse();
+        oauth.setAccessToken(body.getAccessToken());
+        oauth.setRefreshToken(body.getRefreshToken());
+        oauth.setExpiresAt(Instant.now().plusSeconds(body.getExpiresIn()));
+
+        return oauth;
+    }
+
+
     public List<GroceryItem> searchProducts(List<String> terms, String accessToken) {
         List<GroceryItem> out = new ArrayList<>();
 
@@ -130,14 +168,12 @@ public class KrogerProvider {
                 item.setProductId(p.getProductId());
                 item.setName(p.getDescription());
 
-                // pick price
                 if (p.getItems() != null && !p.getItems().isEmpty()) {
                     KrogerProductResponse.Price pr = p.getItems().get(0).getPrice();
                     item.setPrice(pr != null ? pr.getRegular() : 0.0);
                     item.setSize(p.getItems().get(0).getSize());
                 }
 
-                // pick first image
                 if (p.getImages() != null &&
                     !p.getImages().isEmpty() &&
                     p.getImages().get(0).getSizes() != null &&
@@ -152,6 +188,7 @@ public class KrogerProvider {
 
         return out;
     }
+
 
     public String buildCheckoutUrl(List<String> productIds, String accessToken) {
         return "https://www.kroger.com/checkout/start?items=" + String.join(",", productIds);
