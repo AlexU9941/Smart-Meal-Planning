@@ -18,7 +18,6 @@ import java.util.List;
 
 @Component
 public class KrogerProvider {
-
     private final RestTemplate rest = new RestTemplate();
 
     @Value("${kroger.clientId}")
@@ -32,6 +31,19 @@ public class KrogerProvider {
 
     @Value("${kroger.locationId}")
     private String locationId;
+
+    /* public String getAuthorizationUrl() {
+        return UriComponentsBuilder
+                .fromHttpUrl("https://api.kroger.com/v1/connect/oauth2/authorize")
+                .queryParam("client_id", clientId)
+                .queryParam("response_type", "code")
+                .queryParam("scope", "product.compact")
+                .queryParam("redirect_uri", redirectUri)
+                .queryParam("state", "abc123")
+                .build(true)
+                .toUriString();
+    }
+    */
 
     public String getAuthorizationUrl() {
         return UriComponentsBuilder
@@ -56,12 +68,24 @@ public class KrogerProvider {
         return callTokenEndpoint(form);
     }
     */
+    /*
+    public OAuthResponse exchangeAuthCode(String authCode) {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("grant_type", "authorization_code");
+        form.add("code", authCode);
+        form.add("redirect_uri", redirectUri);
+
+        return callTokenEndpoint(form);
+    }
+    */
 
     public OAuthResponse exchangeAuthCode(String authCode) {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "authorization_code");
         form.add("code", authCode);
         form.add("redirect_uri", redirectUri);
+        form.add("client_id", clientId);
+        form.add("client_secret", clientSecret);
 
         return callTokenEndpoint(form);
     }
@@ -76,11 +100,22 @@ public class KrogerProvider {
 
         return callTokenEndpoint(form);
     }
-    */
+    
     public OAuthResponse refreshToken(String refreshToken) {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "refresh_token");
         form.add("refresh_token", refreshToken);
+
+        return callTokenEndpoint(form);
+    }
+    */
+
+    public OAuthResponse refreshToken(String refreshToken) {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("grant_type", "refresh_token");
+        form.add("refresh_token", refreshToken);
+        form.add("client_id", clientId);
+        form.add("client_secret", clientSecret);
 
         return callTokenEndpoint(form);
     }
@@ -108,7 +143,7 @@ public class KrogerProvider {
     }
     */
 
-    private OAuthResponse callTokenEndpoint(MultiValueMap<String, String> form) {
+    /*private OAuthResponse callTokenEndpoint(MultiValueMap<String, String> form) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -137,6 +172,33 @@ public class KrogerProvider {
         return oauth;
     }
 
+    */
+
+    private OAuthResponse callTokenEndpoint(MultiValueMap<String, String> form) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(form, headers);
+
+        ResponseEntity<KrogerTokenResponse> res = rest.exchange(
+                "https://api.kroger.com/v1/connect/oauth2/token",
+                HttpMethod.POST,
+                entity,
+                KrogerTokenResponse.class
+        );
+
+        KrogerTokenResponse body = res.getBody();
+        if (body == null) {
+            throw new RuntimeException("Failed to get token from Kroger");
+        }
+
+        OAuthResponse oauth = new OAuthResponse();
+        oauth.setAccessToken(body.getAccessToken());
+        oauth.setRefreshToken(body.getRefreshToken());
+        oauth.setExpiresAt(Instant.now().plusSeconds(body.getExpiresIn()));
+
+        return oauth;
+    }
 
     public List<GroceryItem> searchProducts(List<String> terms, String accessToken) {
         List<GroceryItem> out = new ArrayList<>();

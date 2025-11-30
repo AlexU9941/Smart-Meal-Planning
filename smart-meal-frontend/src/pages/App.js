@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import SignInForm from "./SignInForm";
+import CreateAccountForm from "./CreateAccountForm";
 import FindRecipes from "./FindRecipes";
 import HealthInfoForm from "./HealthInfoForm";
 import CustomizeProfile from "./CustomizeProfile";
@@ -7,106 +9,17 @@ import NutritionalTracker from "./NutritionalTracker";
 import TrackHealth from "./TrackHealth";
 import PersonalRecipes from "./PersonalRecipes";
 import GroceryPage from "./GroceryPage";
+
 import "./css/App.css";
 
-// ---------------------- Sign In Form ----------------------
-function SignInForm({ onSignIn, switchToCreate }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // TODO: Replace with real authentication logic
-    const success = true;
-
-    if (success) {
-      onSignIn(); // Mark user as signed in
-    } else {
-      alert("Sign in failed");
-    }
-  };
-
-  return (
-    <div>
-      <h2>Sign In</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Sign In</button>
-      </form>
-      <p>
-        Don't have an account?{" "}
-        <button onClick={switchToCreate}>Create Account</button>
-      </p>
-    </div>
-  );
-}
-
-// ---------------------- Create Account Form ----------------------
-function CreateAccountForm({ onSignUp, switchToSignIn }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // TODO: Replace with real account creation logic
-    const success = true;
-
-    if (success) {
-      onSignUp(); // Auto sign in after account creation
-    } else {
-      alert("Account creation failed");
-    }
-  };
-
-  return (
-    <div>
-      <h2>Create Account</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Create Account</button>
-      </form>
-      <p>
-        Already have an account?{" "}
-        <button onClick={switchToSignIn}>Sign In</button>
-      </p>
-    </div>
-  );
-}
-
-// ---------------------- Main App ----------------------
 function App() {
-  const [page, setPage] = useState("signin"); // default page
+  const [page, setPage] = useState("signin"); 
   const [userSignedIn, setUserSignedIn] = useState(false);
+  //const [mealPlanIngredients, setMealPlanIngredients] = useState([]);
 
   const handleSignIn = () => {
     setUserSignedIn(true);
-    setPage("home"); // redirect to main page after sign in
+    setPage("home"); // Redirect to home after sign in
   };
 
   const handleSignOut = () => {
@@ -118,26 +31,11 @@ function App() {
     if (!userSignedIn) {
       switch (page) {
         case "signin":
-          return (
-            <SignInForm
-              onSignIn={handleSignIn}
-              switchToCreate={() => setPage("create")}
-            />
-          );
+          return <SignInForm onSignIn={handleSignIn} switchToCreate={() => setPage("create")} />;
         case "create":
-          return (
-            <CreateAccountForm
-              onSignUp={handleSignIn}
-              switchToSignIn={() => setPage("signin")}
-            />
-          );
+          return <CreateAccountForm onSignUp={handleSignIn} switchToSignIn={() => setPage("signin")} />;
         default:
-          return (
-            <SignInForm
-              onSignIn={handleSignIn}
-              switchToCreate={() => setPage("create")}
-            />
-          );
+          return <SignInForm onSignIn={handleSignIn} switchToCreate={() => setPage("create")} />;
       }
     }
 
@@ -171,18 +69,16 @@ function App() {
       <h1>Smart Meal Planner</h1>
 
       {userSignedIn && (
-        <nav
-          style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem" }}
-        >
+        <nav style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem" }}>
           <button onClick={() => setPage("home")}>Home</button>
           <button onClick={() => setPage("find")}>Find Recipes</button>
           <button onClick={() => setPage("health")}>Health Info</button>
           <button onClick={() => setPage("customize")}>Customize Profile</button>
           <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
+          <button onClick={() => setPage("grocery")}>Grocery Page</button>
           <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
           <button onClick={() => setPage("track")}>Track Health</button>
           <button onClick={() => setPage("personal")}>Personal Recipes</button>
-          <button onClick={() => setPage("grocery")}>Grocery Page</button>
           <button onClick={handleSignOut}>Sign Out</button>
         </nav>
       )}
@@ -194,7 +90,8 @@ function App() {
 
 export default App;
 
-/*import React, { useState } from "react";
+/*
+import React, { useState } from "react";
 import CreateAccountForm from "./CreateAccountForm";
 import SignInForm from "./SignInForm";
 import RecipeCard from "./RecipeCard";
@@ -203,8 +100,6 @@ import FindRecipes from "./FindRecipes";
 import HealthInfoForm from "./HealthInfoForm";
 import CustomizeProfile from "./CustomizeProfile";
 import GenerateMealPlan from "./GenerateMealPlan";
-import IngredientInput from "./IngredientInput";
-import Budget from "./Budget";
 import GroceryPage from "./GroceryPage";
 import NutritionalTracker from "./NutritionalTracker";
 import TrackHealth from "./TrackHealth";
@@ -286,8 +181,8 @@ function App() {
 }
 
 export default App;
-*/
 
+*/
 
 
 // TEMP COMMENTING to see what Srinath's looks like 
