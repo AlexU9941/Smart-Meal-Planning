@@ -75,7 +75,7 @@ function App() {
           <button onClick={() => setPage("health")}>Health Info</button>
           <button onClick={() => setPage("customize")}>Customize Profile</button>
           <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
-          <button onClick={() => setPage("grocery")}>Grocery Page</button>
+          <button onClick={() => setPage("grocery")}>Kroger Grocery List</button>
           <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
           <button onClick={() => setPage("track")}>Track Health</button>
           <button onClick={() => setPage("personal")}>Personal Recipes</button>
