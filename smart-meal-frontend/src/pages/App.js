@@ -1,39 +1,48 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
-
-import CreateAccountForm from "./CreateAccountForm";
 import SignInForm from "./SignInForm";
-import RecipeCard from "./RecipeCard";
-import RecoverPassword from "./RecoverPassword";
+import CreateAccountForm from "./CreateAccountForm";
 import FindRecipes from "./FindRecipes";
 import HealthInfoForm from "./HealthInfoForm";
 import CustomizeProfile from "./CustomizeProfile";
 import GenerateMealPlan from "./GenerateMealPlan";
-import IngredientInput from "./IngredientInput";
-import Budget from "./Budget";
-import GroceryPage from "./GroceryPage";
-
-import "./css/App.css";
 import NutritionalTracker from "./NutritionalTracker";
 import TrackHealth from "./TrackHealth";
 import PersonalRecipes from "./PersonalRecipes";
+import GroceryPage from "./GroceryPage";
 
+import "./css/App.css";
 
 function App() {
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState("signin"); 
+  const [userSignedIn, setUserSignedIn] = useState(false);
+  //const [mealPlanIngredients, setMealPlanIngredients] = useState([]);
+
+  const handleSignIn = () => {
+    setUserSignedIn(true);
+    setPage("home"); // Redirect to home after sign in
+  };
+
+  const handleSignOut = () => {
+    setUserSignedIn(false);
+    setPage("signin");
+  };
 
   const renderPage = () => {
+    if (!userSignedIn) {
+      switch (page) {
+        case "signin":
+          return <SignInForm onSignIn={handleSignIn} switchToCreate={() => setPage("create")} />;
+        case "create":
+          return <CreateAccountForm onSignUp={handleSignIn} switchToSignIn={() => setPage("signin")} />;
+        default:
+          return <SignInForm onSignIn={handleSignIn} switchToCreate={() => setPage("create")} />;
+      }
+    }
+
+    // Main app pages
     switch (page) {
-      case "track":
-        return <TrackHealth />;
-      case "personal":
-        return <PersonalRecipes />;
-      case "create":
-        return <CreateAccountForm />;
-      case "signin":
-        return <SignInForm />;
-      case "recover":
-        return <RecoverPassword />;
+      case "home":
+        return <div>Welcome to Smart Meal Planner!</div>;
       case "find":
         return <FindRecipes />;
       case "health":
@@ -44,10 +53,14 @@ function App() {
         return <GenerateMealPlan />;
       case "nutrition":
         return <NutritionalTracker />;
-      case "home":
-        return <div>Welcome to Smart Meal Planner!</div>;
+      case "track":
+        return <TrackHealth />;
+      case "personal":
+        return <PersonalRecipes />;
+      case "grocery":
+        return <GroceryPage />;
       default:
-        return <SignInForm />;
+        return <div>Welcome to Smart Meal Planner!</div>;
     }
   };
 
@@ -55,16 +68,20 @@ function App() {
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
       <h1>Smart Meal Planner</h1>
 
-      <nav style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem" }}>
-        <button onClick={() => setPage("home")}>Home</button>
-        <button onClick={() => setPage("find")}>Find Recipes</button>
-        <button onClick={() => setPage("health")}>Health Info</button>
-        <button onClick={() => setPage("customize")}>Customize Profile</button>
-        <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
-        <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
-        <button onClick={() => setPage("track")}>Track Health</button>
-        <button onClick={() => setPage("personal")}>Personal Recipes</button>
-      </nav>
+      {userSignedIn && (
+        <nav style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem" }}>
+          <button onClick={() => setPage("home")}>Home</button>
+          <button onClick={() => setPage("find")}>Find Recipes</button>
+          <button onClick={() => setPage("health")}>Health Info</button>
+          <button onClick={() => setPage("customize")}>Customize Profile</button>
+          <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
+          <button onClick={() => setPage("grocery")}>Kroger Grocery List</button>
+          <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
+          <button onClick={() => setPage("track")}>Track Health</button>
+          <button onClick={() => setPage("personal")}>Personal Recipes</button>
+          <button onClick={handleSignOut}>Sign Out</button>
+        </nav>
+      )}
 
       {renderPage()}
     </div>
@@ -73,8 +90,99 @@ function App() {
 
 export default App;
 
+/*
+import React, { useState } from "react";
+import CreateAccountForm from "./CreateAccountForm";
+import SignInForm from "./SignInForm";
+import RecipeCard from "./RecipeCard";
+import RecoverPassword from "./RecoverPassword";
+import FindRecipes from "./FindRecipes";
+import HealthInfoForm from "./HealthInfoForm";
+import CustomizeProfile from "./CustomizeProfile";
+import GenerateMealPlan from "./GenerateMealPlan";
+import GroceryPage from "./GroceryPage";
+import NutritionalTracker from "./NutritionalTracker";
+import TrackHealth from "./TrackHealth";
+import PersonalRecipes from "./PersonalRecipes";
 
+import "./css/App.css";
 
+function App() {
+  const [page, setPage] = useState("signin"); // Default to sign in
+  const [userSignedIn, setUserSignedIn] = useState(false);
+
+  const handleSignIn = () => {
+    setUserSignedIn(true);
+    setPage("home"); // redirect to main page after sign in
+  };
+
+  const renderPage = () => {
+    // If user is not signed in, restrict to signin/create account/recover
+    if (!userSignedIn) {
+      switch (page) {
+        case "signin":
+          return <SignInForm onSignIn={handleSignIn} />;
+        case "create":
+          return <CreateAccountForm onSignUp={handleSignIn} />; // auto sign in after create
+        case "recover":
+          return <RecoverPassword />;
+        default:
+          return <SignInForm onSignIn={handleSignIn} />;
+      }
+    }
+
+    // Main app pages
+    switch (page) {
+      case "track":
+        return <TrackHealth />;
+      case "personal":
+        return <PersonalRecipes />;
+      case "find":
+        return <FindRecipes />;
+      case "health":
+        return <HealthInfoForm />;
+      case "customize":
+        return <CustomizeProfile />;
+      case "generate":
+        return <GenerateMealPlan />;
+      case "nutrition":
+        return <NutritionalTracker />;
+      case "grocery":
+        return <GroceryPage />;
+      case "home":
+        return <div>Welcome to Smart Meal Planner!</div>;
+      default:
+        return <SignInForm onSignIn={handleSignIn} />;
+    }
+  };
+
+  return (
+    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
+      <h1>Smart Meal Planner</h1>
+
+      {userSignedIn && (
+        <nav style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem" }}>
+          <button onClick={() => setPage("home")}>Home</button>
+          <button onClick={() => setPage("find")}>Find Recipes</button>
+          <button onClick={() => setPage("health")}>Health Info</button>
+          <button onClick={() => setPage("customize")}>Customize Profile</button>
+          <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
+          <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
+          <button onClick={() => setPage("track")}>Track Health</button>
+          <button onClick={() => setPage("personal")}>Personal Recipes</button>
+          <button onClick={() => setPage("grocery")}>Grocery Page</button>
+          <button onClick={() => { setUserSignedIn(false); setPage("signin"); }}>Sign Out</button>
+        </nav>
+      )}
+
+      {renderPage()}
+    </div>
+  );
+}
+
+export default App;
+
+*/
 
 
 // TEMP COMMENTING to see what Srinath's looks like 
