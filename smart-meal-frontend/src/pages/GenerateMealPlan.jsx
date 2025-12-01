@@ -1,99 +1,51 @@
 import React, { useState } from "react";
 import "../css/generateMealPlan.css";
 
-const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const emptyDay = (i) => ({ day: DAYS[i], lunch: null, dinner: null });
 
-const emptyDay = (index) => ({
-  day: DAYS[index],
-  lunch: null,
-  dinner: null,
-});
-
-const GenerateMealPlan = () => {
-  const [plan, setPlan] = useState(() => {
-    try {
-      const saved = localStorage.getItem("weeklyMealPlan");
-      const parsed = JSON.parse(saved);
-
-      if (Array.isArray(parsed) && parsed.length === 7) {
-        return parsed;
-      }
-    } catch (e) {
-      console.error("LocalStorage load error:", e);
-    }
-
-    return Array.from({ length: 7 }, (_, i) => emptyDay(i));
-  });
-
+export default function GenerateMealPlan({ onIngredientsGenerated }) {
+  const [plan, setPlan] = useState(Array.from({ length: 7 }, (_, i) => emptyDay(i)));
   const [message, setMessage] = useState("");
 
-  const generate = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/meal-plans/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ingredients: [],
-          budget: 50
-        })
-      });
+  const recipes = [
+    { title: "Chicken Salad", ingredients: ["Chicken", "Lettuce", "Tomatoes"] },
+    { title: "Pasta Alfredo", ingredients: ["Pasta", "Cream", "Parmesan"] },
+    { title: "Veggie Stir Fry", ingredients: ["Broccoli", "Carrots", "Soy Sauce"] },
+  ];
 
-      if (!response.ok) {
-        throw new Error("Meal plan generation failed. Status: " + response.status);
-      }
+  const generateRandomMealPlan = () => {
+    const newPlan = plan.map((day) => ({
+      ...day,
+      lunch: recipes[Math.floor(Math.random() * recipes.length)],
+      dinner: recipes[Math.floor(Math.random() * recipes.length)],
+    }));
 
-      const data = await response.json();
-      console.log("Backend meal plan:", data);
+    setPlan(newPlan);
+    setMessage("Meal plan generated!");
 
-      if (!data.days || !Array.isArray(data.days)) {
-        throw new Error("Invalid backend format: missing days[]");
-      }
+    const ingredients = newPlan.flatMap((d) => [
+      d.lunch?.title,
+      d.dinner?.title,
+    ].filter(Boolean));
 
-      const newPlan = data.days.slice(0, 7).map((day, index) => ({
-        day: DAYS[index],
-        lunch: day.lunch ? { title: day.lunch.title } : null,
-        dinner: day.dinner ? { title: day.dinner.title } : null,
-      }));
-
-      setPlan(newPlan);
-      setMessage("Weekly meal plan generated!");
-
-      localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan));
-    } catch (error) {
-      console.error("Error generating meal plan:", error);
-      setMessage("Failed to generate meal plan. Try again later.");
-    }
-  };
-
-  const clearPlan = () => {
-    const emptyPlan = Array.from({ length: 7 }, (_, i) => emptyDay(i));
-    setPlan(emptyPlan);
-    setMessage("Meal plan cleared.");
-    localStorage.removeItem("weeklyMealPlan");
+    if (onIngredientsGenerated) onIngredientsGenerated(ingredients);
   };
 
   return (
-    <div className="generate-meal-plan">
-      <h2>Generate Weekly Meal Plan</h2>
+    <div>
+      <h2>Generate Meal Plan</h2>
+      <button onClick={generateRandomMealPlan}>Generate</button>
 
-      <div className="actions">
-        <button className="generate" onClick={generate}>Generate Weekly Meal Plan</button>
-        <button className="clear" onClick={clearPlan}>Clear</button>
-      </div>
+      {message && <p>{message}</p>}
 
-      {message && <div className="message">{message}</div>}
-
-      <div className="days-row">
-        {plan.map((p, idx) => (
-          <div key={idx} className="day-card">
-            <div className="day-header">{p.day}</div>
-            <div className="meal">{p.lunch ? p.lunch.title : <em>No lunch</em>}</div>
-            <div className="meal">{p.dinner ? p.dinner.title : <em>No dinner</em>}</div>
-          </div>
+      <ul>
+        {plan.map((d, idx) => (
+          <li key={idx}>
+            <strong>{d.day}</strong> – Lunch: {d.lunch?.title ?? "None"}, Dinner: {d.dinner?.title ?? "None"}
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
-};
-
-export default GenerateMealPlan;
+}

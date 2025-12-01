@@ -17,6 +17,7 @@ import "./css/App.css";
 function App() {
   const [page, setPage] = useState("signin");
   const [userSignedIn, setUserSignedIn] = useState(false);
+  const [mealPlanIngredients, setMealPlanIngredients] = useState([]);
 
   const handleSignIn = () => {
     setUserSignedIn(true);
@@ -50,18 +51,26 @@ function App() {
     }
 
     switch (page) {
-      case "home": return <div>Welcome to Smart Meal Planner!</div>;
-      case "find": return <FindRecipes />;
-      case "health": return <HealthInfoForm />;
-      case "customize": return <CustomizeProfile />;
-      case "generate": return <GenerateMealPlan />;
-      case "nutrition": return <NutritionalTracker />;
-      case "track": return <TrackHealth />;
-      case "personal": return <PersonalRecipes />;
-      case "grocery": return <GroceryPage />;
-      case "ingredient": return <IngredientInput />;
-      case "budget": return <Budget />;
-      default: return <div>Welcome to Smart Meal Planner!</div>;
+      case "home":
+        return <div>Welcome to Smart Meal Planner!</div>;
+      case "find":
+        return <FindRecipes />;
+      case "health":
+        return <HealthInfoForm />;
+      case "customize":
+        return <CustomizeProfile />;
+      case "generate":
+        return <GenerateMealPlan onIngredientsGenerated={setMealPlanIngredients}/>;
+      case "nutrition":
+        return <NutritionalTracker />;
+      case "track":
+        return <TrackHealth />;
+      case "personal":
+        return <PersonalRecipes />;
+      case "grocery":
+        return <GroceryPage mealPlanIngredients={mealPlanIngredients}/>;
+      default:
+        return <div>Welcome to Smart Meal Planner!</div>;
     }
   };
 
