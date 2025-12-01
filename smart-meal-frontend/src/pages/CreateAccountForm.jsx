@@ -10,14 +10,15 @@ export default function CreateAccountForm({ onSignUp, switchToSignIn }) {
 
     if (success) {
       onSignUp(); 
+    } else {
       alert("Account creation failed");
     }
   };
 
   return (
     <div>
-      <h2>Create Account</h2>
-      <form onSubmit={handleSubmit}>
+      <h2 style={{ display: 'none' }}>Create Account</h2>
+      <form onSubmit={handleSubmit} className="auth-box">
         <input
           type="email"
           placeholder="Email"
@@ -32,12 +33,11 @@ export default function CreateAccountForm({ onSignUp, switchToSignIn }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Create Account</button>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '0.5rem' }}>
+          <button type="submit">Create Account</button>
+          <button type="button" className="secondary" onClick={switchToSignIn}>Sign In</button>
+        </div>
       </form>
-      <p>
-        Already have an account?{" "}
-        <button onClick={switchToSignIn}>Sign In</button>
-      </p>
     </div>
   );
 }

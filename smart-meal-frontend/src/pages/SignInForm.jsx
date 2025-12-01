@@ -18,8 +18,8 @@ export default function SignInForm({ onSignIn, switchToCreate }) {
 
   return (
     <div>
-      <h2>Sign In</h2>
-      <form onSubmit={handleSubmit}>
+      <h2 style={{ display: 'none' }}>Sign In</h2>
+      <form onSubmit={handleSubmit} className="auth-box">
         <input
           type="email"
           placeholder="Email"
@@ -34,12 +34,11 @@ export default function SignInForm({ onSignIn, switchToCreate }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Sign In</button>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '0.5rem' }}>
+          <button type="submit">Sign In</button>
+          <button type="button" className="secondary" onClick={switchToCreate}>Create Account</button>
+        </div>
       </form>
-      <p>
-        Don't have an account?{" "}
-        <button onClick={switchToCreate}>Create Account</button>
-      </p>
     </div>
   );
 }
