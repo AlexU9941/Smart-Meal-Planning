@@ -1,14 +1,14 @@
 package smart_meal_planner.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.persistence.*;
 import smart_meal_planner.dto.Ingredient;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "ingredients") // this table name is fine
+@Table(name = "ingredients")
 public class IngredientInput {
 
     @Id
@@ -26,7 +26,6 @@ public class IngredientInput {
     @ManyToOne
     private User user;
 
-    
     public IngredientInput() {}
 
     public IngredientInput(String name, double quantity, String unit) {
@@ -35,7 +34,9 @@ public class IngredientInput {
         this.unit = unit;
     }
 
-    // Getters and setters
+    // -----------------------------
+    // Getters & Setters
+    // -----------------------------
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -48,14 +49,11 @@ public class IngredientInput {
     public String getUnit() { return unit; }
     public void setUnit(String unit) { this.unit = unit; }
 
-    public RecipeEntity getRecipe() {
-        return recipe;
-    }
+    public RecipeEntity getRecipe() { return recipe; }
+    public void setRecipe(RecipeEntity recipe) { this.recipe = recipe; }
 
-    public void setRecipe(RecipeEntity recipe) {
-        this.recipe = recipe;
-    }
-
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
     @Override
     public String toString() {
@@ -66,40 +64,35 @@ public class IngredientInput {
                '}';
     }
 
-   public static IngredientInput fromIngredient(Ingredient ing, RecipeEntity recipe) {
-    IngredientInput i = new IngredientInput();
-    i.setName(ing.getName());
-    i.setQuantity(ing.getAmount());
-    i.setUnit(ing.getUnit());
-    i.setRecipe(recipe);
-    return i;
-}
-
+    // -----------------------------
+    // Conversion: DTO → Entity
+    // -----------------------------
+    public static IngredientInput fromIngredient(Ingredient ing, RecipeEntity recipe) {
+        IngredientInput i = new IngredientInput();
+        i.setName(ing.getName());
+        i.setQuantity(ing.getAmount());
+        i.setUnit(ing.getUnit());
+        i.setRecipe(recipe);
+        return i;
+    }
 
     public static List<IngredientInput> fromList(List<Ingredient> ingredients, RecipeEntity recipe) {
-       
-        if (ingredients == null) {
-        return new ArrayList<>();
-        }
-       
+        if (ingredients == null) return new ArrayList<>();
         return ingredients.stream()
-                .map(ing -> IngredientInput.fromIngredient(ing, recipe))
+                .map(ing -> fromIngredient(ing, recipe))
                 .collect(Collectors.toList());
     }
 
+    // -----------------------------
+    // Conversion: Entity → DTO
+    // -----------------------------
     public Ingredient toIngredient() {
-        Ingredient ing = new Ingredient();
-        ing.setName(this.name);
-        ing.setAmount(this.quantity);
-        ing.setUnit(this.unit);
-        return ing;
+        return new Ingredient(this.name, this.quantity, this.unit);
     }
 
     public static List<Ingredient> toIngredientList(List<IngredientInput> inputs) {
         return inputs.stream()
-                    .map(IngredientInput::toIngredient)
-                    .collect(Collectors.toList());
+                .map(IngredientInput::toIngredient)
+                .collect(Collectors.toList());
     }
-
-
 }

@@ -2,31 +2,41 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function SignInForm({ onSignIn, switchToCreate }) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = true;
 
-    if (success) {
-      onSignIn(); 
-    } else {
-      alert("Sign in failed");
+    try {
+      const response = await axios.post("http://localhost:8080/api/sign-in", {
+        username,
+        password
+      });
+
+      console.log("Signed in:", response.data);
+      alert("Signed in as " + response.data.username);
+      
+      onSignIn();
+
+    } catch (error) {
+      alert("Login failed: " + (error.response?.data || "Unknown error"));
     }
   };
 
   return (
-    <div>
-      <h2 style={{ display: 'none' }}>Sign In</h2>
-      <form onSubmit={handleSubmit} className="auth-box">
+    <div className="form-container">
+      <h2>Sign In</h2>
+
+      <form onSubmit={handleSubmit}>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
+
         <input
           type="password"
           placeholder="Password"
@@ -34,11 +44,16 @@ export default function SignInForm({ onSignIn, switchToCreate }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '0.5rem' }}>
-          <button type="submit">Sign In</button>
-          <button type="button" className="secondary" onClick={switchToCreate}>Create Account</button>
-        </div>
+
+        <button type="submit" className="primary-button">Sign In</button>
       </form>
+
+      <p>
+        Don’t have an account?
+        <button className="secondary-button" onClick={switchToCreate}>
+          Create Account
+        </button>
+      </p>
     </div>
   );
 }
