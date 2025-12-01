@@ -21,6 +21,8 @@ C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planni
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\KrogerTokenResponse.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\MealPlanDTO.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\dto\OAuthResponse.java
+C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerAuthService.java
+C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerConfig.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerController.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerProductResponse.java
 C:\Users\abbyh\OneDrive - IL State University\Documents\GitHub\Smart-Meal-Planning\smart_meal_planner_project\src\main\java\smart_meal_planner\grocery\KrogerProvider.java

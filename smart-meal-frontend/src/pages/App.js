@@ -15,7 +15,7 @@ import "./css/App.css";
 function App() {
   const [page, setPage] = useState("signin"); 
   const [userSignedIn, setUserSignedIn] = useState(false);
-  //const [mealPlanIngredients, setMealPlanIngredients] = useState([]);
+  const [mealPlanIngredients, setMealPlanIngredients] = useState([]);
 
   const handleSignIn = () => {
     setUserSignedIn(true);
@@ -50,7 +50,7 @@ function App() {
       case "customize":
         return <CustomizeProfile />;
       case "generate":
-        return <GenerateMealPlan />;
+        return <GenerateMealPlan onIngredientsGenerated={setMealPlanIngredients}/>;
       case "nutrition":
         return <NutritionalTracker />;
       case "track":
@@ -58,7 +58,7 @@ function App() {
       case "personal":
         return <PersonalRecipes />;
       case "grocery":
-        return <GroceryPage />;
+        return <GroceryPage mealPlanIngredients={mealPlanIngredients}/>;
       default:
         return <div>Welcome to Smart Meal Planner!</div>;
     }

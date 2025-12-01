@@ -10,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import smart_meal_planner.dto.GroceryItem;
 import smart_meal_planner.dto.KrogerTokenResponse;
 import smart_meal_planner.dto.OAuthResponse;
+import smart_meal_planner.grocery.KrogerProductResponse.Product;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Component
 public class KrogerProvider {
+
     private final RestTemplate rest = new RestTemplate();
 
     @Value("${kroger.clientId}")
@@ -32,19 +34,9 @@ public class KrogerProvider {
     @Value("${kroger.locationId}")
     private String locationId;
 
-    /* public String getAuthorizationUrl() {
-        return UriComponentsBuilder
-                .fromHttpUrl("https://api.kroger.com/v1/connect/oauth2/authorize")
-                .queryParam("client_id", clientId)
-                .queryParam("response_type", "code")
-                .queryParam("scope", "product.compact")
-                .queryParam("redirect_uri", redirectUri)
-                .queryParam("state", "abc123")
-                .build(true)
-                .toUriString();
-    }
-    */
-
+    // -------------------------------------------------------------------------
+    // STEP 1: Generate authorization URL
+    // -------------------------------------------------------------------------
     public String getAuthorizationUrl() {
         return UriComponentsBuilder
                 .fromHttpUrl("https://api.kroger.com/v1/connect/oauth2/authorize")
@@ -57,139 +49,54 @@ public class KrogerProvider {
                 .toUriString();
     }
 
-    /*public OAuthResponse exchangeAuthCode(String authCode) {
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("grant_type", "authorization_code");
-        form.add("code", authCode);
-        form.add("redirect_uri", redirectUri);
-        form.add("client_id", clientId);
-        form.add("client_secret", clientSecret);
-
-        return callTokenEndpoint(form);
-    }
-    */
-    /*
+    // -------------------------------------------------------------------------
+    // STEP 2: Exchange authorization code for tokens
+    // -------------------------------------------------------------------------
     public OAuthResponse exchangeAuthCode(String authCode) {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "authorization_code");
         form.add("code", authCode);
         form.add("redirect_uri", redirectUri);
 
-        return callTokenEndpoint(form);
-    }
-    */
-
-    public OAuthResponse exchangeAuthCode(String authCode) {
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("grant_type", "authorization_code");
-        form.add("code", authCode);
-        form.add("redirect_uri", redirectUri);
-        form.add("client_id", clientId);
-        form.add("client_secret", clientSecret);
-
+        // Do NOT add client_id/client_secret in the body (use Basic Auth header)
         return callTokenEndpoint(form);
     }
 
-
-    /*public OAuthResponse refreshToken(String refreshToken) {
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("grant_type", "refresh_token");
-        form.add("refresh_token", refreshToken);
-        form.add("client_id", clientId);
-        form.add("client_secret", clientSecret);
-
-        return callTokenEndpoint(form);
-    }
-    
+    // -------------------------------------------------------------------------
+    // Refresh access token using refresh token
+    // -------------------------------------------------------------------------
     public OAuthResponse refreshToken(String refreshToken) {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "refresh_token");
         form.add("refresh_token", refreshToken);
 
-        return callTokenEndpoint(form);
-    }
-    */
-
-    public OAuthResponse refreshToken(String refreshToken) {
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("grant_type", "refresh_token");
-        form.add("refresh_token", refreshToken);
-        form.add("client_id", clientId);
-        form.add("client_secret", clientSecret);
-
+        // Do NOT add client_id/client_secret in the body (use Basic Auth header)
         return callTokenEndpoint(form);
     }
 
-    /* private OAuthResponse callTokenEndpoint(MultiValueMap<String, String> form) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        HttpEntity<?> entity = new HttpEntity<>(form, headers);
-
-        ResponseEntity<KrogerTokenResponse> res = rest.postForEntity(
-                "https://api.kroger.com/v1/connect/oauth2/token",
-                entity,
-                KrogerTokenResponse.class
-        );
-
-        KrogerTokenResponse body = res.getBody();
-
-        OAuthResponse oauth = new OAuthResponse();
-        oauth.setAccessToken(body.getAccessToken());
-        oauth.setRefreshToken(body.getRefreshToken());
-        oauth.setExpiresAt(Instant.now().plusSeconds(body.getExpiresIn()));
-
-        return oauth;
-    }
-    */
-
-    /*private OAuthResponse callTokenEndpoint(MultiValueMap<String, String> form) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        // Add Basic Auth
-        String credentials = clientId + ":" + clientSecret;
-        String encodedCredentials = Base64.getEncoder()
-                                        .encodeToString(credentials.getBytes());
-        headers.set("Authorization", "Basic " + encodedCredentials);
-
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(form, headers);
-
-        ResponseEntity<KrogerTokenResponse> res = rest.postForEntity(
-                "https://api.kroger.com/v1/connect/oauth2/token",
-                entity,
-                KrogerTokenResponse.class
-        );
-
-        KrogerTokenResponse body = res.getBody();
-        if (body == null) throw new RuntimeException("Empty token response");
-
-        OAuthResponse oauth = new OAuthResponse();
-        oauth.setAccessToken(body.getAccessToken());
-        oauth.setRefreshToken(body.getRefreshToken());
-        oauth.setExpiresAt(Instant.now().plusSeconds(body.getExpiresIn()));
-
-        return oauth;
-    }
-
-    */
-
+    // -------------------------------------------------------------------------
+    // Internal helper: call token endpoint with Basic Auth
+    // -------------------------------------------------------------------------
     private OAuthResponse callTokenEndpoint(MultiValueMap<String, String> form) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
+        // Basic Auth header
+        String credentials = clientId + ":" + clientSecret;
+        String encoded = Base64.getEncoder().encodeToString(credentials.getBytes());
+        headers.set("Authorization", "Basic " + encoded);
+
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(form, headers);
 
-        ResponseEntity<KrogerTokenResponse> res = rest.exchange(
+        ResponseEntity<KrogerTokenResponse> res = rest.postForEntity(
                 "https://api.kroger.com/v1/connect/oauth2/token",
-                HttpMethod.POST,
                 entity,
                 KrogerTokenResponse.class
         );
 
         KrogerTokenResponse body = res.getBody();
         if (body == null) {
-            throw new RuntimeException("Failed to get token from Kroger");
+            throw new RuntimeException("Empty token response from Kroger");
         }
 
         OAuthResponse oauth = new OAuthResponse();
@@ -200,60 +107,64 @@ public class KrogerProvider {
         return oauth;
     }
 
-    public List<GroceryItem> searchProducts(List<String> terms, String accessToken) {
-        List<GroceryItem> out = new ArrayList<>();
+    // -------------------------------------------------------------------------
+    // STEP 3: Search products
+    // -------------------------------------------------------------------------
 
-        for (String term : terms) {
+    public List<GroceryItem> searchProducts(List<String> keywords, String accessToken) {
+        List<GroceryItem> items = new ArrayList<>();
+
+        for (String keyword : keywords) {
             String url = UriComponentsBuilder
                     .fromHttpUrl("https://api.kroger.com/v1/products")
-                    .queryParam("filter.term", term)
+                    .queryParam("filter.term", keyword)
                     .queryParam("filter.locationId", locationId)
                     .queryParam("filter.limit", 10)
-                    .build()
-                    .toString();
+                    .build(true)
+                    .toUriString();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(accessToken);
+            HttpEntity<?> entity = new HttpEntity<>(headers);
 
-            ResponseEntity<KrogerProductResponse> res = rest.exchange(
+            ResponseEntity<KrogerProductResponse> response = rest.exchange(
                     url,
                     HttpMethod.GET,
-                    new HttpEntity<>(headers),
+                    entity,
                     KrogerProductResponse.class
             );
 
-            KrogerProductResponse body = res.getBody();
+            KrogerProductResponse body = response.getBody();
             if (body == null || body.getData() == null) continue;
 
-            for (KrogerProductResponse.Product p : body.getData()) {
-                GroceryItem item = new GroceryItem();
-                item.setProductId(p.getProductId());
-                item.setName(p.getDescription());
+            for (Product product : body.getData()) {
+                GroceryItem g = new GroceryItem();
+                g.setName(product.getDescription());
+                g.setProductId(product.getProductId());
 
-                if (p.getItems() != null && !p.getItems().isEmpty()) {
-                    KrogerProductResponse.Price pr = p.getItems().get(0).getPrice();
-                    item.setPrice(pr != null ? pr.getRegular() : 0.0);
-                    item.setSize(p.getItems().get(0).getSize());
+                if (product.getImages() != null && !product.getImages().isEmpty() &&
+                    product.getImages().get(0).getSizes() != null &&
+                    !product.getImages().get(0).getSizes().isEmpty()) {
+                    g.setImageUrl(product.getImages().get(0).getSizes().get(0).getUrl());
                 }
 
-                if (p.getImages() != null &&
-                    !p.getImages().isEmpty() &&
-                    p.getImages().get(0).getSizes() != null &&
-                    !p.getImages().get(0).getSizes().isEmpty()) {
-
-                    item.setImageUrl(p.getImages().get(0).getSizes().get(0).getUrl());
-                }
-
-                out.add(item);
+                items.add(g);
             }
         }
 
-        return out;
+        return items;
     }
 
 
-    public String buildCheckoutUrl(List<String> productIds, String accessToken) {
-        return "https://www.kroger.com/checkout/start?items=" + String.join(",", productIds);
+    // -------------------------------------------------------------------------
+    // STEP 4: Build checkout URL
+    // -------------------------------------------------------------------------
+    public String buildCheckoutUrl(List<String> productIds) {
+        return UriComponentsBuilder
+                .fromHttpUrl("https://www.kroger.com/cart/add")
+                .queryParam("items", String.join(",", productIds))
+                .build(true)
+                .toUriString();
     }
 
     public String getProviderName() {
