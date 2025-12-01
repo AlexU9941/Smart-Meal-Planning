@@ -2,11 +2,13 @@ package smart_meal_planner.model;
 
 
 import jakarta.persistence.*;
+import smart_meal_planner.dto.Ingredient;
 import smart_meal_planner.recipe.RecipeResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -172,5 +174,31 @@ public class RecipeEntity {
         this.id = id; 
     }
 
-    
+    public RecipeResult toRecipeResult() {
+        RecipeResult r = new RecipeResult();
+        r.setId(this.id);
+        r.setTitle(this.title);
+        r.setImage(this.image);
+        r.setSourceUrl(this.sourceUrl);
+        r.setReadyInMinutes(this.readyInMinutes);
+        r.setCookingMinutes(this.cookingMinutes);
+        r.setPreparationMinutes(this.preparationMinutes);
+        r.setServings(this.servings);
+        r.setPricePerServing(this.pricePerServing);
+        r.setDishTypes(this.dishTypes.toArray(new String[0]));
+        r.setScore(this.score);
+
+        // Convert ingredients
+        List<Ingredient> extIngredients = IngredientInput.toIngredientList(this.ingredients);
+        r.setExtendedIngredients(extIngredients);
+
+        // Optional: add nutrition info
+        if (this.nutrition != null) {
+            r.setNutritionalInfo(this.nutrition.toNutrition());
+        }
+
+        return r;
+    }
+
+
 }
