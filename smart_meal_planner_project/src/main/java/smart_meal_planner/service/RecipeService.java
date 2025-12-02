@@ -51,9 +51,15 @@ public class RecipeService {
      * Finds recipes based on ingredients and max price, then creates a persisted MealPlan.
      */
      public MealPlan findRecipeByString(List<String> ingredients, double maxPrice) {
-        if (ingredients.isEmpty()) {
-            throw new IllegalArgumentException("Ingredient list cannot be empty");
-        }
+        // if (ingredients == null|| ingredients.isEmpty()) {
+        //     throw new IllegalArgumentException("Ingredient list cannot be empty");
+        // }
+
+        if (ingredients == null || ingredients.isEmpty()) 
+            {
+              ingredients = Arrays.asList("chicken", "beef", "vegetables");
+            }
+            
 
         String mainIngredient = ingredients.get(0);
         List<String> scoringIngredients = ingredients.subList(1, ingredients.size());
@@ -76,7 +82,7 @@ public class RecipeService {
         public MealPlan findRecipeByIngredients(List<Ingredient> ingredients, double maxPrice) {
             List<String> ingredientNames; 
 
-            if (ingredients.isEmpty()) 
+            if (ingredients == null || ingredients.isEmpty()) 
             {
               ingredientNames = Arrays.asList("chicken", "beef", "vegetables");
             }

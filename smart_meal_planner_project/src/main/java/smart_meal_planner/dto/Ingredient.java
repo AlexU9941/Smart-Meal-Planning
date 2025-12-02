@@ -5,6 +5,13 @@ public class Ingredient {
     private double amount;
     private String unit;
 
+    public Ingredient() {
+    }
+
+    public Ingredient(String name) {
+    this.name = name;
+    }
+
     public String getName() {
         return name;
     }
