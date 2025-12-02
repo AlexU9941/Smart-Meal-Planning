@@ -9,6 +9,7 @@ import NutritionalTracker from "./NutritionalTracker";
 import TrackHealth from "./TrackHealth";
 import PersonalRecipes from "./PersonalRecipes";
 import GroceryPage from "./GroceryPage";
+import RecoverPassword from "./RecoverPassword";
 
 import "./css/App.css";
 
@@ -31,9 +32,15 @@ function App() {
     if (!userSignedIn) {
       switch (page) {
         case "signin":
-          return <SignInForm onSignIn={handleSignIn} switchToCreate={() => setPage("create")} />;
+          return <SignInForm 
+                  onSignIn={handleSignIn} 
+                  switchToCreate={() => setPage("create")} 
+                  switchToRecover={() => setPage("recover")}
+                />
         case "create":
           return <CreateAccountForm onSignUp={handleSignIn} switchToSignIn={() => setPage("signin")} />;
+        case "recover":
+          return <RecoverPassword switchToSignIn={() => setPage("signin")} />;
         default:
           return <SignInForm onSignIn={handleSignIn} switchToCreate={() => setPage("create")} />;
       }

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-export default function SignInForm({ onSignIn, switchToCreate }) {
+export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
@@ -27,7 +27,7 @@ export default function SignInForm({ onSignIn, switchToCreate }) {
   
 
   return (
-    <div>
+    <><div>
       <h2>Sign In</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -35,15 +35,13 @@ export default function SignInForm({ onSignIn, switchToCreate }) {
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+          required />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          required />
         <button type="submit">Sign In</button>
       </form>
       <p>
@@ -51,13 +49,12 @@ export default function SignInForm({ onSignIn, switchToCreate }) {
         <button onClick={switchToCreate}>Create Account</button>
       </p>
     </div>
-  
-<p>
-  Forgot your password?{" "}
-  <button onClick={() => window.location.href = "/recover-password"}>
-    Recover Password
-  </button>
-</p>
-
+    <p>
+        Forgot your password?{" "}
+        <button onClick={switchToRecover}>
+          Recover Password
+        </button>
+      </p>
+    </>
   );
 }
