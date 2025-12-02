@@ -108,7 +108,7 @@ body {
   margin-top: 0.6rem;
 }
 
-input[type="email"], input[type="password"], textarea {
+input[type="email"], input[type="password"], input[type="username"], textarea {
   padding: 0.65rem 0.75rem;
   border-radius: 8px;
   border: 1px solid #e1e6ef;
@@ -131,6 +131,7 @@ button {
   cursor: pointer;
   font-weight: 600;
 }
+
 
 button.secondary {
   background: transparent;

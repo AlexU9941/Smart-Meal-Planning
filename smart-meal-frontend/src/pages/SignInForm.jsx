@@ -2,29 +2,39 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function SignInForm({ onSignIn, switchToCreate }) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const success = true;
+    const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (success) {
-      onSignIn(); 
+  try {
+    const response = await axios.post("http://localhost:8080/api/sign-in", {
+      username: username,    // If backend expects "username"
+      password: password,
+    });
+
+    console.log("Login successful:", response.data);
+    onSignIn();  // Call parent callback to update UI
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      alert("Invalid username or password");
     } else {
-      alert("Sign in failed");
+      alert("Server error. Please try again.");
     }
-  };
+  }
+};
+  
 
   return (
     <div>
       <h2>Sign In</h2>
       <form onSubmit={handleSubmit}>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="username"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
         <input
