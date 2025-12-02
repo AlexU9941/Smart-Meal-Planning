@@ -2,41 +2,31 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function SignInForm({ onSignIn, switchToCreate }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    const success = true;
 
-    try {
-      const response = await axios.post("http://localhost:8080/api/sign-in", {
-        username,
-        password
-      });
-
-      console.log("Signed in:", response.data);
-      alert("Signed in as " + response.data.username);
-      
-      onSignIn();
-
-    } catch (error) {
-      alert("Login failed: " + (error.response?.data || "Unknown error"));
+    if (success) {
+      onSignIn(); 
+    } else {
+      alert("Sign in failed");
     }
   };
 
   return (
-    <div className="form-container">
+    <div>
       <h2>Sign In</h2>
-
       <form onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
-
         <input
           type="password"
           placeholder="Password"
@@ -44,15 +34,11 @@ export default function SignInForm({ onSignIn, switchToCreate }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
-        <button type="submit" className="primary-button">Sign In</button>
+        <button type="submit">Sign In</button>
       </form>
-
       <p>
-        Don’t have an account?
-        <button className="secondary-button" onClick={switchToCreate}>
-          Create Account
-        </button>
+        Don't have an account?{" "}
+        <button onClick={switchToCreate}>Create Account</button>
       </p>
     </div>
   );

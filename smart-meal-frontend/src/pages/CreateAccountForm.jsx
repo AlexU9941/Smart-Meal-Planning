@@ -1,46 +1,23 @@
 import React, { useState } from "react";
-import axios from "axios";
-import './css/CreateAccountForm.css';
 
 export default function CreateAccountForm({ onSignUp, switchToSignIn }) {
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [popupMessage, setPopupMessage] = useState("");
-  const [popupVisible, setPopupVisible] = useState(false);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:8080/api/create-account", {
-        username,
-        email,
-        password
-      });
+    const success = true;
 
-      setPopupMessage("Account created successfully!");
-      setPopupVisible(true);
-      onSignUp();
-    } catch (err) {
-      setPopupMessage("Error: " + (err.response?.data || "Failed to create account"));
-      setPopupVisible(true);
+    if (success) {
+      onSignUp(); 
+      alert("Account creation failed");
     }
   };
 
   return (
-    <div className="create-account-container">
+    <div>
       <h2>Create Account</h2>
-
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-
         <input
           type="email"
           placeholder="Email"
@@ -48,7 +25,6 @@ export default function CreateAccountForm({ onSignUp, switchToSignIn }) {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
         <input
           type="password"
           placeholder="Password"
@@ -56,18 +32,12 @@ export default function CreateAccountForm({ onSignUp, switchToSignIn }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
         <button type="submit">Create Account</button>
       </form>
-
-      {popupVisible && (
-        <div className="popup-overlay" onClick={() => setPopupVisible(false)}>
-          <div className="popup-content">
-            <p>{popupMessage}</p>
-            <button onClick={() => setPopupVisible(false)}>Close</button>
-          </div>
-        </div>
-      )}
+      <p>
+        Already have an account?{" "}
+        <button onClick={switchToSignIn}>Sign In</button>
+      </p>
     </div>
   );
 }
