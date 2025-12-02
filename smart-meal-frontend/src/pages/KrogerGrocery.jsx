@@ -5,42 +5,35 @@ export default function KrogerGrocery({ mealPlanIngredients = [] }) {
   const [cart, setCart] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const normalizedIngredients = mealPlanIngredients.map((i) =>
-    i.trim().toLowerCase()
-  );
+  // Normalize ingredient names
+  const normalizedIngredients = mealPlanIngredients.map(i => i.trim().toLowerCase());
 
   const handleSearch = async () => {
     if (!normalizedIngredients.length) return;
-    
     setLoading(true);
-    setSearchResults([]);
 
     try {
       const queryParam = encodeURIComponent(normalizedIngredients.join(","));
-      const res = await fetch(apiUrl(`/api/kroger/search?q=${queryParam}`), {
-        credentials: "include", // important for cookies/sessions if you add later
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("HTTP Error:", res.status, text);
-        throw new Error(`Server error ${res.status}`);
-      }
+      const res = await fetch(`http://localhost:8080/api/kroger/search?q=${queryParam}`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
       const data = await res.json();
-      console.log("Success! Got", data.length, "items");
+      console.log("Kroger search results:", data);
 
+      // Filter results to match any ingredient (case-insensitive)
+      const filteredData = data.filter(item =>
+        normalizedIngredients.some(ing => item.name?.toLowerCase().includes(ing))
+      );
+
+      // Initialize cart quantities
       const initialCart = {};
-      data.forEach(item => {
-        if (item.id) initialCart[item.id] = 1;
-      });
+      filteredData.forEach(item => { initialCart[item.id] = 1; });
 
-      setSearchResults(data);
+      setSearchResults(filteredData);
       setCart(initialCart);
-
     } catch (err) {
       console.error("Kroger search failed:", err);
-      alert("Failed to load products. Check:\n1. Backend running on port 8080\n2. CORS enabled\n3. Kroger connected successfully");
+      setSearchResults([]);
     } finally {
       setLoading(false);
     }
@@ -48,19 +41,23 @@ export default function KrogerGrocery({ mealPlanIngredients = [] }) {
 
   useEffect(() => {
     handleSearch();
-  }, [normalizedIngredients]);
+  }, [normalizedIngredients]); // triggers whenever ingredients change
 
   const updateQuantity = (id, quantity) => {
     if (quantity < 1) return;
-    setCart((prev) => ({ ...prev, [id]: quantity }));
+    setCart(prev => ({ ...prev, [id]: quantity }));
   };
 
   const handleCheckout = () => {
-    if (!Object.keys(cart).length) return alert("Select at least one item");
+    if (!Object.keys(cart).length) {
+      alert("Select at least one item to checkout.");
+      return;
+    }
     const params = Object.entries(cart)
       .map(([id, qty]) => `productIds=${id}&quantities=${qty}`)
       .join("&");
-    window.open(`http://localhost:8080/api/kroger/checkout?${params}`, "_blank");
+    const url = `http://localhost:8080/api/kroger/checkout?${params}`;
+    window.open(url, "_blank");
   };
 
   const totalPrice = searchResults.reduce((sum, item) => {
@@ -71,44 +68,20 @@ export default function KrogerGrocery({ mealPlanIngredients = [] }) {
   return (
     <div style={{ padding: "1rem" }}>
       <h2>Kroger Grocery - Meal Plan Ingredients</h2>
-      {!normalizedIngredients.length && <p>No ingredients to search.</p>}
+      {!normalizedIngredients.length && <p>No ingredients to search. Generate a meal plan first.</p>}
 
       <button onClick={handleSearch} disabled={loading || !normalizedIngredients.length}>
         {loading ? "Searching..." : "Search Kroger"}
       </button>
 
       <ul style={{ listStyle: "none", padding: 0, marginTop: "1rem" }}>
-        {searchResults.map((item) => (
-          <li
-            key={item.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "0.5rem",
-              border: "1px solid #ccc",
-              padding: "0.5rem",
-              borderRadius: "4px",
-            }}
-          >
-            {item.image && (
-              <img
-                src={item.image}
-                alt={item.name}
-                style={{ width: "60px", height: "60px", marginRight: "1rem" }}
-              />
-            )}
+        {searchResults.map(item => (
+          <li key={item.id} style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem", border: "1px solid #ccc", padding: "0.5rem", borderRadius: "4px" }}>
+            {item.image && <img src={item.image} alt={item.name} style={{ width: "60px", height: "60px", marginRight: "1rem" }} />}
             <div style={{ flex: 1 }}>
               <strong>{item.name}</strong> - {item.brand} - ${item.price}
             </div>
-            <input
-              type="number"
-              min="1"
-              value={cart[item.id] || 1}
-              onChange={(e) =>
-                updateQuantity(item.id, parseInt(e.target.value))
-              }
-              style={{ width: "50px", marginRight: "0.5rem" }}
-            />
+            <input type="number" min="1" value={cart[item.id] || 1} onChange={e => updateQuantity(item.id, parseInt(e.target.value))} style={{ width: "50px", marginRight: "0.5rem" }} />
           </li>
         ))}
       </ul>
