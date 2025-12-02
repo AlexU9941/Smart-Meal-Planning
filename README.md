@@ -57,7 +57,7 @@ npm install
 npm start
 
 System Architecture Diagram: 
-<img width="3407" height="2833" alt="326SoftwareArchitectureDiagram drawio" src="https://github.com/user-attachments/assets/eca502c9-9f79-4a66-adcf-1c693141793a" />
+<img width="3407" height="2833" alt="326SoftwareArchitectureDiagram drawio (1)" src="https://github.com/user-attachments/assets/6e004a9f-b5ad-41d6-b49d-56bc8631a734" />
 
 
 The Software Architecture Diagram reveals that our design has three layers: presentation, service, and persistence. The presentation layer includes the BudgetController, CreateAccountController, SignInController, IngredientController, LogoutController, UserNutritionalGoalsController, UserHealthInfoController, MealPlanController, and RecipeController. These controller classes communicate with service classes that connect them to the repository level. For example, the BudgetController class gets data from the BudgetService class that is apart of the BudgetRepository class. Another example of the connection to the repository class is the SignInController that connects with the MailService and PasswordUtils service layer classes. The PasswordUtils service layer class then goes through the DatabaseCommunicator to reach the repository layer. Once the DatabaseCommunicator reaches the UserRepository, the UserRepository connects these classes to the database. All the repository classes communicate with out SQL database. 
