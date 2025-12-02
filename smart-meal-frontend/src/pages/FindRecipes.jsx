@@ -178,4 +178,3 @@ const FindRecipes = () => {
 };
 
 export default FindRecipes;
-
