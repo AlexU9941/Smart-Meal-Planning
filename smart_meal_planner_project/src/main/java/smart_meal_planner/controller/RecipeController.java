@@ -22,7 +22,7 @@ public class RecipeController {
     //or create multiple endpoints for different search criteria
     @PostMapping("/recipes")
     public MealPlan getRecipes(@RequestBody RecipeSearchRequest request) {
-        return recipeService.findRecipeByIngredients(request.getIngredients(), request.getMaxPrice());
+        return recipeService.findRecipeByString(request.getIngredients(), request.getMaxPrice());
     }
 
 }

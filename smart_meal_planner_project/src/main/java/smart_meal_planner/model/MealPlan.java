@@ -2,6 +2,8 @@ package smart_meal_planner.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class MealPlan {
     private Long id;
     
     @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<MealDay> days = new ArrayList<>();
 
     public MealPlan(){}

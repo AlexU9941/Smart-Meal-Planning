@@ -7,6 +7,7 @@ public class Nutrition {
     private CaloricBreakdown caloricBreakdown; 
     private WeightPerServing weightPerServing;
     
+
     public List<Nutrient> getNutrients() {
         return nutrients;
     }
@@ -25,4 +26,16 @@ public class Nutrition {
     public void setWeightPerServing(WeightPerServing weightPerServing) {
         this.weightPerServing = weightPerServing;
     } 
+
+    //returns value of calories from nutrients list
+    public Double getCalories() {
+    if (nutrients == null) return null;
+
+    return nutrients.stream()
+            .filter(n -> n.getName().equalsIgnoreCase("Calories"))
+            .map(Nutrient::getAmount)
+            .findFirst()
+            .orElse(null);
+    }
+
 }

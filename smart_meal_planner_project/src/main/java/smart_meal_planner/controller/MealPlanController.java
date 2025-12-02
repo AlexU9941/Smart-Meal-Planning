@@ -11,15 +11,20 @@ import smart_meal_planner.dto.MealPlanDTO;
 import smart_meal_planner.model.MealPlan;
 import smart_meal_planner.model.UserNutritionalGoals;
 import smart_meal_planner.service.MealPlanService;
+import smart_meal_planner.service.RecipeService;
+import smart_meal_planner.service.GenerateRequest;
+
 
 @RestController
 @RequestMapping("/meal-plans")
 public class MealPlanController {
 
     private final MealPlanService mealPlanService;
+    private final RecipeService recipeService;
 
-    public MealPlanController(MealPlanService mealPlanService) {
+    public MealPlanController(MealPlanService mealPlanService, RecipeService recipeService) {
         this.mealPlanService = mealPlanService;
+        this.recipeService = recipeService;
     }
 
     @PostMapping
@@ -35,6 +40,12 @@ public class MealPlanController {
     @PostMapping("/{id}/nutrition-diff")
     public double[][] getNutritionDiff(@PathVariable Long id, @RequestBody UserNutritionalGoals goals) {
         return mealPlanService.compareNutrition(id, goals);
+    }
+
+    @PostMapping("/generate")
+    public MealPlan generateMealPlan(@RequestBody GenerateRequest request) {
+        MealPlan plan = recipeService.findRecipeByIngredients(request.getIngredients(), request.getBudget());
+        return plan; 
     }
 }
 
