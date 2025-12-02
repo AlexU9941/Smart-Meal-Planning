@@ -51,5 +51,13 @@ export default function SignInForm({ onSignIn, switchToCreate }) {
         <button onClick={switchToCreate}>Create Account</button>
       </p>
     </div>
+  
+<p>
+  Forgot your password?{" "}
+  <button onClick={() => window.location.href = "/recover-password"}>
+    Recover Password
+  </button>
+</p>
+
   );
 }
