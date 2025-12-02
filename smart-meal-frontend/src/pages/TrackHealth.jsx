@@ -12,6 +12,7 @@ const TrackHealth = () => {
 
   useEffect(() => {
     try {
+     
       const raw = localStorage.getItem('weeklyMealPlan');
       if (!raw) {
         setPlan(null);
@@ -33,9 +34,11 @@ const TrackHealth = () => {
     async function fetchSummary() {
       if (!plan || !Array.isArray(plan) || plan.length === 0) return;
       try {
-        const resp = await fetch('http://localhost:8080/api/nutrition/summary', {
+         console.log("Sending plan to summary endpoint:", plan);
+         const resp = await fetch('http://localhost:8080/api/nutrition/summary', {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ days: plan })
-        });
+         });
+      
         if (!resp.ok) {
           setError('Failed to fetch nutrition summary from backend');
           return;
