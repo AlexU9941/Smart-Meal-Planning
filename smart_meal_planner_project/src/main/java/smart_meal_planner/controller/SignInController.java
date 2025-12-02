@@ -67,8 +67,12 @@ public class SignInController
 
 
     @PostMapping("/recover-password")
-    public ResponseEntity<?> recoverPassword(HttpServletRequest request, @RequestBody String email)
+    public ResponseEntity<?> recoverPassword(@RequestBody Map<String, String> body)
     {
+
+        System.out.println("Email password: " + System.getenv("EMAIL_PASSWORD"));
+
+        String email = body.get("email");
         User user = dbCommunicator.getUserByEmail(email);
 
             if (user == null) {
@@ -93,11 +97,11 @@ public class SignInController
                user.setSalt(newSalt);
                dbCommunicator.updateUser(user);
 
-               //recovery email
+               //recovery email  TEMP COMMENTED 
                mailService.sendEmail(
                    user.getEmail(), 
                    "Password Recovery - Smart Meal Planner", 
-                   "Your temporary password is: " + tempPassword + "\nPlease log in and change your password immediately."
+                   "I tYour temporary password is: " + tempPassword + "\nPlease log in and change your password immediately."
                ); 
 
                 return ResponseEntity.ok("Temp password sent.");
@@ -106,6 +110,7 @@ public class SignInController
 
             catch (Exception e)
             {
+                e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Error sending password recovery email.");
             }
