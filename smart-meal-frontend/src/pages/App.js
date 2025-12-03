@@ -10,6 +10,8 @@ import TrackHealth from "./TrackHealth";
 import PersonalRecipes from "./PersonalRecipes";
 import GroceryPage from "./GroceryPage";
 import RecoverPassword from "./RecoverPassword";
+import IngredientInput from "./IngredientInput";
+import Budget from "./Budget";
 
 import "./css/App.css";
 
@@ -66,6 +68,10 @@ function App() {
         return <PersonalRecipes />;
       case "grocery":
         return <GroceryPage />;
+      case "ingredient":
+        return <IngredientInput />;
+      case "budget":
+        return <Budget />;
       default:
         return <div>Welcome to Smart Meal Planner!</div>;
     }
@@ -82,6 +88,8 @@ function App() {
           <button onClick={() => setPage("health")}>Health Info</button>
           <button onClick={() => setPage("customize")}>Customize Profile</button>
           <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
+          <button onClick={() => setPage("ingredient")}>Input Ingredients</button>
+          <button onClick={() => setPage("budget")}>Set Budget</button> 
           <button onClick={() => setPage("grocery")}>Kroger Grocery List</button>
           <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
           <button onClick={() => setPage("track")}>Track Health</button>

@@ -38,6 +38,7 @@ export default function IngredientInput({ onIngredientsSaved }) {
         ingredients
       );
       setLoading(false);
+      localStorage.setItem("ingredients", JSON.stringify(ingredients));
       if (onIngredientsSaved) onIngredientsSaved(response.data);
       alert("✅ All ingredients saved successfully!");
     } catch (err) {
@@ -72,7 +73,7 @@ export default function IngredientInput({ onIngredientsSaved }) {
             value={ingredient.quantity}
             onChange={(e) => handleChange(index, e)}
             className="border p-2 rounded w-1/4"
-            required
+            //required
           />
           <input
             type="text"

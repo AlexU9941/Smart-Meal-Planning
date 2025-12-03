@@ -36,14 +36,21 @@ const GenerateMealPlan = () => {
 
   const [message, setMessage] = useState("");
 
+  const savedIngredients = JSON.parse(localStorage.getItem("ingredients")) || [];
+  const ingredientNames = savedIngredients //obtain only names of ingredients for generation
+  .map(ing => ing.name)
+  .filter(name => name && name.trim() !== "");
+
+  const budget = localStorage.getItem("budget") || 100; //default budget if none set
+
   const generate = async () => {
     try {
       const response = await fetch("http://localhost:8080/meal-plans/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ingredients: [],
-          budget: 100,
+          ingredients: ingredientNames,
+          budget: budget,
         })
       });
 
@@ -61,7 +68,14 @@ const GenerateMealPlan = () => {
       }));
 
       setPlan(newPlan);
-      setMessage("Weekly meal plan generated!");
+      
+      // Check if any meals are null
+      const anyMissing = newPlan.some(day => !day.lunch || !day.dinner);
+      if (anyMissing) {
+        setMessage("Unable to generate meal plan with current criteria.");
+      } else {
+        setMessage("Weekly meal plan generated!");
+      }
 
       // Save to localStorage
       localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan));
