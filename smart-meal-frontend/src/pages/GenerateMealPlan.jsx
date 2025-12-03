@@ -81,13 +81,42 @@ const GenerateMealPlan = () => {
       const data = await response.json();
       console.log("Received meal plan data:", data);
 
-      const newPlan = data.days.map((day, index) => ({
+      /*const newPlan = data.days.map((day, index) => ({
         day: DAYS[index],
         lunch: day.lunch ? { title: day.lunch.title } : null,
         dinner: day.dinner ? { title: day.dinner.title } : null,
       }));
+      **/
+
+      const newPlan = data.days.map((day, index) => ({
+        day: DAYS[index],
+        lunch: day.lunch
+          ? {
+              title: day.lunch.title,
+              ingredients: day.lunch.ingredients || [],
+            }
+          : null,
+
+        dinner: day.dinner
+          ? {
+              title: day.dinner.title,
+              ingredients: day.dinner.ingredients || [],
+            }
+          : null,
+      }));
+
+
+      const extractAllIngredients = (plan) => {
+        return plan.flatMap((day) => [
+          ...(day.lunch?.ingredients || []),
+          ...(day.dinner?.ingredients || []),
+        ]);
+      };
 
       setPlan(newPlan);
+      
+      const allIngredients = extractAllIngredients(newPlan);
+      localStorage.setItem("mealPlanIngredients", JSON.stringify(allIngredients));
 
       const anyMissing = newPlan.some((day) => !day.lunch || !day.dinner);
       if (anyMissing) {
