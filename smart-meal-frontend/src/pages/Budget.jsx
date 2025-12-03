@@ -29,6 +29,7 @@ class Budget extends Component {
         period: "weekly" // backend expects period
       });
       this.setState({ message: "Budget set successfully!", amount: "" });
+      localStorage.setItem("budget", amount);
       console.log(res.data);
     } catch (err) {
       console.error(err);

@@ -16,7 +16,8 @@ public class IngredientInput {
     private Long id;
 
     private String name;
-    private double quantity;
+    private Double quantity;
+    @Column(nullable = true)
     private String unit;
 
     @ManyToOne
@@ -29,7 +30,7 @@ public class IngredientInput {
     
     public IngredientInput() {}
 
-    public IngredientInput(String name, double quantity, String unit) {
+    public IngredientInput(String name, Double quantity, String unit) {
         this.name = name;
         this.quantity = quantity;
         this.unit = unit;
@@ -69,7 +70,7 @@ public class IngredientInput {
    public static IngredientInput fromIngredient(Ingredient ing, RecipeEntity recipe) {
     IngredientInput i = new IngredientInput();
     i.setName(ing.getName());
-    i.setQuantity(ing.getAmount());
+    i.setQuantity(ing.getAmount() > 0 ? ing.getAmount() : null);
     i.setUnit(ing.getUnit());
     i.setRecipe(recipe);
     return i;

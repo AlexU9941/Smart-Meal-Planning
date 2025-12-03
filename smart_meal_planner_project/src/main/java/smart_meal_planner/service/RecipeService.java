@@ -2,6 +2,7 @@ package smart_meal_planner.service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import reactor.core.publisher.Mono;
 import smart_meal_planner.model.*;
@@ -21,6 +23,8 @@ import smart_meal_planner.recipe.RecipeSearchResponse;
 import smart_meal_planner.repository.RecipeRepository;
 import smart_meal_planner.repository.UserNutritionalGoalsRepository;
 import smart_meal_planner.repository.MealPlanRepository;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -54,6 +58,9 @@ public class RecipeService {
         // if (ingredients == null|| ingredients.isEmpty()) {
         //     throw new IllegalArgumentException("Ingredient list cannot be empty");
         // }
+        try{
+        System.out.println("Querying API using: " + ingredients + " with budget " + maxPrice);
+
 
         if (ingredients == null || ingredients.isEmpty()) 
             {
@@ -61,21 +68,98 @@ public class RecipeService {
             }
             
 
-        String mainIngredient = ingredients.get(0);
-        List<String> scoringIngredients = ingredients.subList(1, ingredients.size());
+        // String mainIngredient = ingredients.get(0);
+        // List<String> scoringIngredients = ingredients.subList(0, ingredients.size());
        
+        List<RecipeResult> allResults = new ArrayList<>();
+        int callsPerIngredient = Math.max(1, 100 / ingredients.size());
 
-        RecipeSearchResponse response = fetchRecipesFromApi(mainIngredient, maxPrice);
-        if (response == null || response.getResults() == null || response.getResults().isEmpty()) {
-            throw new RuntimeException("No recipes returned from Spoonacular API");
+        for (String ingredient : ingredients) {
+            RecipeSearchResponse response = fetchRecipesFromApi(ingredient, maxPrice, callsPerIngredient);
+            if (response != null && response.getResults() != null) {
+                allResults.addAll(response.getResults());
+            }
         }
 
+        if (allResults == null || allResults.size() < 14) {
+            // No recipes found — do NOT create a meal plan
+            System.out.println("No recipes found for the given ingredients and budget.");
+            return new MealPlan(); // empty plan
+        }
 
-        // Score and sort recipes
-        List<RecipeResult> scoredResults = scoreRecipes(response.getResults(), scoringIngredients);
+        // Remove duplicates by recipe ID
+        Map<Long, RecipeResult> uniqueResults = allResults.stream()
+            .filter(Objects::nonNull)
+            .collect(Collectors.toMap(RecipeResult::getId, r -> r, (r1, r2) -> r1));
 
-        // Assign meals and persist
-        return assignMealsAndPersist(scoredResults);
+        List<RecipeResult> scoredResults = scoreRecipes(new ArrayList<>(uniqueResults.values()), ingredients);
+
+        //Take top 14
+        int topMeals = Math.min(scoredResults.size(), 14);
+        List<RecipeResult> topRecipes = scoredResults.subList(0, topMeals);
+
+        return assignMealsAndPersist(topRecipes);
+    } catch (WebClientResponseException e) {
+        // Handle specific HTTP errors
+        if (e.getStatusCode().value() == 402) {
+            System.out.println("API limit reached or payment required: " + e.getMessage());
+        } else {
+            System.out.println("API error: " + e.getStatusCode() + " - " + e.getMessage());
+        }
+        return new MealPlan(); // return empty plan instead of throwing
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new MealPlan(); // fallback for all other exceptions
+    }
+       // RecipeSearchResponse response = fetchRecipesFromApi(mainIngredient, maxPrice);
+    //    RecipeSearchResponse response = fetchRecipesFromApi(ingredients, maxPrice);
+    //     if (response == null || response.getResults() == null || response.getResults().isEmpty()) {
+    //         throw new RuntimeException("No recipes returned from Spoonacular API");
+    //     }
+
+        //TRIED FILTERING BUT SEEMS TO REDUCE RESULTS TOO MUCH
+        //filter by price per serving
+        // List<RecipeResult> filteredResults = response.getResults().stream()
+        //     .filter(r -> r.getPricePerServing() > 0  && r.getPricePerServing() <= maxPrice)
+        //     .collect(Collectors.toList());
+
+        //filter by ingredients, must include at least one scoring ingredient
+        // filteredResults = filteredResults.stream()
+        // .filter(r -> r.getExtendedIngredients().stream()
+        // .anyMatch(i -> scoringIngredients.contains(i.getName().toLowerCase())))
+        // .collect(Collectors.toList());
+
+        //filter by ingredients, must use ALL selected ingredients (or substrings w/ ingredient name)
+    //    filteredResults = filteredResults.stream()
+    //     .filter(r -> {
+    //         // Collect ingredient names from this recipe
+
+    //         // Skip recipes with no ingredient list
+    //         if (r.getExtendedIngredients() == null) {
+    //             return false;
+    //         }
+
+    //         Set<String> names = r.getExtendedIngredients().stream()
+    //                 .filter(Objects::nonNull)
+    //                 .map(i -> i.getName().toLowerCase())
+    //                 .collect(Collectors.toSet());
+
+    //         // Every scoring ingredient must appear at least once (substring match)
+    //        long count = scoringIngredients.stream()
+    //         .filter(ing -> names.stream().anyMatch(n -> n.contains(ing)))
+    //         .count();
+
+    //         return count >= names.size()/2; // at least 1/2 of ingredients must match
+    //     })
+    //     .collect(Collectors.toList());
+
+      //  List<RecipeResult> scoredResults = scoreRecipes(filteredResults, scoringIngredients);
+
+        // // Score and sort recipes
+        // List<RecipeResult> scoredResults = scoreRecipes(response.getResults(), scoringIngredients);
+
+        // // Assign meals and persist
+        // return assignMealsAndPersist(scoredResults);
     }
 
 
@@ -104,14 +188,16 @@ public class RecipeService {
     /**
      * Calls Spoonacular API synchronously to get recipes.
      */
-    private RecipeSearchResponse fetchRecipesFromApi(String mainIngredient, double maxPrice) {
-        int requestCount = 50; // fetch more results to ensure variety
+   // private RecipeSearchResponse fetchRecipesFromApi(String mainIngredient, double maxPrice) {
+    private RecipeSearchResponse fetchRecipesFromApi(String mainIngredient, double maxPrice, int callsPerIngredient) {
+       // int requestCount = 100; // fetch more results to ensure variety
 
+      
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/recipes/complexSearch")
                         .queryParam("query", mainIngredient)
-                        .queryParam("number", requestCount)
+                        .queryParam("number", callsPerIngredient)
                         .queryParam("addRecipeInformation", true)
                         .queryParam("includeNutrition", true)
                         .queryParam("maxPrice", maxPrice)
@@ -120,6 +206,7 @@ public class RecipeService {
                 .retrieve()
                 .bodyToMono(RecipeSearchResponse.class)
                 .block();
+                
     }
 
 
@@ -178,30 +265,37 @@ public class RecipeService {
      * Converts top scored RecipeResults to RecipeEntity and creates MealPlan.
      */
     private MealPlan assignMealsAndPersist(List<RecipeResult> sorted) {
-        List<RecipeResult> top14 = sorted.stream()
-                .limit(14)
-                .collect(Collectors.toList());
+        // List<RecipeResult> top14 = sorted.stream()
+        //         .limit(14)
+        //         .collect(Collectors.toList());
 
-        List<RecipeResult> lunchResults = top14.subList(0, 7);
-        List<RecipeResult> dinnerResults = top14.subList(7, 14);
+        MealPlan mealPlan = new MealPlan();
+        List<MealDay> days = new ArrayList<>();
+
+        List<RecipeResult> lunchResults = sorted.subList(0, 7);
+        List<RecipeResult> dinnerResults = sorted.subList(7, 14);
 
         // Convert RecipeResult -> RecipeEntity and persist
-        List<RecipeEntity> lunchEntities = lunchResults.stream()
-                .map(this::saveOrGetRecipeEntity)
-                .collect(Collectors.toList());
+         List<RecipeEntity> lunchEntities = lunchResults.stream()
+            .map(this::saveOrGetRecipeEntity)
+            .collect(Collectors.toList());
 
         List<RecipeEntity> dinnerEntities = dinnerResults.stream()
-                .map(this::saveOrGetRecipeEntity)
-                .collect(Collectors.toList());
+            .map(this::saveOrGetRecipeEntity)
+            .collect(Collectors.toList());
 
-        // Create MealPlan entity
-        MealPlan mealPlan = new MealPlan(lunchEntities, dinnerEntities);
-
-        // Set back-references
-        for (MealDay day : mealPlan.getDays()) {
+        // Build MealDays (handle missing meals)
+        for (int i = 0; i < 7; i++) {
+            MealDay day = new MealDay();
+            day.setLunch(i < lunchEntities.size() ? lunchEntities.get(i) : null);
+            day.setDinner(i < dinnerEntities.size() ? dinnerEntities.get(i) : null);
             day.setMealPlan(mealPlan);
+            days.add(day);
         }
 
+        mealPlan.setDays(days);
+
+        // Persist meal plan
         return mealPlanRepository.save(mealPlan);
     }
 

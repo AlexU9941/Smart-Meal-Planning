@@ -42,6 +42,9 @@ public class MealPlan {
         return days;
     }
 
+    public void setDays(List<MealDay> days) {
+        this.days = days;
+    }
 
     public String printMealPlan() {
         StringBuilder sb = new StringBuilder();
