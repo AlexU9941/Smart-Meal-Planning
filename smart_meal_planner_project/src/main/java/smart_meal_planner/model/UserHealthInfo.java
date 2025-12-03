@@ -50,6 +50,14 @@ public class UserHealthInfo {
     @Column(nullable = false, unique = true, length = 255)
     private String email;
 
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+
+    private String theme;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String picture;  // base64 string
+
     public UserHealthInfo() {}
 
     // Getters
@@ -62,7 +70,9 @@ public class UserHealthInfo {
     public User getUser() {return user; }
     public String getEmail() {return email;} 
     public LocalDate getDateOfBirth() {return dateOfBirth;}
-
+    public String getBio() {return bio;}
+    public String getTheme(){return theme;}
+    public String getPicture() {return picture;}
 
     // Setters
     public void setHeightFt(int heightFt) { this.heightFt = heightFt; }
@@ -74,4 +84,8 @@ public class UserHealthInfo {
     public void setUser(User user) {this.user = user;  }
     public void setEmail(String email) {this.email = email;}
     public void setDateOfBirth(LocalDate dateOfBirth) {this.dateOfBirth = dateOfBirth;}
+    public void setBio(String bio) {this.bio=bio;}
+    public void setTheme(String theme) {this.theme=theme;}
+    public void setPicture(String picture) {this.picture=picture;}
+    public void setUid(Long uid) {this.uid = uid;}
 }

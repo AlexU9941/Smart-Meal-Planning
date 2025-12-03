@@ -17,9 +17,9 @@ import smart_meal_planner.service.MailService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-public class SignInController {
-    private boolean signInSuccess;
+public class SignInController
+{
+    private boolean signInSuccess; //may not need
 
     @Autowired
     private DatabaseCommunicator dbCommunicator;
@@ -28,6 +28,7 @@ public class SignInController {
     private MailService mailService;
 
     @PostMapping("/sign-in")
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     public ResponseEntity<?> signIn(HttpServletRequest request, @RequestBody Map<String, String> credentials) {
         try {
             String username = credentials.get("username");
