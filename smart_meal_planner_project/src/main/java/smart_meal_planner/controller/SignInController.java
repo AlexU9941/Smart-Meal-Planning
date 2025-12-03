@@ -19,7 +19,6 @@ import smart_meal_planner.service.MailService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000") // allow React dev server to connect
 public class SignInController
 {
     private boolean signInSuccess; //may not need
@@ -31,6 +30,7 @@ public class SignInController
     private MailService mailService;
 
     @PostMapping("/sign-in")
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     public ResponseEntity<?> signIn(HttpServletRequest request, @RequestBody Map<String, String> credentials) {
         try{
             String username = credentials.get("username");

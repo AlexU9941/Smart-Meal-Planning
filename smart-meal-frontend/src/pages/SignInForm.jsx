@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "../css/signIn.css";
 
 export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }) {
   const [username, setUsername] = useState("");
@@ -28,7 +29,7 @@ export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }
 
   return (
     <><div>
-      <h2>Sign In</h2>
+      <h3>Please sign in to use Smart Meal Planner!</h3>
       <form onSubmit={handleSubmit}>
         <input
           type="username"
@@ -45,7 +46,7 @@ export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }
         <button type="submit">Sign In</button>
       </form>
       <p>
-        Don't have an account?{" "}
+        Need to sign up?{" "}
         <button onClick={switchToCreate}>Create Account</button>
       </p>
     </div>

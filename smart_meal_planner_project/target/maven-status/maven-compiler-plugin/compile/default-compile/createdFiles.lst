@@ -70,6 +70,7 @@ smart_meal_planner\controller\NutritionController$FrontendMeal.class
 smart_meal_planner\repository\MealPlanRepository.class
 smart_meal_planner\config\CorsConfig.class
 smart_meal_planner\service\PasswordUtils.class
+smart_meal_planner\controller\UserController.class
 smart_meal_planner\service\UserCreatedRecipeService.class
 smart_meal_planner\config\WebClientConfig.class
 smart_meal_planner\config\CorsConfig$1.class
