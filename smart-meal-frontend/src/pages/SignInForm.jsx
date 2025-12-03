@@ -7,25 +7,38 @@ export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const response = await axios.post("http://localhost:8080/api/sign-in", {
-      username: username,    // If backend expects "username"
-      password: password,
-    });
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/sign-in",
+        {
+          username: username,
+          password: password,
+        },
+        {
+          withCredentials: true, // important for session-based auth
+        }
+      );
 
-    console.log("Login successful:", response.data);
-    onSignIn();  // Call parent callback to update UI
-  } catch (error) {
-    if (error.response && error.response.status === 401) {
-      alert("Invalid username or password");
-    } else {
-      alert("Server error. Please try again.");
+      console.log("Login successful:", response.data);
+
+      // Store basic user info if you want it on the frontend
+      try {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      } catch (err) {
+        console.error("Failed to store user in localStorage", err);
+      }
+
+      onSignIn();
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert("Invalid username or password");
+      } else {
+        alert("Server error. Please try again.");
+      }
     }
-  }
-};
-  
+  };
 
   return (
     <><div>
