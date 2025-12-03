@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SignInForm from "./SignInForm";
 import CreateAccountForm from "./CreateAccountForm";
 import FindRecipes from "./FindRecipes";
@@ -18,7 +18,21 @@ import "./css/App.css";
 function App() {
   const [page, setPage] = useState("signin"); 
   const [userSignedIn, setUserSignedIn] = useState(false);
+  const [theme, setTheme] = useState("light");
   //const [mealPlanIngredients, setMealPlanIngredients] = useState([]);
+ 
+ //loading theme from customized profile when user logs in
+  useEffect(() => {
+  if (userSignedIn) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const uid = user?.uid;
+    if (uid) {
+      const profile = JSON.parse(localStorage.getItem(`userProfile_${uid}`));
+      if (profile?.theme) setTheme(profile.theme);
+    }
+  }
+}, [userSignedIn]);
+
 
   const handleSignIn = () => {
     setUserSignedIn(true);
@@ -57,7 +71,7 @@ function App() {
       case "health":
         return <HealthInfoForm />;
       case "customize":
-        return <CustomizeProfile />;
+        return <CustomizeProfile onThemeChange={setTheme} />;
       case "generate":
         return <GenerateMealPlan />;
       case "nutrition":

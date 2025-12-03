@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "../css/customizeProfile.css";
 
-const STORAGE_KEY = "userProfile";
+//const STORAGE_KEY = "userProfile";
 const MAX_BIO_LENGTH = 500;
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024; // 2MB
 
-function loadProfile() {
+function loadProfile(uid) {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(`userProfile_${uid}`);
     return raw ? JSON.parse(raw) : { bio: "", theme: "light", picture: null };
   } catch (e) {
     console.warn("Failed to parse profile from storage", e);
@@ -15,11 +15,14 @@ function loadProfile() {
   }
 }
 
-function saveProfile(profile) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+function saveProfile(uid, profile) {
+  localStorage.setItem(`userProfile_${uid}`, JSON.stringify(profile));
 }
 
-const CustomizeProfile = () => {
+const CustomizeProfile = ({ onThemeChange }) => {
+  const user = JSON.parse(localStorage.getItem("user"))
+  const uid = user && user.uid ? user.uid : null;
+  
   const [bio, setBio] = useState("");
   const [theme, setTheme] = useState("light");
   const [picture, setPicture] = useState(null); // base64 string
@@ -27,20 +30,18 @@ const CustomizeProfile = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-  useEffect(() => {
-    const p = loadProfile();
-    setBio(p.bio || "");
-    setTheme(p.theme || "light");
-    setPicture(p.picture || null);
-  }, []);
 
   useEffect(() => {
-    // Apply theme class to root element so the rest of the app can pick it up if desired
-    const root = document.getElementById("root");
-    if (!root) return;
-    root.classList.remove("theme-light", "theme-dark", "theme-colorful");
-    root.classList.add(`theme-${theme}`);
-  }, [theme]);
+    if (!uid) return;
+    const p = loadProfile(uid);
+    setBio(p.bio);
+    setTheme(p.theme);
+    setPicture(p.picture);
+  }, [uid]);
+
+  useEffect(() => {
+  if (onThemeChange) onThemeChange(theme);
+  },  [theme, onThemeChange]);
 
   const handleImageChange = (e) => {
     const file = e.target.files && e.target.files[0];
@@ -66,7 +67,7 @@ const CustomizeProfile = () => {
       return;
     }
 
-    saveProfile({ bio, theme, picture });
+    saveProfile(uid, { bio, theme, picture });
     setMessage("Profile saved.");
   };
 
@@ -79,7 +80,7 @@ const CustomizeProfile = () => {
     setBio(empty.bio);
     setTheme(empty.theme);
     setPicture(empty.picture);
-    saveProfile(empty);
+    saveProfile(uid, empty);
     setShowConfirm(false);
     setShowToast(true);
     // also set a small message accessible for screen readers
