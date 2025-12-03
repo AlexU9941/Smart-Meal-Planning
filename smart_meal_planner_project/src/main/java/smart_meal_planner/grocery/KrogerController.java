@@ -1,13 +1,17 @@
 package smart_meal_planner.grocery;
 
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import smart_meal_planner.dto.GroceryItem;
 import smart_meal_planner.dto.OAuthResponse;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/kroger")
@@ -15,19 +19,19 @@ public class KrogerController {
 
     private final KrogerProvider krogerProvider;
 
+    // Store current tokens in memory for simplicity
     private OAuthResponse currentTokens;
 
     public KrogerController(KrogerProvider krogerProvider) {
         this.krogerProvider = krogerProvider;
     }
 
-
     @GetMapping("/connect")
     public void connect(HttpServletResponse response) throws IOException {
-        System.out.println(krogerProvider.getAuthorizationUrl());
-        response.sendRedirect(krogerProvider.getAuthorizationUrl());
+        String url = krogerProvider.getAuthorizationUrl();
+        System.out.println("Redirecting to Kroger OAuth URL: " + url);
+        response.sendRedirect(url);
     }
-
 
     @GetMapping("/callback")
     public String oauthCallback(@RequestParam("code") String code) {
@@ -35,35 +39,35 @@ public class KrogerController {
         return "<h1>Kroger Connected!</h1><p>You can now close this window.</p>";
     }
 
-
     @GetMapping("/status")
-    public boolean status() {
-        return currentTokens != null && currentTokens.getAccessToken() != null;
+    public Map<String, Boolean> status() {
+        boolean connected = currentTokens != null && currentTokens.getAccessToken() != null;
+        return Map.of("connected", connected);
     }
 
-    
     @GetMapping("/search")
-    public List<GroceryItem> search(@RequestParam List<String> q) {
+    public List<GroceryItem> search(@RequestParam("q") String q) {
         ensureTokenValid();
-        return krogerProvider.searchProducts(q, currentTokens.getAccessToken());
+        return krogerProvider.searchProducts(List.of(q), currentTokens.getAccessToken());
     }
 
-    
     @GetMapping("/checkout")
     public String checkout(@RequestParam List<String> productIds) {
         ensureTokenValid();
         return krogerProvider.buildCheckoutUrl(productIds, currentTokens.getAccessToken());
     }
 
-    
     private void ensureTokenValid() {
-        if (currentTokens == null) {
-            throw new RuntimeException("Not authenticated with Kroger");
+        if (currentTokens == null || currentTokens.getAccessToken() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated with Kroger");
         }
-
-        // Refresh token if expired
         if (Instant.now().isAfter(currentTokens.getExpiresAt())) {
-            currentTokens = krogerProvider.refreshToken(currentTokens.getRefreshToken());
+            try {
+                currentTokens = krogerProvider.refreshToken(currentTokens.getRefreshToken());
+            } catch (Exception e) {
+                currentTokens = null;
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token refresh failed");
+            }
         }
     }
 }
