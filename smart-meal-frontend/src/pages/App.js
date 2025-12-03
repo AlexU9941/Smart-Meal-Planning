@@ -34,6 +34,7 @@ function App() {
 }, [userSignedIn]);
 
 
+
   const handleSignIn = () => {
     setUserSignedIn(true);
     setPage("home"); // Redirect to home after sign in
@@ -42,7 +43,13 @@ function App() {
   const handleSignOut = () => {
     setUserSignedIn(false);
     setPage("signin");
+    setTheme("light")
   };
+
+  useEffect(() => {
+  document.body.className = ""; // clear previous classes
+  document.body.classList.add(`theme-${theme}`);
+  }, [theme]);
 
   const renderPage = () => {
     if (!userSignedIn) {
@@ -93,6 +100,7 @@ function App() {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
+     {/* <div className={`theme-${theme}`} style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}> */}
       <h1>Smart Meal Planner</h1>
 
       {userSignedIn && (

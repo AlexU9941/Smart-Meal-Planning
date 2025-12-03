@@ -201,9 +201,35 @@ button:disabled {
 
 .message { color: #001f3f; }
 
+
+.theme-light {
+  background-color: #ffffff !important;
+  color: #000 !important;
+}
+
+.theme-dark {
+  background-color: #110f0f !important;
+  color: #918d8d !important;
+  /* color: #000000 !important; */
+}
+
+.theme-colorful {
+  background: linear-gradient(135deg, #ff8a00, #e52e71);
+  color: #000 !important;
+  /* color: white !important; */
+}
+
+.theme-dark button,
+.theme-colorful button {
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #ffffff;
+}
+
+
 /* Responsive tweaks */
 @media (max-width: 800px) {
   .sidebar { display: none; }
   .auth-card { width: 92%; }
   .nav-button { padding: 0.5rem; }
 }
+

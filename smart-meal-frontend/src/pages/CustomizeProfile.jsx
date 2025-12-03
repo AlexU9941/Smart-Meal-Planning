@@ -24,7 +24,7 @@ const CustomizeProfile = ({ onThemeChange }) => {
   const uid = user && user.uid ? user.uid : null;
   
   const [bio, setBio] = useState("");
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("");
   const [picture, setPicture] = useState(null); // base64 string
   const [message, setMessage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
