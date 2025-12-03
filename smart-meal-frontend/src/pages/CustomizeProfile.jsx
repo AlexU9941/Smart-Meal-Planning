@@ -12,7 +12,6 @@ export default function CustomizeProfile() {
   const [picture, setPicture] = useState(null);
   const [message, setMessage] = useState("");
 
-  // 1️⃣ Get logged-in user on mount
   useEffect(() => {
     axios
       .get("http://localhost:8080/api/users/me", { withCredentials: true })
