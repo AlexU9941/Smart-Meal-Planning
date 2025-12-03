@@ -30,6 +30,11 @@ const CustomizeProfile = ({ onThemeChange }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
 
   useEffect(() => {
     if (!uid) return;
@@ -70,6 +75,22 @@ const CustomizeProfile = ({ onThemeChange }) => {
     saveProfile(uid, { bio, theme, picture });
     setMessage("Profile saved.");
   };
+
+  const changePassword = async (oldPass, newPass) => {
+    try {
+    const response = await fetch("http://localhost:8080/api/user/change-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: user.username, oldPassword: oldPass, newPassword: newPass })
+    });
+
+    const data = await response.text();
+    setMessage(data);
+  } catch (err) {
+    setMessage("Failed to change password.");
+  }
+  };
+
 
   // open confirmation modal
   const handleReset = () => setShowConfirm(true);
@@ -146,6 +167,9 @@ const CustomizeProfile = ({ onThemeChange }) => {
       <div className="actions">
         <button onClick={handleSave} className="save">Save</button>
         <button onClick={handleReset} className="reset">Reset</button>
+        {/* <button onClick={changePassword} className="change-password">Change Password</button> */}
+        <button onClick={() => setShowPasswordModal(true)} className="change-password">Change Password</button>
+
       </div>
 
       {message && <div className="message">{message}</div>}
@@ -162,6 +186,62 @@ const CustomizeProfile = ({ onThemeChange }) => {
           </div>
         </div>
       )}
+
+    {showPasswordModal && (
+    <div className="modal-overlay" >
+      <div className="modal" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem', width: '300px' }}>
+        <h3>Change Password</h3>
+        <label>
+          Old Password
+          <input
+            type="password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+        </label>     
+        <label>
+          New Password
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+        </label>
+        <label>
+          Confirm New Password
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </label>
+
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+          <button onClick={() => setShowPasswordModal(false)}>Cancel</button>
+          <button
+            onClick={async () => {
+              if (newPassword !== confirmPassword) {
+                setMessage("New passwords do not match");
+                return;
+              }
+              await changePassword(oldPassword, newPassword);
+              setOldPassword("");
+              setNewPassword("");
+              setConfirmPassword("");
+              setShowPasswordModal(false);
+            }}
+          >
+            Change
+          </button>
+        </div>
+      </div>
+    </div>
+    )}
+
+
+
+
+
     </div>
   );
 };

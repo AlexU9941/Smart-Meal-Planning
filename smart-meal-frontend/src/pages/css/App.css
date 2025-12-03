@@ -225,6 +225,18 @@ button:disabled {
   color: #ffffff;
 }
 
+.change-password {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.change-password:hover {
+  background-color: #1565c0;
+}
 
 /* Responsive tweaks */
 @media (max-width: 800px) {
