@@ -19,6 +19,9 @@ public class MealPlan {
     @Column(name = "user_id")
     private Long userId;
 
+    public MealPlan() {
+        // Default constructor for JPA
+    }
     // ---------- GETTERS ----------
 
     public Long getId() {
