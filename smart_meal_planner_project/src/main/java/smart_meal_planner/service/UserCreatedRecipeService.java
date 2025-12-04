@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import smart_meal_planner.model.UserCreatedRecipe;
 import smart_meal_planner.repository.UserCreatedRecipeRepository;
+//import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class UserCreatedRecipeService {
@@ -13,11 +15,12 @@ public class UserCreatedRecipeService {
     private UserCreatedRecipeRepository repo;
 
     public UserCreatedRecipe saveUserCreatedRecipe(UserCreatedRecipe recipe) {
+        System.out.println("Saving recipe for userId: " + recipe.getUserId());
         return repo.save(recipe);
     }
 
     public List<UserCreatedRecipe> getUserCreatedRecipesByUserId(Long userId) {
         return repo.findByUserId(userId);
     }
-
+  
 }

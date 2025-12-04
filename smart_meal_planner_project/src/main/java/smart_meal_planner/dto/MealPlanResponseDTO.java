@@ -69,7 +69,8 @@ public class MealPlanResponseDTO {
     private String title;
     private String image;
     private List<IngredientInput> ingredients;  // <-- ADD THIS
-
+    private String sourceUrl;
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -81,5 +82,13 @@ public class MealPlanResponseDTO {
 
     public List<IngredientInput> getIngredients() { return ingredients; }
     public void setIngredients(List<IngredientInput> ingredients) { this.ingredients = ingredients; }
+
+        public String getSourceUrl() {
+            return sourceUrl;
+        }
+
+        public void setSourceUrl(String sourceUrl) {
+            this.sourceUrl = sourceUrl;
+        }
     }
 }

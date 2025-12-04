@@ -5,8 +5,10 @@ const STORAGE_USER_ID_KEY = 'userId';
 const STORAGE_USER_EMAIL_KEY = 'userEmail';
 
 const PersonalRecipes = () => {
-  const [userId, setUserId] = useState(localStorage.getItem(STORAGE_USER_ID_KEY) || '');
-  const [email, setEmail] = useState(localStorage.getItem(STORAGE_USER_EMAIL_KEY) || '');
+  // const [userId, setUserId] = useState(localStorage.getItem(STORAGE_USER_ID_KEY) || '');
+  // const [email, setEmail] = useState(localStorage.getItem(STORAGE_USER_EMAIL_KEY) || '');
+  //const storedUser = JSON.parse(localStorage.getItem("user")); 
+  const [userId, setUserId] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -20,21 +22,42 @@ const PersonalRecipes = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (userId) fetchRecipes(userId);
-  }, [userId]);
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  if (!storedUser || !storedUser.uid) {
+  setError("You must be logged in to view personal recipes.");
+  setLoading(false);
+  return;
+  }
+  setUserId(Number(storedUser.uid));
+  }, []);
+
+  // const fetchRecipes = async (uid) => {
+  //   setError('');
+  //   setLoading(true);
+  //   try {
+  //     const resp = await axios.get(`http://localhost:8080/user-recipes/${uid}`);
+  //     setRecipes(resp.data || []);
+  //   } catch (e) {
+  //     console.error('Failed to load user recipes', e);
+  //     setError('Failed to load personal recipes. If you are offline, recipes cannot be retrieved.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const fetchRecipes = async (uid) => {
-    setError('');
-    setLoading(true);
-    try {
-      const resp = await axios.get(`http://localhost:8080/user-recipes/${uid}`);
-      setRecipes(resp.data || []);
-    } catch (e) {
-      console.error('Failed to load user recipes', e);
-      setError('Failed to load personal recipes. If you are offline, recipes cannot be retrieved.');
-    } finally {
-      setLoading(false);
-    }
+  setLoading(true);
+  setError('');
+
+  try {
+    const resp = await axios.get(`http://localhost:8080/user-recipes/${uid}`);
+    setRecipes(resp.data || []);
+  } catch (e) {
+    setError("Failed to load personal recipes.");
+  } finally {
+    setLoading(false);
+  }
+
   };
 
   const isUnsupportedInput = (text) => {
@@ -56,10 +79,10 @@ const PersonalRecipes = () => {
     setMessage('');
     setError('');
 
-    if (!userId) {
-      setError('No user id found. Please enter your user id to save recipes.');
-      return;
-    }
+    // if (!userId) {
+    //   setError('No user id found. Please enter your user id to save recipes.');
+    //   return;
+    // }
 
     if (!title.trim()) { setMessage('Please provide a title.'); return; }
     if (!content.trim()) { setMessage('Please provide the recipe content.'); return; }
@@ -67,7 +90,7 @@ const PersonalRecipes = () => {
     if (content.length > 10000) { setMessage('Recipe content is too long. Max 10000 characters.'); return; }
 
     const payload = {
-      userId: Number(userId),
+      userId: userId ? Number(userId) : null,
       title: title.trim(),
       recipeContent: content.trim(),
       servings: servings ? Number(servings) : null,
@@ -90,18 +113,19 @@ const PersonalRecipes = () => {
     }
   };
 
-  const handleUserIdSave = () => {
-    localStorage.setItem(STORAGE_USER_ID_KEY, userId);
-    if (email) localStorage.setItem(STORAGE_USER_EMAIL_KEY, email);
-    setMessage('User id saved. Fetching your recipes...');
-    fetchRecipes(userId);
-  };
+  // const handleUserIdSave = () => {
+  //   localStorage.setItem(STORAGE_USER_ID_KEY, userId);
+  //   //if (email) localStorage.setItem(STORAGE_USER_EMAIL_KEY, email);
+  //   setMessage('User id saved. Fetching your recipes...');
+  //   fetchRecipes(userId);
+  // };
 
   return (
     <div className="personal-recipes" style={{ maxWidth: 900, margin: '1rem auto', padding: 12 }}>
       <h2>Personal Recipes</h2>
       <p>Upload and manage your own recipes. Your recipes are saved to your account id.</p>
 
+{/*
       {!userId && (
         <div style={{ marginBottom: 12 }}>
           <label>Enter your user id (required to save): </label>
@@ -113,6 +137,7 @@ const PersonalRecipes = () => {
           </div>
         </div>
       )}
+    */}
 
       <div style={{ marginBottom: 12 }}>
         <button onClick={handleAddClick} style={{ padding: '8px 12px' }}>Add Personal Recipe</button>
