@@ -43,6 +43,7 @@ cd Smart-Meal-Planning
 **2. Environmental Variables:**
 Three environmental variables are necessary for the application to function as intended. 
 Utilize these commands in the terminal before using maven to run to backend. 
+
 $env:EMAIL_PASSWORD="uvvk cgla qhrm iabi" - app password for email sending
 
 $env:KROGER_SECRET = "_" - obtain Kroger api key from the below website. 
