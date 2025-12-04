@@ -67,15 +67,32 @@ const GenerateMealPlan = () => {
       }));
 
       const extractAllIngredients = (plan) =>
-        plan.flatMap((day) => [
-          ...(day.breakfast?.ingredients || []),
-          ...(day.lunch?.ingredients || []),
-          ...(day.dinner?.ingredients || []),
-        ]);
+  plan.flatMap((day) => {
+    const breakfastIng = Array.isArray(day.breakfast?.ingredients)
+      ? day.breakfast.ingredients
+      : [];
+
+    const lunchIng = Array.isArray(day.lunch?.ingredients)
+      ? day.lunch.ingredients
+      : [];
+
+    const dinnerIng = Array.isArray(day.dinner?.ingredients)
+      ? day.dinner.ingredients
+      : [];
+
+    console.log("Day ingredient sets:", {
+      breakfastIng,
+      lunchIng,
+      dinnerIng
+    });
+
+    return [...breakfastIng, ...lunchIng, ...dinnerIng];
+  });
 
       setPlan(newPlan);
       const allIngredients = extractAllIngredients(newPlan);
       localStorage.setItem("mealPlanIngredients", JSON.stringify(allIngredients));
+      console.log("Stored mealPlanIngredients:", allIngredients);
 
       const anyMissing = newPlan.some((day) => !day.breakfast || !day.lunch || !day.dinner);
       setMessage(anyMissing ? "Some meals could not be generated." : "Weekly meal plan generated!");
