@@ -28,19 +28,19 @@ public class MealPlanDTO {
     // ================================================================
     public static class MealDayDTO {
 
-        private Integer breakfastId; // NEW
-        private Integer lunchId;
-        private Integer dinnerId;
+        private Long breakfastId; // NEW
+        private Long lunchId;
+        private Long dinnerId;
 
-        public Integer getBreakfastId() {
+        public Long getBreakfastId() {
             return breakfastId;
         }
 
-        public void setBreakfastId(Integer breakfastId) {
+        public void setBreakfastId(Long breakfastId) {
             this.breakfastId = breakfastId;
         }
 
-        public Integer getLunchId() {
+        public Long getLunchId() {
             return lunchId;
         }
 

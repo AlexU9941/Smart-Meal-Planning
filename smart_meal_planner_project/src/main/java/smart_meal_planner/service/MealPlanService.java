@@ -8,11 +8,14 @@ import smart_meal_planner.dto.MealPlanResponseDTO;
 import smart_meal_planner.model.MealDay;
 import smart_meal_planner.model.MealPlan;
 import smart_meal_planner.model.RecipeEntity;
+import smart_meal_planner.model.UserNutritionalGoals;
+import smart_meal_planner.nutrition.NutritionComparison;
 import smart_meal_planner.repository.MealPlanRepository;
 import smart_meal_planner.repository.RecipeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,14 +34,34 @@ public class MealPlanService {
     /** Save plan built manually */
     @Transactional
     public MealPlan saveMealPlan(List<RecipeEntity> breakfasts, List<RecipeEntity> lunches, List<RecipeEntity> dinners) {
-        MealPlan mealPlan = new MealPlan(breakfasts, lunches, dinners);
+        // MealPlan mealPlan = new MealPlan(breakfasts, lunches, dinners);
 
-        for (MealDay day : mealPlan.getDays()) {
+        // for (MealDay day : mealPlan.getDays()) {
+        //     day.setMealPlan(mealPlan);
+        // }
+
+        // plan.setDays(days);
+        // return mealPlanRepository.save(plan);
+
+        MealPlan mealPlan = new MealPlan();
+        List<MealDay> days = new ArrayList<>();
+
+        String[] dayNames = { "Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday" };
+
+        for (int i = 0; i < 7; i++) {
+            MealDay day = new MealDay();
+            day.setDay(dayNames[i]);
+            day.setBreakfast(breakfasts.get(i));
+            day.setLunch(lunches.get(i));
+            day.setDinner(dinners.get(i));
             day.setMealPlan(mealPlan);
+
+            days.add(day);
         }
 
-        plan.setDays(days);
-        return mealPlanRepository.save(plan);
+        mealPlan.setDays(days);
+
+        return mealPlanRepository.save(mealPlan);
     }
 
     /** Save plan built from DTO */

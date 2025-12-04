@@ -239,7 +239,7 @@ public class RecipeService {
             daysList.add(day);
         }
 
-        mealPlan.setDays(days);
+        mealPlan.setDays(daysList);
 
         return mealPlanRepository.save(mealPlan);
     }
