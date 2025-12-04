@@ -23,12 +23,11 @@ public class MealPlanService {
         this.recipeRepository = recipeRepository;
     }
 
-    /** Save a meal plan from RecipeResult lists (used internally) */
+    /** Save plan built manually */
     @Transactional
-    public MealPlan saveMealPlan(List<RecipeEntity> lunchEntities, List<RecipeEntity> dinnerEntities) {
-        MealPlan mealPlan = new MealPlan(lunchEntities, dinnerEntities);
+    public MealPlan saveMealPlan(List<RecipeEntity> breakfasts, List<RecipeEntity> lunches, List<RecipeEntity> dinners) {
+        MealPlan mealPlan = new MealPlan(breakfasts, lunches, dinners);
 
-        // Set back-references in MealDay
         for (MealDay day : mealPlan.getDays()) {
             day.setMealPlan(mealPlan);
         }
@@ -36,32 +35,33 @@ public class MealPlanService {
         return mealPlanRepository.save(mealPlan);
     }
 
-    /** Save a meal plan from DTO containing recipe IDs */
+    /** Save plan built from DTO */
     @Transactional
     public MealPlan saveMealPlan(MealPlanDTO dto) {
-        // Fetch recipes by ID from DB
-        List<RecipeEntity> lunchEntities = dto.getDays().stream()
-                .map(day -> recipeRepository.findById(day.getLunchId().longValue())
-                        .orElseThrow(() -> new RuntimeException("Lunch recipe not found: " + day.getLunchId())))
-                .collect(Collectors.toList());
 
-        List<RecipeEntity> dinnerEntities = dto.getDays().stream()
-                .map(day -> recipeRepository.findById(day.getDinnerId().longValue())
-                        .orElseThrow(() -> new RuntimeException("Dinner recipe not found: " + day.getDinnerId())))
-                .collect(Collectors.toList());
+        List<RecipeEntity> breakfasts = dto.getDays().stream()
+            .map(day -> recipeRepository.findById(day.getBreakfastId().longValue())
+            .orElseThrow(() -> new RuntimeException("Breakfast recipe not found: " + day.getBreakfastId())))
+            .collect(Collectors.toList());
 
-        return saveMealPlan(lunchEntities, dinnerEntities);
+        List<RecipeEntity> lunches = dto.getDays().stream()
+            .map(day -> recipeRepository.findById(day.getLunchId().longValue())
+            .orElseThrow(() -> new RuntimeException("Lunch recipe not found: " + day.getLunchId())))
+            .collect(Collectors.toList());
+
+        List<RecipeEntity> dinners = dto.getDays().stream()
+            .map(day -> recipeRepository.findById(day.getDinnerId().longValue())
+            .orElseThrow(() -> new RuntimeException("Dinner recipe not found: " + day.getDinnerId())))
+            .collect(Collectors.toList());
+
+        return saveMealPlan(breakfasts, lunches, dinners);
     }
 
-    /** Fetch a MealPlan by ID */
-    @Transactional(readOnly = true)
     public MealPlan getMealPlan(Long id) {
         return mealPlanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("MealPlan not found: " + id));
     }
 
-    /** Compare meal plan nutrition against goals */
-    @Transactional(readOnly = true)
     public double[][] compareNutrition(Long mealPlanId, UserNutritionalGoals goals) {
         MealPlan mealPlan = getMealPlan(mealPlanId);
         return new NutritionComparison().compareNutrients(mealPlan, goals);

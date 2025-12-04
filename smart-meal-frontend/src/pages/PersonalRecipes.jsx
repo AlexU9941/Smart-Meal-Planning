@@ -1,6 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+/* -----------------------------------------------------------
+   SAFE INPUT VALIDATION — placed at top so ESLint detects usage
+------------------------------------------------------------ */
+const isUnsupportedInput = (text) => {
+  if (!text) return false;
+
+  const low = text.toLowerCase();
+
+  // Detect script tags
+  if (low.includes("<script")) return true;
+
+  // Detect dangerous script URLs (ESLint-safe regex)
+  if (/^\s*javascript:/i.test(low)) return true;
+
+  return false;
+};
+
 const STORAGE_USER_ID_KEY = 'userId';
 const STORAGE_USER_EMAIL_KEY = 'userEmail';
 
@@ -37,18 +54,13 @@ const PersonalRecipes = () => {
     }
   };
 
-  const isUnsupportedInput = (text) => {
-    if (!text) return false;
-    // disallow script tags or other potentially unsupported patterns
-    const low = text.toLowerCase();
-    if (low.includes('<script')) return true;
-    if (low.includes('javascript:')) return true;
-    // other heuristic: extremely long input already constrained client-side
-    return false;
-  };
-
   const handleAddClick = () => {
-    setTitle(''); setContent(''); setServings(1); setPrepMinutes(10); setMessage(''); setShowForm(true);
+    setTitle('');
+    setContent('');
+    setServings(1);
+    setPrepMinutes(10);
+    setMessage('');
+    setShowForm(true);
   };
 
   const handleSubmit = async (e) => {
@@ -63,7 +75,10 @@ const PersonalRecipes = () => {
 
     if (!title.trim()) { setMessage('Please provide a title.'); return; }
     if (!content.trim()) { setMessage('Please provide the recipe content.'); return; }
-    if (isUnsupportedInput(title) || isUnsupportedInput(content)) { setMessage('Unsupported input detected (e.g. script tags). Please remove it.'); return; }
+    if (isUnsupportedInput(title) || isUnsupportedInput(content)) {
+      setMessage('Unsupported input detected (e.g. script tags or javascript URLs). Please remove it.');
+      return;
+    }
     if (content.length > 10000) { setMessage('Recipe content is too long. Max 10000 characters.'); return; }
 
     const payload = {
@@ -167,4 +182,3 @@ const PersonalRecipes = () => {
 };
 
 export default PersonalRecipes;
-

@@ -15,8 +15,18 @@ public class MealPlanDTO {
     }
 
     public static class MealDayDTO {
-        private Integer lunchId;  // just the recipe IDs
+
+        private Integer breakfastId; // NEW
+        private Integer lunchId;
         private Integer dinnerId;
+
+        public Integer getBreakfastId() {
+            return breakfastId;
+        }
+
+        public void setBreakfastId(Integer breakfastId) {
+            this.breakfastId = breakfastId;
+        }
 
         public Integer getLunchId() {
             return lunchId;

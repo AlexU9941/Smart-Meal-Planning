@@ -1,16 +1,9 @@
 package smart_meal_planner.model;
 
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
-
-
-import smart_meal_planner.recipe.RecipeResult;
-
 
 @Entity
 @Table(name = "meal_plan")
@@ -24,17 +17,22 @@ public class MealPlan {
     @JsonManagedReference
     private List<MealDay> days = new ArrayList<>();
 
+    @Column(name = "user_id")
+    private Long userId;
+
     public MealPlan(){}
 
+    // 🔥 UPDATED to accept breakfast meals too
+    public MealPlan(List<RecipeEntity> breakfasts, List<RecipeEntity> lunches, List<RecipeEntity> dinners) {
 
-    public MealPlan(List<RecipeEntity> lunches, List<RecipeEntity> dinners) {
-        int lunchCount = Math.min(7, lunches.size());
-        int dinnerCount = Math.min(7, dinners.size());
+        int size = Math.min(7, Math.min(breakfasts.size(), Math.min(lunches.size(), dinners.size())));
 
-        int count = Math.min(lunchCount, dinnerCount);
-        
-        for (int i = 0; i < count; i++) {
-            days.add(new MealDay(lunches.get(i), dinners.get(i)));
+        for (int i = 0; i < size; i++) {
+            days.add(new MealDay(
+                breakfasts.get(i),
+                lunches.get(i),
+                dinners.get(i)
+            ));
         }
     }
 
@@ -46,14 +44,11 @@ public class MealPlan {
         this.days = days;
     }
 
-    public String printMealPlan() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < days.size(); i++) {
-            MealDay day = days.get(i);
-            sb.append("Day ").append(i + 1).append(":\n");
-            sb.append("  Lunch: ").append(day.getLunch().getTitle()).append("\n");
-            sb.append("  Dinner: ").append(day.getDinner().getTitle()).append("\n");
-        }
-        return sb.toString();
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
