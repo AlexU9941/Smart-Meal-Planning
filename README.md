@@ -46,12 +46,13 @@ Utilize these commands in the terminal before using maven to run to backend.
 
 $env:EMAIL_PASSWORD="uvvk cgla qhrm iabi" - app password for email sending
 
-$env:KROGER_SECRET = "_" - obtain Kroger api key from the below website. 
+$env:KROGER_SECRET = "_" - obtain Kroger api key from the linked website. 
 https://developer.kroger.com/api-products/api/cart-api-public
-if necessary, the below can be utilized. 
+
+if necessary, this key can be utilized. 
 $env:KROGER_SECRET = "JwteLIQXSnte05X54DPls_2NMJDI9q9r-SO9ziC0"
 
-$env:SPOONACULAR_API_KEY = "_" - obtain Spoonacular api key from the below website. 
+$env:SPOONACULAR_API_KEY = "_" - obtain Spoonacular api key from the linked website. 
 https://spoonacular.com/food-api
 
 **3. Set up your Backend:**
