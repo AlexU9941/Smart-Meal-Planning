@@ -2,7 +2,6 @@ package smart_meal_planner.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import smart_meal_planner.recipe.RecipeResult;
 
 @Entity
 @Table(name = "meal_day")
@@ -12,10 +11,12 @@ public class MealDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "day")
+    private String day;   // <-- REQUIRED
+
     @ManyToOne
-    @JoinColumn(name = "meal_plan_id")
-    @JsonBackReference
-    private MealPlan mealPlan;
+    @JoinColumn(name = "breakfast_id")
+    private RecipeEntity breakfast;
 
     // 🔥 NEW — breakfast support
     @ManyToOne(cascade = CascadeType.ALL)
@@ -30,7 +31,14 @@ public class MealDay {
     @JoinColumn(name = "dinner_id")
     private RecipeEntity dinner;
 
-    public MealDay() {}
+    @ManyToOne
+    @JoinColumn(name = "meal_plan_id")
+    private MealPlan mealPlan;
+
+    // ---------- GETTERS ----------
+    public Long getId() {
+        return id;
+    }
 
     public MealDay(RecipeEntity breakfast, RecipeEntity lunch, RecipeEntity dinner) {
         this.breakfast = breakfast;
@@ -66,15 +74,16 @@ public class MealDay {
         return mealPlan;
     }
 
-    public void setMealPlan(MealPlan mealPlan) {
-        this.mealPlan = mealPlan;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
+    // ---------- SETTERS ----------
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setLunch(RecipeEntity lunch) {
+        this.lunch = lunch;
+    }
+
+    public void setDinner(RecipeEntity dinner) {
+        this.dinner = dinner;
     }
 }

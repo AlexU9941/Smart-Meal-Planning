@@ -12,27 +12,25 @@ const emptyDay = (index) => ({
 
 const GenerateMealPlan = () => {
   const [plan, setPlan] = useState(() => {
+
     try {
-      if (typeof window === "undefined") {
-        return Array.from({ length: 7 }, (_, i) => emptyDay(i));
-      }
+      if (typeof window === "undefined") return Array.from({ length: 7 }, (_, i) => emptyDay(i));
 
       const saved = localStorage.getItem("weeklyMealPlan");
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length === 7) {
-          return parsed;
-        }
+        if (Array.isArray(parsed) && parsed.length === 7) return parsed;
       }
     } catch (e) {
       console.error("Failed to load weeklyMealPlan from localStorage", e);
     }
-
     return Array.from({ length: 7 }, (_, i) => emptyDay(i));
   });
 
   const [message, setMessage] = useState("");
   const [ingredientNames, setIngredientNames] = useState([]);
+  const [selectedMeal, setSelectedMeal] = useState(null); // clicked meal
+  const [clickedUrl, setClickedUrl] = useState(null);
 
   const userId = Number(localStorage.getItem("userId"));
   const budget = localStorage.getItem("budget") || 100;
@@ -57,7 +55,6 @@ const GenerateMealPlan = () => {
         console.error("Error loading ingredients:", err);
       }
     };
-
     loadIngredients();
   }, []);
 
@@ -76,7 +73,6 @@ const GenerateMealPlan = () => {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const data = await response.json();
-      console.log("Received meal plan data:", data);
 
       const newPlan = data.days.map((day, index) => ({
         day: DAYS[index],
@@ -85,7 +81,16 @@ const GenerateMealPlan = () => {
         dinner: day.dinner ? { title: day.dinner.title } : null,
       }));
 
+      const extractAllIngredients = (plan) =>
+        plan.flatMap((day) => [
+          ...(day.breakfast?.ingredients || []),
+          ...(day.lunch?.ingredients || []),
+          ...(day.dinner?.ingredients || []),
+        ]);
+
       setPlan(newPlan);
+      const allIngredients = extractAllIngredients(newPlan);
+      localStorage.setItem("mealPlanIngredients", JSON.stringify(allIngredients));
 
       const anyMissing = newPlan.some(
         (d) => !d.breakfast || !d.lunch || !d.dinner
@@ -102,6 +107,9 @@ const GenerateMealPlan = () => {
       console.error("Error generating meal plan:", error);
       setMessage("Failed to generate meal plan. Please try again later.");
     }
+
+
+
   };
 
   const clearPlan = () => {
@@ -110,6 +118,16 @@ const GenerateMealPlan = () => {
     setMessage("Meal plan cleared.");
     localStorage.removeItem("weeklyMealPlan");
   };
+
+  const handleMealClick = (meal) => {
+  //setSelectedMeal(meal);
+if (meal) {
+    setClickedUrl(meal.sourceUrl || "https://example.com");
+  }
+  };
+
+  const closeModal = () => setSelectedMeal(null);
+
 
   return (
     <div className="generate-meal-plan">
@@ -154,8 +172,77 @@ const GenerateMealPlan = () => {
           </div>
         ))}
       </div>
-    </div>
+    
+
+
+    {clickedUrl && (
+        <div 
+          className="modal-overlay" 
+          style={{
+            position: "fixed",
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000
+          }}
+          onClick={() => setClickedUrl(null)} // click outside closes
+        >
+          <div
+            className="modal-content"
+            style={{
+              backgroundColor: "#fff",
+              padding: "20px",
+              borderRadius: "8px",
+              minWidth: "200px",
+            }}
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+          >
+            <p>
+              <a href={clickedUrl} target="_blank" rel="noopener noreferrer">
+                Open Recipe
+              </a>
+            </p>
+            <button onClick={() => setClickedUrl(null)} style={{ marginTop: "10px" }}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>  // <-- Close main container div
   );
 };
-
 export default GenerateMealPlan;
+
+
+/* //     <div className="modal-overlay" onClick={closeModal}>
+//       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+//         <button className="close-button" onClick={closeModal}>×</button>
+//         <h3>{selectedMeal.title}</h3>
+//         <p><strong>Ingredients:</strong></p>
+//         <ul>
+//           {selectedMeal.ingredients && selectedMeal.ingredients.length > 0 ? (
+//             selectedMeal.ingredients.map((ing, i) => (
+//               <li key={i}>{ing.name} {ing.quantity ? `- ${ing.quantity}${ing.unit || ''}` : ''}</li>
+//             ))
+//           ) : (
+//             <li>No ingredients listed</li>
+//           )}
+//         </ul>
+//         {selectedMeal.sourceUrl && (
+//           <p>
+//             <a href={selectedMeal.sourceUrl} target="_blank" rel="noopener noreferrer">
+//               View full recipe
+//             </a>
+//           </p>
+//         )}
+//       </div>
+//     </div>
+//   )}
+// </div> */
+
+
+
+
+

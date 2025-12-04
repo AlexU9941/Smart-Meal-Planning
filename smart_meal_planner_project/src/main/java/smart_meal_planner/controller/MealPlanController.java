@@ -32,6 +32,7 @@ public class MealPlanController {
         this.mealPlanRepository = mealPlanRepository;
     }
 
+    // Save a meal plan from frontend-provided IDs
     @PostMapping
     public MealPlan createMealPlan(@RequestBody MealPlanDTO dto) {
         return mealPlanService.saveMealPlan(dto);

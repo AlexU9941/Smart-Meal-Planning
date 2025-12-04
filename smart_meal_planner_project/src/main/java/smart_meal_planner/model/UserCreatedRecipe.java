@@ -4,6 +4,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 
@@ -43,6 +46,7 @@ public class UserCreatedRecipe {
     public Long getUserId() {
         return userId;
     }
+    @JsonProperty("userId")
     public void setUserId(Long userId) {
         this.userId = userId;
     }

@@ -1,12 +1,11 @@
 package smart_meal_planner.service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import reactor.core.publisher.Mono;
-import smart_meal_planner.model.*;
 import smart_meal_planner.dto.Ingredient;
+import smart_meal_planner.model.MealDay;
+import smart_meal_planner.model.MealPlan;
+import smart_meal_planner.model.RecipeEntity;
+import smart_meal_planner.dto.RandomRecipeResponse;
 import smart_meal_planner.recipe.RecipeResult;
 import smart_meal_planner.recipe.RecipeSearchResponse;
 import smart_meal_planner.repository.RecipeRepository;
@@ -133,6 +134,40 @@ public class RecipeService {
     /**
      * Score recipes by ingredient matches.
      */
+    private List<RecipeResult> fetchRecipesForIngredients(List<String> ingredients, int numberPerIngredient) {
+        List<RecipeResult> combined = new ArrayList<>();
+
+        if (ingredients == null) return combined;
+
+        for (String ing : ingredients) {
+            if (ing == null || ing.trim().isEmpty()) {
+                continue;
+            }
+
+            RecipeSearchResponse response = webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/recipes/complexSearch")
+                            .queryParam("query", ing)
+                            .queryParam("number", numberPerIngredient)
+                            .queryParam("addRecipeInformation", true)
+                            .queryParam("includeNutrition", true)
+                            .queryParam("apiKey", apiKey)
+                            .build())
+                    .retrieve()
+                    .bodyToMono(RecipeSearchResponse.class)
+                    .block();
+
+            if (response != null && response.getResults() != null) {
+                combined.addAll(response.getResults());
+            }
+        }
+
+        return combined;
+    }
+
+    // -----------------------------
+    // Scoring by ingredient
+    // -----------------------------
     private List<RecipeResult> scoreRecipes(List<RecipeResult> results, List<String> scoringIngredients) {
 
         for (RecipeResult recipe : results) {
@@ -171,7 +206,7 @@ public class RecipeService {
     private MealPlan assignMealsAndPersist(List<RecipeResult> sorted) {
 
         MealPlan mealPlan = new MealPlan();
-        List<MealDay> days = new ArrayList<>();
+        List<MealDay> daysList = new ArrayList<>();
 
         // BREAKFAST (0–6)
         List<RecipeResult> breakfastResults = sorted.subList(0, 7);
@@ -189,8 +224,8 @@ public class RecipeService {
             .collect(Collectors.toList());
 
         List<RecipeEntity> dinnerEntities = dinnerResults.stream()
-            .map(this::saveOrGetRecipeEntity)
-            .collect(Collectors.toList());
+                .map(this::saveOrGetRecipeEntity)
+                .collect(Collectors.toList());
 
         // Create 7 meal days
         for (int i = 0; i < 7; i++) {
@@ -201,7 +236,7 @@ public class RecipeService {
             day.setDinner(dinnerEntities.get(i));
 
             day.setMealPlan(mealPlan);
-            days.add(day);
+            daysList.add(day);
         }
 
         mealPlan.setDays(days);

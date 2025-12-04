@@ -4,21 +4,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import smart_meal_planner.dto.MealPlanDTO;
-import smart_meal_planner.model.*;
-import smart_meal_planner.nutrition.NutritionComparison;
+import smart_meal_planner.dto.MealPlanResponseDTO;
+import smart_meal_planner.model.MealDay;
+import smart_meal_planner.model.MealPlan;
+import smart_meal_planner.model.RecipeEntity;
 import smart_meal_planner.repository.MealPlanRepository;
 import smart_meal_planner.repository.RecipeRepository;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MealPlanService {
 
     private final MealPlanRepository mealPlanRepository;
     private final RecipeRepository recipeRepository;
 
-    public MealPlanService(MealPlanRepository mealPlanRepository, RecipeRepository recipeRepository) {
+    public MealPlanService(MealPlanRepository mealPlanRepository,
+                           RecipeRepository recipeRepository) {
+
         this.mealPlanRepository = mealPlanRepository;
         this.recipeRepository = recipeRepository;
     }
@@ -32,7 +37,8 @@ public class MealPlanService {
             day.setMealPlan(mealPlan);
         }
 
-        return mealPlanRepository.save(mealPlan);
+        plan.setDays(days);
+        return mealPlanRepository.save(plan);
     }
 
     /** Save plan built from DTO */

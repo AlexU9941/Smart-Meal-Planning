@@ -51,6 +51,7 @@ public class RecipeEntity {
         e.id = r.getId();
         e.title = r.getTitle();
         e.image = r.getImage();
+        //System.out.println("Source URL in fromRecipeResult: " + r.getSourceUrl());
         e.sourceUrl = r.getSourceUrl();
         e.readyInMinutes = r.getReadyInMinutes();
         e.cookingMinutes = r.getCookingMinutes();

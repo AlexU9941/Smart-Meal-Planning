@@ -8,14 +8,10 @@ import java.util.ArrayList;
 @Entity
 @Table(name = "meal_plan")
 public class MealPlan {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<MealDay> days = new ArrayList<>();
 
     @Column(name = "user_id")
     private Long userId;
@@ -39,6 +35,12 @@ public class MealPlan {
     public List<MealDay> getDays() {
         return days;
     }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    // ---------- SETTERS ----------
 
     public void setDays(List<MealDay> days) {
         this.days = days;

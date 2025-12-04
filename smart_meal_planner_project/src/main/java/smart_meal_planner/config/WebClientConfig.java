@@ -20,6 +20,11 @@ public class WebClientConfig {
     public WebClient spoonacularWebClient() {
         return WebClient.builder()
                 .baseUrl("https://api.spoonacular.com")
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(16 * 1024 * 1024) // 16MB buffer limit
+                )
                 .build();
     }
+
 }
