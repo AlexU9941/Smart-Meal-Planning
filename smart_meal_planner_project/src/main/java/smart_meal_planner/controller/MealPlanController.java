@@ -50,7 +50,6 @@ public class MealPlanController {
                 : Arrays.asList("chicken", "beef", "vegetables");
 
         try {
-            // Use your RecipeService logic
             MealPlan plan = recipeService.findRecipeByString(ingredients, budget);
 
             // Convert to DTO for frontend

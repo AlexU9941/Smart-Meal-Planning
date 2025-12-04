@@ -145,6 +145,7 @@ public class MealPlanService {
         s.setTitle(recipe.getTitle());
         s.setImage(recipe.getImage());
         s.setIngredients(recipe.getIngredients()); 
+        s.setSourceUrl(recipe.getSourceUrl());
         return s;
     }
 }

@@ -1,8 +1,6 @@
 smart_meal_planner\repository\IngredientRepository.class
 smart_meal_planner\nutrition\Nutrient.class
 smart_meal_planner\dto\Ingredient.class
-smart_meal_planner\grocery\KrogerProductResponse$Image.class
-smart_meal_planner\grocery\KrogerProductResponse$Price.class
 smart_meal_planner\service\RecipePersistenceHelper.class
 smart_meal_planner\model\NutritionEntity.class
 smart_meal_planner\model\Favorite.class
@@ -12,7 +10,6 @@ smart_meal_planner\controller\ChangePasswordController.class
 smart_meal_planner\model\Budget.class
 smart_meal_planner\controller\UserHealthInfoController.class
 smart_meal_planner\dto\KrogerTokenResponse.class
-smart_meal_planner\grocery\KrogerProductResponse$Item.class
 smart_meal_planner\controller\ChangePasswordController$PasswordChangeRequest.class
 smart_meal_planner\controller\FavoriteController$FavoriteDto.class
 smart_meal_planner\model\UserGoals.class
@@ -28,7 +25,6 @@ smart_meal_planner\controller\UserNutritionalGoalsController.class
 smart_meal_planner\dto\GroceryItem.class
 smart_meal_planner\controller\RecipeFilterController.class
 smart_meal_planner\model\NutrientEntity.class
-smart_meal_planner\repository\UserCreatedRecipeRepository.class
 smart_meal_planner\model\UserHealthInfo.class
 smart_meal_planner\model\NutritionInfo.class
 smart_meal_planner\service\BudgetService.class
@@ -36,7 +32,6 @@ smart_meal_planner\dto\MealPlanResponseDTO.class
 smart_meal_planner\controller\NutritionController$HealthCheckRequest.class
 smart_meal_planner\service\FavoriteService.class
 smart_meal_planner\model\MealDay.class
-smart_meal_planner\grocery\KrogerProvider.class
 smart_meal_planner\model\UserNutritionalGoals.class
 smart_meal_planner\nutrition\NutritionComparison$TrackedNutrient.class
 smart_meal_planner\repository\RecipeRepository.class
@@ -44,7 +39,6 @@ smart_meal_planner\repository\UserHealthInfoRepository.class
 smart_meal_planner\dto\OAuthResponse.class
 smart_meal_planner\nutrition\Nutrition.class
 smart_meal_planner\SmartMealPlannerApplication.class
-smart_meal_planner\grocery\KrogerProductResponse$Product.class
 smart_meal_planner\controller\SpoonacularController.class
 smart_meal_planner\nutrition\CaloricBreakdown.class
 smart_meal_planner\controller\FavoriteController.class
@@ -52,12 +46,10 @@ smart_meal_planner\controller\GlobalExceptionHandler.class
 smart_meal_planner\controller\IngredientController.class
 smart_meal_planner\model\User.class
 smart_meal_planner\controller\LogoutController.class
-smart_meal_planner\grocery\KrogerProductResponse.class
 smart_meal_planner\service\NutritionService.class
 smart_meal_planner\nutrition\NutritionComparison.class
 smart_meal_planner\model\MealPlan.class
 smart_meal_planner\service\RecipeMapper.class
-smart_meal_planner\grocery\KrogerController.class
 smart_meal_planner\service\MealPlanService.class
 smart_meal_planner\service\DatabaseCommunicator.class
 smart_meal_planner\service\MailService.class
@@ -76,7 +68,6 @@ smart_meal_planner\repository\MealPlanRepository.class
 smart_meal_planner\config\CorsConfig.class
 smart_meal_planner\service\PasswordUtils.class
 smart_meal_planner\dto\RandomRecipeResponse.class
-smart_meal_planner\service\UserCreatedRecipeService.class
 smart_meal_planner\config\WebClientConfig.class
 smart_meal_planner\config\CorsConfig$1.class
 smart_meal_planner\controller\ResetController.class
@@ -87,7 +78,6 @@ smart_meal_planner\model\IngredientInput.class
 smart_meal_planner\service\UserNutritionalGoalsService.class
 smart_meal_planner\repository\FavoriteRepository.class
 smart_meal_planner\dto\MealPlanDTO.class
-smart_meal_planner\controller\UserCreatedRecipeController.class
 smart_meal_planner\service\SpoonacularService.class
 smart_meal_planner\repository\MealDayRepository.class
 smart_meal_planner\controller\MealPlanController.class
@@ -96,13 +86,11 @@ smart_meal_planner\repository\NutritionRepository.class
 smart_meal_planner\controller\NutritionController$MealWithNutrition.class
 smart_meal_planner\model\RecipeEntity.class
 smart_meal_planner\controller\CreateAccountController.class
-smart_meal_planner\model\UserCreatedRecipe.class
 smart_meal_planner\controller\BudgetController.class
 smart_meal_planner\dto\MealPlanDTO$MealDayDTO.class
 smart_meal_planner\repository\UserRepository.class
 smart_meal_planner\dto\MealPlanResponseDTO$DayDTO.class
 smart_meal_planner\model\GroceryAccount.class
 smart_meal_planner\controller\NutritionController$FrontendWeekPlan.class
-smart_meal_planner\grocery\KrogerProductResponse$Size.class
 smart_meal_planner\controller\FindRecipesController.class
 smart_meal_planner\repository\UserNutritionalGoalsRepository.class
