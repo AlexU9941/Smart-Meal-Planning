@@ -251,7 +251,6 @@ public class KrogerProvider {
         return out;
     }
 
-
     public String buildCheckoutUrl(List<String> productIds, String accessToken) {
         return "https://www.kroger.com/checkout/start?items=" + String.join(",", productIds);
     }
@@ -259,4 +258,7 @@ public class KrogerProvider {
     public String getProviderName() {
         return "KROGER";
     }
+
 }
+
+        

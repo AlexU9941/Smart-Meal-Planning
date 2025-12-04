@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "../css/customizeProfile.css";
 
-const STORAGE_KEY = "userProfile";
+
+//const STORAGE_KEY = "userProfile";
 const MAX_BIO_LENGTH = 500;
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024; // 2MB
 
-function loadProfile() {
+function loadProfile(uid) {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(`userProfile_${uid}`);
+
     return raw ? JSON.parse(raw) : { bio: "", theme: "light", picture: null };
   } catch (e) {
     console.warn("Failed to parse profile from storage", e);
@@ -15,32 +17,57 @@ function loadProfile() {
   }
 }
 
-function saveProfile(profile) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+
+function saveProfile(uid, profile) {
+  localStorage.setItem(`userProfile_${uid}`, JSON.stringify(profile));
 }
 
-const CustomizeProfile = () => {
+const CustomizeProfile = ({ onThemeChange }) => {
+  const user = JSON.parse(localStorage.getItem("user"))
+  const uid = user && user.uid ? user.uid : null;
+  
   const [bio, setBio] = useState("");
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("");
   const [picture, setPicture] = useState(null); // base64 string
   const [message, setMessage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [showToast, setShowToast] = useState(false);
+// <<<<<<< HEAD
+
+//   useEffect(() => {
+//     const p = loadProfile();
+//     setBio(p.bio || "");
+//     setTheme(p.theme || "light");
+//     setPicture(p.picture || null);
+//   }, []);
+
+//   useEffect(() => {
+//     // Apply theme class to root element so the rest of the app can pick it up if desired
+//     const root = document.getElementById("root");
+//     if (!root) return;
+//     root.classList.remove("theme-light", "theme-dark", "theme-colorful");
+//     root.classList.add(`theme-${theme}`);
+//   }, [theme]);
+// =======
+
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
 
   useEffect(() => {
-    const p = loadProfile();
-    setBio(p.bio || "");
-    setTheme(p.theme || "light");
-    setPicture(p.picture || null);
-  }, []);
+    if (!uid) return;
+    const p = loadProfile(uid);
+    setBio(p.bio);
+    setTheme(p.theme);
+    setPicture(p.picture);
+  }, [uid]);
 
   useEffect(() => {
-    // Apply theme class to root element so the rest of the app can pick it up if desired
-    const root = document.getElementById("root");
-    if (!root) return;
-    root.classList.remove("theme-light", "theme-dark", "theme-colorful");
-    root.classList.add(`theme-${theme}`);
-  }, [theme]);
+  if (onThemeChange) onThemeChange(theme);
+  },  [theme, onThemeChange]);
+
 
   const handleImageChange = (e) => {
     const file = e.target.files && e.target.files[0];
@@ -66,10 +93,33 @@ const CustomizeProfile = () => {
       return;
     }
 
-    saveProfile({ bio, theme, picture });
+// <<<<<<< HEAD
+//     saveProfile({ bio, theme, picture });
+//     setMessage("Profile saved.");
+//   };
+
+// =======
+    saveProfile(uid, { bio, theme, picture });
     setMessage("Profile saved.");
   };
 
+  const changePassword = async (oldPass, newPass) => {
+    try {
+    const response = await fetch("http://localhost:8080/api/user/change-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: user.username, oldPassword: oldPass, newPassword: newPass })
+    });
+
+    const data = await response.text();
+    setMessage(data);
+  } catch (err) {
+    setMessage("Failed to change password.");
+  }
+  };
+
+
+// >>>>>>> 5fea8983e338c93861bf05a024bc47c7262c875b
   // open confirmation modal
   const handleReset = () => setShowConfirm(true);
 
@@ -79,7 +129,11 @@ const CustomizeProfile = () => {
     setBio(empty.bio);
     setTheme(empty.theme);
     setPicture(empty.picture);
-    saveProfile(empty);
+// <<<<<<< HEAD
+//     saveProfile(empty);
+// =======
+    saveProfile(uid, empty);
+// >>>>>>> 5fea8983e338c93861bf05a024bc47c7262c875b
     setShowConfirm(false);
     setShowToast(true);
     // also set a small message accessible for screen readers
@@ -145,6 +199,10 @@ const CustomizeProfile = () => {
       <div className="actions">
         <button onClick={handleSave} className="save">Save</button>
         <button onClick={handleReset} className="reset">Reset</button>
+
+        {/* <button onClick={changePassword} className="change-password">Change Password</button> */}
+        <button onClick={() => setShowPasswordModal(true)} className="change-password">Change Password</button>
+
       </div>
 
       {message && <div className="message">{message}</div>}
@@ -161,6 +219,60 @@ const CustomizeProfile = () => {
           </div>
         </div>
       )}
+
+    {showPasswordModal && (
+    <div className="modal-overlay" >
+      <div className="modal" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem', width: '300px' }}>
+        <h3>Change Password</h3>
+        <label>
+          Old Password
+          <input
+            type="password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+        </label>     
+        <label>
+          New Password
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+        </label>
+        <label>
+          Confirm New Password
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </label>
+
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+          <button onClick={() => setShowPasswordModal(false)}>Cancel</button>
+          <button
+            onClick={async () => {
+              if (newPassword !== confirmPassword) {
+                setMessage("New passwords do not match");
+                return;
+              }
+              await changePassword(oldPassword, newPassword);
+              setOldPassword("");
+              setNewPassword("");
+              setConfirmPassword("");
+              setShowPasswordModal(false);
+            }}
+          >
+            Change
+          </button>
+        </div>
+      </div>
+    </div>
+    )}
+
+
+
     </div>
   );
 };

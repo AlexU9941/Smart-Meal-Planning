@@ -2,6 +2,8 @@ package smart_meal_planner.dto;
 
 import java.util.List;
 
+import smart_meal_planner.model.IngredientInput;
+
 public class MealPlanResponseDTO {
 
     private Long planId;
@@ -63,32 +65,30 @@ public class MealPlanResponseDTO {
     }
 
     public static class SimpleRecipeDTO {
-        private Long id;
-        private String title;
-        private String image;
+    private Long id;
+    private String title;
+    private String image;
+    private List<IngredientInput> ingredients;  // <-- ADD THIS
+    private String sourceUrl;
+    
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-        public Long getId() {
-            return id;
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
+
+    public List<IngredientInput> getIngredients() { return ingredients; }
+    public void setIngredients(List<IngredientInput> ingredients) { this.ingredients = ingredients; }
+
+        public String getSourceUrl() {
+            return sourceUrl;
         }
 
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
+        public void setSourceUrl(String sourceUrl) {
+            this.sourceUrl = sourceUrl;
         }
     }
 }
