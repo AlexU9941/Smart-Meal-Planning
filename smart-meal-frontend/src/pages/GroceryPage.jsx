@@ -6,7 +6,7 @@ const GroceryPage = () => {
   const [connected, setConnected] = useState(false);
   const [ingredients, setIngredients] = useState([]);
 
-  // Load meal plan ingredients from localStorage
+  // Load ingredients from localStorage initially
   useEffect(() => {
     const loadIngredients = () => {
       const saved = localStorage.getItem("mealPlanIngredients");
@@ -15,13 +15,22 @@ const GroceryPage = () => {
 
     loadIngredients();
 
-    // Update ingredients whenever meal plan updates
-    window.addEventListener("storage", loadIngredients);
-    window.addEventListener("mealPlanUpdated", loadIngredients);
+    // Listen for changes to localStorage in case meal plan was updated in another tab
+    const handleStorage = (event) => {
+      if (event.key === "mealPlanIngredients") {
+        loadIngredients();
+      }
+    };
+
+    window.addEventListener("storage", handleStorage);
+
+    // Custom event for same-tab updates
+    const handleMealPlanUpdated = () => loadIngredients();
+    window.addEventListener("mealPlanUpdated", handleMealPlanUpdated);
 
     return () => {
-      window.removeEventListener("storage", loadIngredients);
-      window.removeEventListener("mealPlanUpdated", loadIngredients);
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("mealPlanUpdated", handleMealPlanUpdated);
     };
   }, []);
 
@@ -59,7 +68,6 @@ const GroceryPage = () => {
       {connected && ingredients.length > 0 && (
         <div style={{ marginTop: "25px" }}>
           <h3>Searching Kroger products for your ingredients…</h3>
-
           <SearchProducts ingredients={ingredients} autoSearch={true} />
         </div>
       )}
