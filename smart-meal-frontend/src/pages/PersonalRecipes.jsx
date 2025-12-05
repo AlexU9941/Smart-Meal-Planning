@@ -38,6 +38,7 @@ const PersonalRecipes = () => {
   const [prepMinutes, setPrepMinutes] = useState(10);
   const [message, setMessage] = useState('');
 
+  //set user id 
   useEffect(() => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   if (!storedUser || !storedUser.uid) {
@@ -47,6 +48,13 @@ const PersonalRecipes = () => {
   }
   setUserId(Number(storedUser.uid));
   }, []);
+
+  //load saved recipes. 
+  useEffect(() => {
+    if (userId) {
+      fetchRecipes(userId);
+    }
+  }, [userId]);
 
   // const fetchRecipes = async (uid) => {
   //   setError('');
@@ -138,7 +146,7 @@ const PersonalRecipes = () => {
   return (
     <div className="personal-recipes" style={{ maxWidth: 900, margin: '1rem auto', padding: 12 }}>
       <h2>Personal Recipes</h2>
-      <p>Upload and manage your own recipes. Your recipes are saved to your account id.</p>
+      <p>Upload and manage your own recipes!</p>
 
 {/*
       {!userId && (

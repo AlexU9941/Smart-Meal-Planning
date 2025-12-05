@@ -3,9 +3,11 @@ package smart_meal_planner.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import smart_meal_planner.dto.MealPlanDTO;
+import smart_meal_planner.dto.MealPlanResponseDTO;
 import smart_meal_planner.model.MealDay;
 import smart_meal_planner.model.MealPlan;
 import smart_meal_planner.model.UserNutritionalGoals;
@@ -49,42 +51,74 @@ public class MealPlanController {
         return mealPlanService.compareNutrition(id, goals);
     }
 
+
+
+
+
     @PostMapping("/generate")
-    public MealPlan generateMealPlan(@RequestBody GenerateRequest request) {
+    public ResponseEntity<MealPlanResponseDTO> generateMealPlan(
+            @RequestBody GenerateRequest request) {
 
-        double budget = request.getBudget() != null ? request.getBudget() : 100.0;
+        double budget = request.getBudget() != null ? request.getBudget() : 0.0;
 
-        List<String> ingredients =
-                (request.getIngredients() != null && !request.getIngredients().isEmpty())
-                        ? request.getIngredients()
-                        : Arrays.asList("eggs", "oats", "fruit", "bread", "chicken", "vegetables");
+        List<String> ingredients = (request.getIngredients() != null &&
+                                    !request.getIngredients().isEmpty())
+                ? request.getIngredients()
+                : Arrays.asList("chicken", "beef", "vegetables");
 
         try {
-            // Generate and persist a meal plan (breakfast/lunch/dinner) from Spoonacular
             MealPlan plan = recipeService.findRecipeByString(ingredients, budget);
 
-            if (plan == null) {
-                return new MealPlan();
-            }
+            // Convert to DTO for frontend
+            MealPlanResponseDTO response = mealPlanService.toDTO(plan);
 
-            // Attach current user ID (so the plan is owned by this user)
-            if (request.getUserId() != null) {
-                plan.setUserId(request.getUserId());
-            }
-
-            // Ensure each MealDay has the correct back-reference to this plan
-            if (plan.getDays() != null) {
-                for (MealDay day : plan.getDays()) {
-                    day.setMealPlan(plan);
-                }
-            }
-
-            // Save or update the plan with userId included
-            return mealPlanRepository.save(plan);
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new MealPlan();
+            return ResponseEntity.ok(new MealPlanResponseDTO()); // empty response
         }
     }
+
+
+
+    //Was not working for me - replaced with earlier working code above.
+    // @PostMapping("/generate")
+    // public MealPlan generateMealPlan(@RequestBody GenerateRequest request) {
+
+    //     double budget = request.getBudget() != null ? request.getBudget() : 100.0;
+
+    //     List<String> ingredients =
+    //             (request.getIngredients() != null && !request.getIngredients().isEmpty())
+    //                     ? request.getIngredients()
+    //                     : Arrays.asList("eggs", "oats", "fruit", "bread", "chicken", "vegetables");
+
+    //     try {
+    //         // Generate and persist a meal plan (breakfast/lunch/dinner) from Spoonacular
+    //         MealPlan plan = recipeService.findRecipeByString(ingredients, budget);
+
+    //         if (plan == null) {
+    //             return new MealPlan();
+    //         }
+
+    //         // Attach current user ID (so the plan is owned by this user)
+    //         if (request.getUserId() != null) {
+    //             plan.setUserId(request.getUserId());
+    //         }
+
+    //         // Ensure each MealDay has the correct back-reference to this plan
+    //         if (plan.getDays() != null) {
+    //             for (MealDay day : plan.getDays()) {
+    //                 day.setMealPlan(plan);
+    //             }
+    //         }
+
+    //         // Save or update the plan with userId included
+    //         return mealPlanRepository.save(plan);
+
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return new MealPlan();
+    //     }
+    // }
 }
