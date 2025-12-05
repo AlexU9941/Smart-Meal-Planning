@@ -29,8 +29,8 @@ public class UserCreatedRecipeController {
         return ResponseEntity.ok(saved);
     }
 
-    @GetMapping("/{userId}")
-    public List<UserCreatedRecipe> getUserCreatedRecipes(@PathVariable Long userId) {
+    @GetMapping("/{id}")
+    public List<UserCreatedRecipe> getUserCreatedRecipes(@PathVariable("id") Long userId) {
         return service.getUserCreatedRecipesByUserId(userId);
     }
  }
