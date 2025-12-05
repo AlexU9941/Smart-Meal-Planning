@@ -76,9 +76,9 @@ const GenerateMealPlan = () => {
 
       const newPlan = data.days.map((day, index) => ({
         day: DAYS[index],
-        breakfast: day.breakfast ? { title: day.breakfast.title } : null,
-        lunch: day.lunch ? { title: day.lunch.title } : null,
-        dinner: day.dinner ? { title: day.dinner.title } : null,
+        breakfast: day.breakfast ? { title: day.breakfast.title,  sourceUrl: day.breakfast.sourceUrl} : null,
+        lunch: day.lunch ? { title: day.lunch.title, sourceUrl: day.lunch.sourceUrl } : null,
+        dinner: day.dinner ? { title: day.dinner.title, sourceUrl: day.dinner.sourceUrl } : null,
       }));
 
       const extractAllIngredients = (plan) =>
@@ -99,7 +99,7 @@ const GenerateMealPlan = () => {
       setMessage(
         anyMissing
           ? "Unable to generate a full meal plan with current criteria."
-          : "Weekly meal plan generated!"
+          : "Weekly meal plan generated! Click on a meal to view the recipe (if stored in Spoonacular)."
       );
 
       localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan));
@@ -148,7 +148,7 @@ if (meal) {
             {/* 📅 Breakfast */}
             <div className="meal-row">
               <span className="meal-label">Breakfast:</span>
-              <span className="meal-text">
+              <span className="meal-text" onClick={() => handleMealClick(p.breakfast)}>
                 {p.breakfast ? p.breakfast.title : <em>No breakfast generated</em>}
               </span>
             </div>
@@ -156,7 +156,7 @@ if (meal) {
             {/* 🍽 Lunch */}
             <div className="meal-row">
               <span className="meal-label">Lunch:</span>
-              <span className="meal-text">
+              <span className="meal-text" onClick={() => handleMealClick(p.lunch)}>
                 {p.lunch ? p.lunch.title : <em>No lunch</em>}
               </span>
             </div>
@@ -164,7 +164,7 @@ if (meal) {
             {/* 🍛 Dinner */}
             <div className="meal-row">
               <span className="meal-label">Dinner:</span>
-              <span className="meal-text">
+              <span className="meal-text" onClick={() => handleMealClick(p.dinner)}>
                 {p.dinner ? p.dinner.title : <em>No dinner</em>}
               </span>
             </div>
