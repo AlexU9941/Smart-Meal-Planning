@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../css/customizeProfile.css";
 
+
 //const STORAGE_KEY = "userProfile";
 const MAX_BIO_LENGTH = 500;
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024; // 2MB
@@ -8,12 +9,14 @@ const MAX_IMAGE_BYTES = 2 * 1024 * 1024; // 2MB
 function loadProfile(uid) {
   try {
     const raw = localStorage.getItem(`userProfile_${uid}`);
+
     return raw ? JSON.parse(raw) : { bio: "", theme: "light", picture: null };
   } catch (e) {
     console.warn("Failed to parse profile from storage", e);
     return { bio: "", theme: "light", picture: null };
   }
 }
+
 
 function saveProfile(uid, profile) {
   localStorage.setItem(`userProfile_${uid}`, JSON.stringify(profile));
@@ -29,6 +32,23 @@ const CustomizeProfile = ({ onThemeChange }) => {
   const [message, setMessage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [showToast, setShowToast] = useState(false);
+// <<<<<<< HEAD
+
+//   useEffect(() => {
+//     const p = loadProfile();
+//     setBio(p.bio || "");
+//     setTheme(p.theme || "light");
+//     setPicture(p.picture || null);
+//   }, []);
+
+//   useEffect(() => {
+//     // Apply theme class to root element so the rest of the app can pick it up if desired
+//     const root = document.getElementById("root");
+//     if (!root) return;
+//     root.classList.remove("theme-light", "theme-dark", "theme-colorful");
+//     root.classList.add(`theme-${theme}`);
+//   }, [theme]);
+// =======
 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
@@ -47,6 +67,7 @@ const CustomizeProfile = ({ onThemeChange }) => {
   useEffect(() => {
   if (onThemeChange) onThemeChange(theme);
   },  [theme, onThemeChange]);
+
 
   const handleImageChange = (e) => {
     const file = e.target.files && e.target.files[0];
@@ -72,6 +93,12 @@ const CustomizeProfile = ({ onThemeChange }) => {
       return;
     }
 
+// <<<<<<< HEAD
+//     saveProfile({ bio, theme, picture });
+//     setMessage("Profile saved.");
+//   };
+
+// =======
     saveProfile(uid, { bio, theme, picture });
     setMessage("Profile saved.");
   };
@@ -92,6 +119,7 @@ const CustomizeProfile = ({ onThemeChange }) => {
   };
 
 
+// >>>>>>> 5fea8983e338c93861bf05a024bc47c7262c875b
   // open confirmation modal
   const handleReset = () => setShowConfirm(true);
 
@@ -101,7 +129,11 @@ const CustomizeProfile = ({ onThemeChange }) => {
     setBio(empty.bio);
     setTheme(empty.theme);
     setPicture(empty.picture);
+// <<<<<<< HEAD
+//     saveProfile(empty);
+// =======
     saveProfile(uid, empty);
+// >>>>>>> 5fea8983e338c93861bf05a024bc47c7262c875b
     setShowConfirm(false);
     setShowToast(true);
     // also set a small message accessible for screen readers
@@ -167,6 +199,7 @@ const CustomizeProfile = ({ onThemeChange }) => {
       <div className="actions">
         <button onClick={handleSave} className="save">Save</button>
         <button onClick={handleReset} className="reset">Reset</button>
+
         {/* <button onClick={changePassword} className="change-password">Change Password</button> */}
         <button onClick={() => setShowPasswordModal(true)} className="change-password">Change Password</button>
 
@@ -237,8 +270,6 @@ const CustomizeProfile = ({ onThemeChange }) => {
       </div>
     </div>
     )}
-
-
 
 
 

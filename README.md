@@ -40,7 +40,22 @@ git clone https://github.com/AlexU9941/Smart-Meal-Planning.git
 
 cd Smart-Meal-Planning
 
-**2. Set up your Backend:**
+**2. Environmental Variables:**
+Three environmental variables are necessary for the application to function as intended. 
+Utilize these commands in the terminal before using maven to run to backend. 
+
+$env:EMAIL_PASSWORD="uvvk cgla qhrm iabi" - app password for email sending
+
+$env:KROGER_SECRET = "_" - obtain Kroger api key from the linked website. 
+https://developer.kroger.com/api-products/api/cart-api-public
+
+if necessary, this key can be utilized. 
+$env:KROGER_SECRET = "JwteLIQXSnte05X54DPls_2NMJDI9q9r-SO9ziC0"
+
+$env:SPOONACULAR_API_KEY = "_" - obtain Spoonacular api key from the linked website. 
+https://spoonacular.com/food-api
+
+**3. Set up your Backend:**
 
 cd smart_meal_planner_project
 
@@ -48,7 +63,7 @@ mvn clean install
 
 mvn spring-boot:run
 
-**3. Set up your Frontend:**
+**4. Set up your Frontend:**
 
 cd smart-meal-frontend
 
@@ -56,9 +71,14 @@ npm install
 
 npm start
 
+
+
+
 System Architecture Diagram: 
 <img width="3407" height="2833" alt="326SoftwareArchitectureDiagram drawio (1)" src="https://github.com/user-attachments/assets/6e004a9f-b5ad-41d6-b49d-56bc8631a734" />
 
 
 The Software Architecture Diagram reveals that our design has three layers: presentation, service, and persistence. The presentation layer includes the BudgetController, CreateAccountController, SignInController, IngredientController, LogoutController, UserNutritionalGoalsController, UserHealthInfoController, MealPlanController, and RecipeController. These controller classes communicate with service classes that connect them to the repository level. For example, the BudgetController class gets data from the BudgetService class that is apart of the BudgetRepository class. Another example of the connection to the repository class is the SignInController that connects with the MailService and PasswordUtils service layer classes. The PasswordUtils service layer class then goes through the DatabaseCommunicator to reach the repository layer. Once the DatabaseCommunicator reaches the UserRepository, the UserRepository connects these classes to the database. All the repository classes communicate with out SQL database. 
 
+FUTURE UPDATES POSSIBLE IF INTERESTED. 
+Updates would involve refining the meal plan generation and nutritional tracking processes. Admin accounts are a potential addition to manage or remove users. Future functionality may be applied to this application.  

@@ -32,14 +32,24 @@ const GenerateMealPlan = () => {
   const [selectedMeal, setSelectedMeal] = useState(null); // clicked meal
   const [clickedUrl, setClickedUrl] = useState(null);
 
+  const userId = Number(localStorage.getItem("userId"));
+  const budget = localStorage.getItem("budget") || 100;
+
+  // Load user ingredients
   useEffect(() => {
     const loadIngredients = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/ingredients", { credentials: "include" });
-        if (!res.ok) return console.error("Failed to load ingredients:", res.status);
+        const res = await fetch("http://localhost:8080/api/ingredients", {
+          credentials: "include",
+        });
+
+        if (!res.ok) return console.error("Failed to load ingredients");
 
         const data = await res.json();
-        const names = (data || []).map((ing) => ing.name).filter((n) => n && n.trim() !== "");
+        const names = (data || [])
+          .map((ing) => ing.name)
+          .filter(Boolean);
+
         setIngredientNames(names);
       } catch (err) {
         console.error("Error loading ingredients:", err);
@@ -48,14 +58,16 @@ const GenerateMealPlan = () => {
     loadIngredients();
   }, []);
 
-  const budget = localStorage.getItem("budget") || 100;
-
   const generate = async () => {
     try {
       const response = await fetch("http://localhost:8080/meal-plans/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ingredients: ingredientNames, budget }),
+        body: JSON.stringify({
+          ingredients: ingredientNames,
+          budget: budget,
+          userId: userId,
+        }),
       });
 
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -64,9 +76,9 @@ const GenerateMealPlan = () => {
 
       const newPlan = data.days.map((day, index) => ({
         day: DAYS[index],
-        breakfast: day.breakfast ? { title: day.breakfast.title, ingredients: day.breakfast.ingredients || [],sourceUrl: day.breakfast.sourceUrl || null  } : null,
-        lunch: day.lunch ? { title: day.lunch.title, ingredients: day.lunch.ingredients || [], sourceUrl: day.lunch.sourceUrl || null } : null,
-        dinner: day.dinner ? { title: day.dinner.title, ingredients: day.dinner.ingredients || [], sourceUrl: day.dinner.sourceUrl || null } : null,
+        breakfast: day.breakfast ? { title: day.breakfast.title } : null,
+        lunch: day.lunch ? { title: day.lunch.title } : null,
+        dinner: day.dinner ? { title: day.dinner.title } : null,
       }));
 
       const extractAllIngredients = (plan) =>
@@ -80,8 +92,15 @@ const GenerateMealPlan = () => {
       const allIngredients = extractAllIngredients(newPlan);
       localStorage.setItem("mealPlanIngredients", JSON.stringify(allIngredients));
 
-      const anyMissing = newPlan.some((day) => !day.breakfast || !day.lunch || !day.dinner);
-      setMessage(anyMissing ? "Some meals could not be generated." : "Weekly meal plan generated!");
+      const anyMissing = newPlan.some(
+        (d) => !d.breakfast || !d.lunch || !d.dinner
+      );
+
+      setMessage(
+        anyMissing
+          ? "Unable to generate a full meal plan with current criteria."
+          : "Weekly meal plan generated!"
+      );
 
       localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan));
     } catch (error) {
@@ -113,25 +132,43 @@ if (meal) {
   return (
     <div className="generate-meal-plan">
       <h2>Generate Weekly Meal Plan</h2>
+
       <div className="actions">
         <button className="generate" onClick={generate}>Generate Weekly Meal Plan</button>
         <button className="clear" onClick={clearPlan}>Clear</button>
       </div>
+
       {message && <div className="message">{message}</div>}
 
       <div className="days-row">
         {plan.map((p, idx) => (
           <div key={idx} className="day-card">
             <div className="day-header">{p.day}</div>
-            <div className="meal" onClick={() => p.breakfast && handleMealClick(p.breakfast)}>
-              <strong>Breakfast:</strong> {p.breakfast ? p.breakfast.title : <em>No breakfast</em>}
+
+            {/* 📅 Breakfast */}
+            <div className="meal-row">
+              <span className="meal-label">Breakfast:</span>
+              <span className="meal-text">
+                {p.breakfast ? p.breakfast.title : <em>No breakfast generated</em>}
+              </span>
             </div>
-            <div className="meal" onClick={() => p.lunch && handleMealClick(p.lunch)}>
-              <strong>Lunch:</strong> {p.lunch ? p.lunch.title : <em>No lunch</em>}
+
+            {/* 🍽 Lunch */}
+            <div className="meal-row">
+              <span className="meal-label">Lunch:</span>
+              <span className="meal-text">
+                {p.lunch ? p.lunch.title : <em>No lunch</em>}
+              </span>
             </div>
-            <div className="meal" onClick={() => p.dinner && handleMealClick(p.dinner)}>
-              <strong>Dinner:</strong> {p.dinner ? p.dinner.title : <em>No dinner</em>}
+
+            {/* 🍛 Dinner */}
+            <div className="meal-row">
+              <span className="meal-label">Dinner:</span>
+              <span className="meal-text">
+                {p.dinner ? p.dinner.title : <em>No dinner</em>}
+              </span>
             </div>
+
           </div>
         ))}
       </div>

@@ -28,21 +28,9 @@ public class MealPlanDTO {
     // ================================================================
     public static class MealDayDTO {
 
-        // optional: day name ("Sunday", etc.)
-        private String day;
-
-        // IDs of recipes for each meal
-        private Long breakfastId;
+        private Long breakfastId; // NEW
         private Long lunchId;
         private Long dinnerId;
-
-        public String getDay() {
-            return day;
-        }
-
-        public void setDay(String day) {
-            this.day = day;
-        }
 
         public Long getBreakfastId() {
             return breakfastId;
