@@ -153,6 +153,10 @@ public class MealPlanService {
         return s;
     }
 
+    public double[][] compareNutrition(Long mealPlanId, UserNutritionalGoals goals) {
+        MealPlan mealPlan = getMealPlan(mealPlanId);
+        return new NutritionComparison().compareNutrients(mealPlan, goals);
+    }
 
 }
 
