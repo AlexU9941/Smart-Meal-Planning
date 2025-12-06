@@ -61,12 +61,33 @@
 
 
 
-        <!-- Spring Boot Test (for unit and integration tests) -->
+        <!-- Spring Boot Test (for unit and integration tests) 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        -->
+
+        <!-- Spring Boot Test (includes JUnit 5, Mockito, AssertJ, etc.) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+        <exclusions>
+            <!-- Exclude JUnit 4 if present -->
+            <exclusion>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+            </exclusion>
+            <!-- Exclude vintage engine if not needed -->
+            <exclusion>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+
 
         <!-- MySQL dependency -->
         <dependency>
