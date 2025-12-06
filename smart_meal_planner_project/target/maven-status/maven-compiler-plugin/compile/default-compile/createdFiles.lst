@@ -58,6 +58,7 @@ smart_meal_planner\nutrition\NutritionComparison.class
 smart_meal_planner\model\MealPlan.class
 smart_meal_planner\service\RecipeMapper.class
 smart_meal_planner\grocery\KrogerController.class
+smart_meal_planner\service\MealPlanService.class
 smart_meal_planner\service\DatabaseCommunicator.class
 smart_meal_planner\service\MailService.class
 smart_meal_planner\service\RecipeService.class
@@ -86,8 +87,10 @@ smart_meal_planner\model\IngredientInput.class
 smart_meal_planner\service\UserNutritionalGoalsService.class
 smart_meal_planner\repository\FavoriteRepository.class
 smart_meal_planner\dto\MealPlanDTO.class
+smart_meal_planner\controller\UserCreatedRecipeController.class
 smart_meal_planner\service\SpoonacularService.class
 smart_meal_planner\repository\MealDayRepository.class
+smart_meal_planner\controller\MealPlanController.class
 smart_meal_planner\controller\SignInController.class
 smart_meal_planner\repository\NutritionRepository.class
 smart_meal_planner\controller\NutritionController$MealWithNutrition.class
