@@ -40,10 +40,11 @@ export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }
   };
 
   return (
-    <>
-      <div>
-        <h2>Sign In</h2>
-        <form onSubmit={handleSubmit}>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Welcome Back</h2>
+        <p style={{ color: '#666' }}>Sign in to continue to Smart Meal Planner</p>
+        <form onSubmit={handleSubmit} className="auth-box">
           <input
             type="username"
             placeholder="Username"
@@ -58,19 +59,21 @@ export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit">Sign In</button>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 6 }}>
+            <button type="submit">Sign In</button>
+          </div>
         </form>
-        <p>
+        <p style={{ marginTop: 10 }}>
           Don't have an account?{" "}
-          <button onClick={switchToCreate}>Create Account</button>
+          <button className="secondary" onClick={switchToCreate}>Create Account</button>
+        </p>
+        <p>
+          Forgot your password?{" "}
+          <button className="ghost" onClick={switchToRecover}>
+            Recover Password
+          </button>
         </p>
       </div>
-      <p>
-        Forgot your password?{" "}
-        <button onClick={switchToRecover}>
-          Recover Password
-        </button>
-      </p>
-    </>
+    </div>
   );
 }

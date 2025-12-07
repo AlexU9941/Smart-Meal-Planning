@@ -130,7 +130,7 @@ if (meal) {
 
 
   return (
-    <div className="generate-meal-plan">
+    <div className="page-card generate-meal-plan">
       <h2>Generate Weekly Meal Plan</h2>
 
       <div className="actions">
@@ -172,8 +172,6 @@ if (meal) {
           </div>
         ))}
       </div>
-    
-
 
     {clickedUrl && (
         <div 
@@ -241,8 +239,3 @@ export default GenerateMealPlan;
 //     </div>
 //   )}
 // </div> */
-
-
-
-
-

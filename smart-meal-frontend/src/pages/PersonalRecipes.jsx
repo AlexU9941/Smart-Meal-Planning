@@ -144,26 +144,12 @@ const PersonalRecipes = () => {
   // };
 
   return (
-    <div className="personal-recipes" style={{ maxWidth: 900, margin: '1rem auto', padding: 12 }}>
+    <div className="page-card personal-recipes" style={{ maxWidth: 900, margin: '1rem auto', padding: 12 }}>
       <h2>Personal Recipes</h2>
       <p>Upload and manage your own recipes!</p>
 
-{/*
-      {!userId && (
-        <div style={{ marginBottom: 12 }}>
-          <label>Enter your user id (required to save): </label>
-          <input value={userId} onChange={e => setUserId(e.target.value)} placeholder="123" />
-          <label style={{ marginLeft: 8 }}>Email (optional): </label>
-          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" />
-          <div style={{ marginTop: 6 }}>
-            <button onClick={handleUserIdSave}>Save user id</button>
-          </div>
-        </div>
-      )}
-    */}
-
       <div style={{ marginBottom: 12 }}>
-        <button onClick={handleAddClick} style={{ padding: '8px 12px' }}>Add Personal Recipe</button>
+        <button onClick={handleAddClick}>Add Personal Recipe</button>
       </div>
 
       {showForm && (
@@ -187,8 +173,8 @@ const PersonalRecipes = () => {
             </div>
           </div>
           <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-            <button type="submit" style={{ background: '#1976d2', color: '#fff', border: 'none', padding: '8px 12px' }}>Save Recipe</button>
-            <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
+            <button type="submit">Save Recipe</button>
+            <button type="button" className="secondary" onClick={() => setShowForm(false)}>Cancel</button>
           </div>
           {message && <div style={{ color: '#2e7d32', marginTop: 8 }}>{message}</div>}
           {error && <div style={{ color: '#d32f2f', marginTop: 8 }}>{error}</div>}

@@ -32,36 +32,41 @@ export default function CreateAccountForm({ onSignUp, switchToSignIn }) {
   };
 
   return (
-    <div>
-      <h2>Create Account</h2>
-      <form onSubmit={handleSubmit}>
-         <input
-          type="username"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Create Account</button>
-      </form>
-      <p>
-        Already have an account?{" "}
-        <button onClick={switchToSignIn}>Sign In</button>
-      </p>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Welcome to Smart Meal Planner</h2>
+        <p style={{ color: '#666' }}>Create your account to get personalized meal plans.</p>
+        <form onSubmit={handleSubmit} className="auth-box">
+           <input
+            type="username"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 6 }}>
+            <button type="submit">Create Account</button>
+          </div>
+        </form>
+        <p style={{ marginTop: 10 }}>
+          Already have an account?{" "}
+          <button className="secondary" onClick={switchToSignIn}>Sign In</button>
+        </p>
+      </div>
     </div>
   );
 }
