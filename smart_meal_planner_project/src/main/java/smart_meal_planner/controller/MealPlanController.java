@@ -10,6 +10,7 @@ import smart_meal_planner.dto.MealPlanDTO;
 import smart_meal_planner.dto.MealPlanResponseDTO;
 import smart_meal_planner.model.MealDay;
 import smart_meal_planner.model.MealPlan;
+import smart_meal_planner.model.RecipeEntity;
 import smart_meal_planner.model.UserNutritionalGoals;
 import smart_meal_planner.repository.MealPlanRepository;
 import smart_meal_planner.service.GenerateRequest;
@@ -34,7 +35,6 @@ public class MealPlanController {
         this.mealPlanRepository = mealPlanRepository;
     }
 
-    // Save a meal plan from frontend-provided IDs
     @PostMapping
     public MealPlan createMealPlan(@RequestBody MealPlanDTO dto) {
         return mealPlanService.saveMealPlan(dto);
@@ -51,74 +51,78 @@ public class MealPlanController {
         return mealPlanService.compareNutrition(id, goals);
     }
 
-
-
-
-
     @PostMapping("/generate")
     public ResponseEntity<MealPlanResponseDTO> generateMealPlan(
             @RequestBody GenerateRequest request) {
 
+        Long userId = request.getUserId();
+        System.out.println(">>> FRONTEND SENT USER ID = " + userId);
+
         double budget = request.getBudget() != null ? request.getBudget() : 0.0;
 
         List<String> ingredients = (request.getIngredients() != null &&
-                                    !request.getIngredients().isEmpty())
+                !request.getIngredients().isEmpty())
                 ? request.getIngredients()
                 : Arrays.asList("chicken", "beef", "vegetables");
 
         try {
             MealPlan plan = recipeService.findRecipeByString(ingredients, budget);
 
-            // Convert to DTO for frontend
-            MealPlanResponseDTO response = mealPlanService.toDTO(plan);
+            boolean emptyPlan = (plan == null ||
+                    plan.getDays() == null ||
+                    plan.getDays().isEmpty());
 
-            return ResponseEntity.ok(response);
+            if (emptyPlan) {
+                if (userId != null) {
+                    MealPlan existing = mealPlanRepository.findTopByUserIdOrderByIdDesc(userId);
+                    if (existing != null &&
+                        existing.getDays() != null &&
+                        !existing.getDays().isEmpty()) {
+
+                        return ResponseEntity.ok(mealPlanService.toDTO(existing));
+                    }
+                }
+
+                return ResponseEntity.ok(new MealPlanResponseDTO());
+            }
+
+            // FIX: Assign correct user ID
+            if (userId != null) {
+                plan.setUserId(userId);
+            }
+
+            // Assign back-reference to each MealDay
+            for (MealDay d : plan.getDays()) {
+                d.setMealPlan(plan);
+            }
+
+            plan = mealPlanRepository.save(plan);
+
+            return ResponseEntity.ok(mealPlanService.toDTO(plan));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.ok(new MealPlanResponseDTO()); // empty response
+
+            if (userId != null) {
+                MealPlan existing = mealPlanRepository.findTopByUserIdOrderByIdDesc(userId);
+                if (existing != null &&
+                    existing.getDays() != null &&
+                    !existing.getDays().isEmpty()) {
+
+                    return ResponseEntity.ok(mealPlanService.toDTO(existing));
+                }
+            }
+
+            return ResponseEntity.ok(new MealPlanResponseDTO());
         }
     }
 
+    @PostMapping("/alternative")
+    public MealPlanResponseDTO.SimpleRecipeDTO alternativeMeal(
+            @RequestParam("dayId") Long dayId,
+            @RequestParam("mealType") String mealType) {
 
-
-    //Was not working for me - replaced with earlier working code above.
-    // @PostMapping("/generate")
-    // public MealPlan generateMealPlan(@RequestBody GenerateRequest request) {
-
-    //     double budget = request.getBudget() != null ? request.getBudget() : 100.0;
-
-    //     List<String> ingredients =
-    //             (request.getIngredients() != null && !request.getIngredients().isEmpty())
-    //                     ? request.getIngredients()
-    //                     : Arrays.asList("eggs", "oats", "fruit", "bread", "chicken", "vegetables");
-
-    //     try {
-    //         // Generate and persist a meal plan (breakfast/lunch/dinner) from Spoonacular
-    //         MealPlan plan = recipeService.findRecipeByString(ingredients, budget);
-
-    //         if (plan == null) {
-    //             return new MealPlan();
-    //         }
-
-    //         // Attach current user ID (so the plan is owned by this user)
-    //         if (request.getUserId() != null) {
-    //             plan.setUserId(request.getUserId());
-    //         }
-
-    //         // Ensure each MealDay has the correct back-reference to this plan
-    //         if (plan.getDays() != null) {
-    //             for (MealDay day : plan.getDays()) {
-    //                 day.setMealPlan(plan);
-    //             }
-    //         }
-
-    //         // Save or update the plan with userId included
-    //         return mealPlanRepository.save(plan);
-
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return new MealPlan();
-    //     }
-    // }
+        RecipeEntity updated = recipeService.replaceMealInDay(dayId, mealType);
+        return mealPlanService.toSimpleRecipeDTO(updated);
+    }
 }

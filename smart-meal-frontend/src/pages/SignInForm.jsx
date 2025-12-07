@@ -11,66 +11,49 @@ export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }
     try {
       const response = await axios.post(
         "http://localhost:8080/api/sign-in",
-        {
-          username: username,
-          password: password,
-        },
-        {
-          withCredentials: true, // important for session-based auth
-        }
+        { username, password },
+        { withCredentials: true }
       );
 
-      console.log("Login successful:", response.data);
-
-      // Store basic user info if you want it on the frontend
-      try {
-        localStorage.setItem("user", JSON.stringify(response.data));
-      } catch (err) {
-        console.error("Failed to store user in localStorage", err);
-      }
+      localStorage.setItem("user", JSON.stringify(response.data));
+      console.log("Logged in user:", response.data);
 
       onSignIn();
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        alert("Invalid username or password");
-      } else {
-        alert("Server error. Please try again.");
-      }
+      alert("Invalid credentials or server error.");
     }
   };
 
   return (
-    <>
-      <div>
-        <h2>Sign In</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="username"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit">Sign In</button>
-        </form>
-        <p>
-          Don't have an account?{" "}
-          <button onClick={switchToCreate}>Create Account</button>
-        </p>
-      </div>
+    <div>
+      <h2>Sign In</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="username"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <button type="submit">Sign In</button>
+      </form>
+
       <p>
-        Forgot your password?{" "}
-        <button onClick={switchToRecover}>
-          Recover Password
-        </button>
+        Don't have an account?{" "}
+        <button onClick={switchToCreate}>Create Account</button>
+        <br />
+        Forgot password?{" "}
+        <button onClick={switchToRecover}>Recover</button>
       </p>
-    </>
+    </div>
   );
 }

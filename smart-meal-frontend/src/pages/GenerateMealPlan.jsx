@@ -8,55 +8,25 @@ const emptyDay = (index) => ({
   breakfast: null,
   lunch: null,
   dinner: null,
+  dayId: null
 });
 
-const GenerateMealPlan = () => {
-  const [plan, setPlan] = useState(() => {
+export default function GenerateMealPlan() {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const userId = storedUser?.uid || null;
 
-    try {
-      if (typeof window === "undefined") return Array.from({ length: 7 }, (_, i) => emptyDay(i));
-
-      const saved = localStorage.getItem("weeklyMealPlan");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length === 7) return parsed;
-      }
-    } catch (e) {
-      console.error("Failed to load weeklyMealPlan from localStorage", e);
-    }
-    return Array.from({ length: 7 }, (_, i) => emptyDay(i));
-  });
-
+  const [plan, setPlan] = useState(Array.from({ length: 7 }, (_, i) => emptyDay(i)));
   const [message, setMessage] = useState("");
-  const [ingredientNames, setIngredientNames] = useState([]);
-  const [selectedMeal, setSelectedMeal] = useState(null); // clicked meal
-  const [clickedUrl, setClickedUrl] = useState(null);
+  const [clickedMeal, setClickedMeal] = useState(null);
 
-  const userId = Number(localStorage.getItem("userId"));
-  const budget = localStorage.getItem("budget") || 100;
-
-  // Load user ingredients
-  useEffect(() => {
-    const loadIngredients = async () => {
-      try {
-        const res = await fetch("http://localhost:8080/api/ingredients", {
-          credentials: "include",
-        });
-
-        if (!res.ok) return console.error("Failed to load ingredients");
-
-        const data = await res.json();
-        const names = (data || [])
-          .map((ing) => ing.name)
-          .filter(Boolean);
-
-        setIngredientNames(names);
-      } catch (err) {
-        console.error("Error loading ingredients:", err);
-      }
-    };
-    loadIngredients();
-  }, []);
+  const safeJson = async (response) => {
+    try {
+      return await response.json();
+    } catch (err) {
+      console.error("JSON parse failed:", err);
+      return null;
+    }
+  };
 
   const generate = async () => {
     try {
@@ -64,78 +34,81 @@ const GenerateMealPlan = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ingredients: ingredientNames,
-          budget: budget,
-          userId: userId,
-        }),
+          ingredients: [],
+          budget: 250,
+          userId: userId
+        })
       });
 
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await safeJson(response);
 
-      const data = await response.json();
+      if (!data || !data.days) {
+        setMessage("No meal plan available.");
+        return;
+      }
 
-      const newPlan = data.days.map((day, index) => ({
-        day: DAYS[index],
-        breakfast: day.breakfast ? { title: day.breakfast.title,  sourceUrl: day.breakfast.sourceUrl} : null,
-        lunch: day.lunch ? { title: day.lunch.title, sourceUrl: day.lunch.sourceUrl } : null,
-        dinner: day.dinner ? { title: day.dinner.title, sourceUrl: day.dinner.sourceUrl } : null,
+      const formatted = data.days.map((d, i) => ({
+        day: d.day || DAYS[i],
+        dayId: d.dayId,
+        breakfast: d.breakfast || null,
+        lunch: d.lunch || null,
+        dinner: d.dinner || null
       }));
 
-      const extractAllIngredients = (plan) =>
-        plan.flatMap((day) => [
-          ...(day.breakfast?.ingredients || []),
-          ...(day.lunch?.ingredients || []),
-          ...(day.dinner?.ingredients || []),
-        ]);
-
-      setPlan(newPlan);
-      const allIngredients = extractAllIngredients(newPlan);
-      localStorage.setItem("mealPlanIngredients", JSON.stringify(allIngredients));
-
-      const anyMissing = newPlan.some(
-        (d) => !d.breakfast || !d.lunch || !d.dinner
-      );
-
-      setMessage(
-        anyMissing
-          ? "Unable to generate a full meal plan with current criteria."
-          : "Weekly meal plan generated! Click on a meal to view the recipe (if stored in Spoonacular)."
-      );
-
-      localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan));
-    } catch (error) {
-      console.error("Error generating meal plan:", error);
-      setMessage("Failed to generate meal plan. Please try again later.");
+      setPlan(formatted);
+      setMessage("Meal plan loaded.");
+    } catch (err) {
+      console.error("Error generating:", err);
+      setMessage("Failed to generate.");
     }
-
-
-
   };
 
-  const clearPlan = () => {
-    const emptyPlan = Array.from({ length: 7 }, (_, i) => emptyDay(i));
-    setPlan(emptyPlan);
-    setMessage("Meal plan cleared.");
-    localStorage.removeItem("weeklyMealPlan");
+  const requestAlternative = async (dayId, mealType) => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/meal-plans/alternative?dayId=${dayId}&mealType=${mealType}`,
+        { method: "POST" }
+      );
+
+      const updated = await safeJson(res);
+      if (!updated) return;
+
+      setPlan((prev) =>
+        prev.map((d) =>
+          d.dayId === dayId ? { ...d, [mealType]: updated } : d
+        )
+      );
+
+      setClickedMeal(updated);
+    } catch (err) {
+      console.error("Alternative request failed:", err);
+    }
   };
 
-  const handleMealClick = (meal) => {
-  //setSelectedMeal(meal);
-if (meal) {
-    setClickedUrl(meal.sourceUrl || "https://example.com");
-  }
+  const getMealType = (day, meal) => {
+    if (day.breakfast?.id === meal.id) return "breakfast";
+    if (day.lunch?.id === meal.id) return "lunch";
+    if (day.dinner?.id === meal.id) return "dinner";
+    return null;
   };
 
-  const closeModal = () => setSelectedMeal(null);
-
+  const handleShare = async (url) => {
+    if (!url) return;
+    try {
+      await navigator.clipboard.writeText(url);
+      alert("Recipe link copied!");
+    } catch (err) {
+      console.error("Failed to copy:", err);
+      alert("Could not copy the link.");
+    }
+  };
 
   return (
     <div className="generate-meal-plan">
       <h2>Generate Weekly Meal Plan</h2>
 
       <div className="actions">
-        <button className="generate" onClick={generate}>Generate Weekly Meal Plan</button>
-        <button className="clear" onClick={clearPlan}>Clear</button>
+        <button onClick={generate}>Generate Weekly Meal Plan</button>
       </div>
 
       {message && <div className="message">{message}</div>}
@@ -145,104 +118,77 @@ if (meal) {
           <div key={idx} className="day-card">
             <div className="day-header">{p.day}</div>
 
-            {/* 📅 Breakfast */}
-            <div className="meal-row">
-              <span className="meal-label">Breakfast:</span>
-              <span className="meal-text" onClick={() => handleMealClick(p.breakfast)}>
-                {p.breakfast ? p.breakfast.title : <em>No breakfast generated</em>}
-              </span>
-            </div>
-
-            {/* 🍽 Lunch */}
-            <div className="meal-row">
-              <span className="meal-label">Lunch:</span>
-              <span className="meal-text" onClick={() => handleMealClick(p.lunch)}>
-                {p.lunch ? p.lunch.title : <em>No lunch</em>}
-              </span>
-            </div>
-
-            {/* 🍛 Dinner */}
-            <div className="meal-row">
-              <span className="meal-label">Dinner:</span>
-              <span className="meal-text" onClick={() => handleMealClick(p.dinner)}>
-                {p.dinner ? p.dinner.title : <em>No dinner</em>}
-              </span>
-            </div>
-
+            {/* FIXED: backend keys remain lowercase */}
+            {[
+              { key: "breakfast", label: "Breakfast" },
+              { key: "lunch", label: "Lunch" },
+              { key: "dinner", label: "Dinner" }
+            ].map(({ key, label }) => (
+              <div className="meal-row" key={key}>
+                <span className="meal-label">{label}:</span>
+                <span
+                  className="meal-text"
+                  onClick={() => p[key] && setClickedMeal(p[key])}
+                >
+                  {p[key] ? p[key].title : <em>No {label}</em>}
+                </span>
+              </div>
+            ))}
           </div>
         ))}
       </div>
-    
 
+      {clickedMeal && (
+        <div className="modal-overlay" onClick={() => setClickedMeal(null)}>
+          <div className="modal-content meal-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>{clickedMeal.title}</h3>
 
-    {clickedUrl && (
-        <div 
-          className="modal-overlay" 
-          style={{
-            position: "fixed",
-            top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000
-          }}
-          onClick={() => setClickedUrl(null)} // click outside closes
-        >
-          <div
-            className="modal-content"
-            style={{
-              backgroundColor: "#fff",
-              padding: "20px",
-              borderRadius: "8px",
-              minWidth: "200px",
-            }}
-            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
-          >
-            <p>
-              <a href={clickedUrl} target="_blank" rel="noopener noreferrer">
-                Open Recipe
-              </a>
-            </p>
-            <button onClick={() => setClickedUrl(null)} style={{ marginTop: "10px" }}>
+            {clickedMeal.image && (
+              <img src={clickedMeal.image} alt="" className="meal-image" />
+            )}
+
+            {clickedMeal.sourceUrl && (
+              <p>
+                <a href={clickedMeal.sourceUrl} target="_blank" rel="noreferrer">
+                  Open Recipe
+                </a>
+              </p>
+            )}
+
+            {/* SHARE BUTTON WITH ICON */}
+            {clickedMeal.sourceUrl && (
+              <button
+                className="share-btn"
+                onClick={() => handleShare(clickedMeal.sourceUrl)}
+              >
+                📤 Share Recipe
+              </button>
+            )}
+
+            {/* ALTERNATIVE MEAL BUTTON */}
+            <button
+              className="alternative-btn"
+              onClick={() => {
+                const parentDay = plan.find((d) =>
+                  ["breakfast", "lunch", "dinner"].some(
+                    (m) => d[m]?.id === clickedMeal.id
+                  )
+                );
+                const mealType = getMealType(parentDay, clickedMeal);
+                if (parentDay && mealType) {
+                  requestAlternative(parentDay.dayId, mealType);
+                }
+              }}
+            >
+              🔁 Alternative Meal
+            </button>
+
+            <button className="close-btn" onClick={() => setClickedMeal(null)}>
               Close
             </button>
           </div>
         </div>
       )}
-    </div>  // <-- Close main container div
+    </div>
   );
-};
-export default GenerateMealPlan;
-
-
-/* //     <div className="modal-overlay" onClick={closeModal}>
-//       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-//         <button className="close-button" onClick={closeModal}>×</button>
-//         <h3>{selectedMeal.title}</h3>
-//         <p><strong>Ingredients:</strong></p>
-//         <ul>
-//           {selectedMeal.ingredients && selectedMeal.ingredients.length > 0 ? (
-//             selectedMeal.ingredients.map((ing, i) => (
-//               <li key={i}>{ing.name} {ing.quantity ? `- ${ing.quantity}${ing.unit || ''}` : ''}</li>
-//             ))
-//           ) : (
-//             <li>No ingredients listed</li>
-//           )}
-//         </ul>
-//         {selectedMeal.sourceUrl && (
-//           <p>
-//             <a href={selectedMeal.sourceUrl} target="_blank" rel="noopener noreferrer">
-//               View full recipe
-//             </a>
-//           </p>
-//         )}
-//       </div>
-//     </div>
-//   )}
-// </div> */
-
-
-
-
-
+}

@@ -6,12 +6,12 @@ import smart_meal_planner.nutrition.Nutrient;
 import smart_meal_planner.nutrition.Nutrition;
 import smart_meal_planner.nutrition.WeightPerServing;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.ArrayList;
-import java.util.List; 
 @Entity
 @Table(name = "nutrition")
 public class NutritionEntity {
@@ -20,35 +20,33 @@ public class NutritionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // One-to-many because each recipe has many individual nutrients
     @JsonIgnore
     @OneToMany(mappedBy = "nutrition", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<NutrientEntity> nutrients = new ArrayList<>();
+    private List<NutrientEntity> nutrients = new ArrayList<NutrientEntity>();
 
-    // store caloric breakdown if needed
     private Double percentCarbs;
     private Double percentProtein;
     private Double percentFat;
 
-    // Store weight per serving if needed
     private Double amount;
     private String unit;
 
-    public NutritionEntity() {}
+    public NutritionEntity() {
+    }
 
     public static NutritionEntity fromNutrition(Nutrition n) {
-        if (n == null) return null;
+        if (n == null) {
+            return null;
+        }
 
         NutritionEntity e = new NutritionEntity();
 
-        // Nutrients list
-        e.nutrients = n.getNutrients()
-                       .stream()
-                       .map(nutr -> NutrientEntity.fromNutrient(nutr, e))
-                       .collect(Collectors.toList());
+        if (n.getNutrients() != null) {
+            e.nutrients = n.getNutrients().stream()
+                    .map(nutr -> NutrientEntity.fromNutrient(nutr, e))
+                    .collect(Collectors.toList());
+        }
 
-
-        // Optional nutrition sub-objects
         if (n.getCaloricBreakdown() != null) {
             e.percentCarbs = n.getCaloricBreakdown().getPercentCarbs();
             e.percentProtein = n.getCaloricBreakdown().getPercentProtein();
@@ -65,6 +63,10 @@ public class NutritionEntity {
 
     public List<NutrientEntity> getNutrients() {
         return nutrients;
+    }
+
+    public void setNutrients(List<NutrientEntity> nutrients) {
+        this.nutrients = nutrients;
     }
 
     public Double getPercentCarbs() {
@@ -108,44 +110,58 @@ public class NutritionEntity {
     }
 
     public Nutrition toNutrition() {
-    Nutrition n = new Nutrition();
+        Nutrition n = new Nutrition();
 
-    // Convert nutrients
-    if (this.nutrients != null) {
-        n.setNutrients(this.nutrients.stream()
-            .map(NutrientEntity::toNutrient)  // you need a method in NutrientEntity
-            .collect(Collectors.toList())
-        );
+        if (this.nutrients != null) {
+            n.setNutrients(this.nutrients.stream()
+                    .map(NutrientEntity::toNutrient)
+                    .collect(Collectors.toList()));
+        }
+
+        if (percentCarbs != null || percentProtein != null || percentFat != null) {
+            CaloricBreakdown cb = new CaloricBreakdown();
+            cb.setPercentCarbs(percentCarbs);
+            cb.setPercentProtein(percentProtein);
+            cb.setPercentFat(percentFat);
+            n.setCaloricBreakdown(cb);
+        }
+
+        if (amount != null && unit != null) {
+            WeightPerServing wps = new WeightPerServing();
+            wps.setAmount(amount);
+            wps.setUnit(unit);
+            n.setWeightPerServing(wps);
+        }
+
+        return n;
     }
 
-    // Caloric breakdown
-    if (percentCarbs != null || percentProtein != null || percentFat != null) {
-        CaloricBreakdown cb = new CaloricBreakdown();
-        cb.setPercentCarbs(percentCarbs);
-        cb.setPercentProtein(percentProtein);
-        cb.setPercentFat(percentFat);
-        n.setCaloricBreakdown(cb);
-    }
+    private Double findNutrientAmount(String key) {
+        if (nutrients == null) {
+            return null;
+        }
 
-    // Weight per serving
-    if (amount != null && unit != null) {
-        WeightPerServing wps = new WeightPerServing();
-        wps.setAmount(amount);
-        wps.setUnit(unit);
-        n.setWeightPerServing(wps);
+        for (NutrientEntity n : nutrients) {
+            if (n.getName() != null && n.getName().toLowerCase().contains(key)) {
+                return n.getAmount();
+            }
+        }
+        return null;
     }
-
-    return n;
-}
 
     public Double getCalories() {
-    if (nutrients == null) return null;
-
-    return nutrients.stream()
-            .filter(n -> n.getName().equalsIgnoreCase("Calories"))
-            .map(NutrientEntity::getAmount)
-            .findFirst()
-            .orElse(null);
+        return findNutrientAmount("calorie");
     }
 
+    public Double getProtein() {
+        return findNutrientAmount("protein");
+    }
+
+    public Double getFat() {
+        return findNutrientAmount("fat");
+    }
+
+    public Double getCarbs() {
+        return findNutrientAmount("carbohydrate");
+    }
 }

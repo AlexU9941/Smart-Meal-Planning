@@ -1,10 +1,141 @@
-.generate-meal-plan { max-width: 900px; margin: 1rem auto; padding: 1rem; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);}
-.generate-meal-plan .actions { display:flex; gap:0.5rem; margin-bottom: 0.75rem;}
-.generate-meal-plan .generate { background:#1976d2; color:#fff; border:none; padding:0.5rem 0.8rem; border-radius:6px; cursor:pointer;}
-.generate-meal-plan .clear { background:#eee; border:none; padding:0.5rem 0.8rem; border-radius:6px; cursor:pointer;}
-.generate-meal-plan .days-row { display:flex; gap:0.5rem; overflow-x:auto; padding-top:0.5rem;}
-.day-card { flex:0 0 120px; background:#fafafa; border-radius:8px; padding:0.6rem; text-align:center; box-shadow: 0 1px 4px rgba(0,0,0,0.04);}
-.day-header { font-weight:700; margin-bottom:0.5rem;}
-.meal { border-top:1px solid #eee; padding-top:0.5rem; margin-top:0.5rem;}
-.message { margin-bottom:0.6rem; color:#2e7d32; }
+.generate-meal-plan {
+  max-width: 900px;
+  margin: 1rem auto;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
 
+.generate-meal-plan .actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.generate-meal-plan .generate {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.generate-meal-plan .clear {
+  background: #eee;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.generate-meal-plan .days-row {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-top: 0.5rem;
+}
+
+.day-card {
+  flex: 0 0 120px;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 0.6rem;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.day-header {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.meal {
+  border-top: 1px solid #eee;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.message {
+  margin-bottom: 0.6rem;
+  color: #2e7d32;
+}
+
+/* ================================
+   🔲 MODAL OVERLAY + BOX
+   ================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 1rem 1.25rem;
+  width: 340px;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+  text-align: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.meal-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* ================================
+   🔘 BUTTONS IN MODAL
+   ================================ */
+
+.share-btn,
+.alternative-btn,
+.close-btn {
+  display: block;
+  width: 100%;
+  margin: 0.4rem auto;
+  padding: 0.55rem 0.8rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+/* Share button */
+.share-btn {
+  background: #43a047;
+  color: white;
+}
+
+/* Alternative meal button */
+.alternative-btn {
+  background: #1976d2;
+  color: white;
+}
+
+/* Close button */
+.close-btn {
+  background: #777;
+  color: white;
+}
+
+.share-btn:hover,
+.alternative-btn:hover,
+.close-btn:hover {
+  opacity: 0.85;
+}
