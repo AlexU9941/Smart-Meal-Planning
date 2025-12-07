@@ -19,6 +19,25 @@ export default function GenerateMealPlan() {
   const [message, setMessage] = useState("");
   const [clickedMeal, setClickedMeal] = useState(null);
 
+  /** ----------------------------------------
+   *  Load saved plan on page open
+   * ---------------------------------------- */
+  useEffect(() => {
+    const saved = localStorage.getItem("weeklyMealPlan");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          setPlan(parsed);
+          setMessage("Loaded saved meal plan.");
+        }
+      } catch (err) {
+        console.error("Failed to load saved plan:", err);
+      }
+    }
+  }, []);
+
+  /** Safe JSON handler */
   const safeJson = async (response) => {
     try {
       return await response.json();
@@ -28,6 +47,9 @@ export default function GenerateMealPlan() {
     }
   };
 
+  /** ----------------------------------------
+   *  Generate new weekly meal plan
+   * ---------------------------------------- */
   const generate = async () => {
     try {
       const response = await fetch("http://localhost:8080/meal-plans/generate", {
@@ -56,6 +78,7 @@ export default function GenerateMealPlan() {
       }));
 
       setPlan(formatted);
+      localStorage.setItem("weeklyMealPlan", JSON.stringify(formatted)); // SAVE PLAN
       setMessage("Meal plan loaded.");
     } catch (err) {
       console.error("Error generating:", err);
@@ -63,6 +86,9 @@ export default function GenerateMealPlan() {
     }
   };
 
+  /** ----------------------------------------
+   *  Request alternative meal
+   * ---------------------------------------- */
   const requestAlternative = async (dayId, mealType) => {
     try {
       const res = await fetch(
@@ -73,11 +99,14 @@ export default function GenerateMealPlan() {
       const updated = await safeJson(res);
       if (!updated) return;
 
-      setPlan((prev) =>
-        prev.map((d) =>
+      setPlan((prev) => {
+        const newPlan = prev.map((d) =>
           d.dayId === dayId ? { ...d, [mealType]: updated } : d
-        )
-      );
+        );
+
+        localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan)); // SAVE UPDATED PLAN
+        return newPlan;
+      });
 
       setClickedMeal(updated);
     } catch (err) {
@@ -92,15 +121,12 @@ export default function GenerateMealPlan() {
     return null;
   };
 
-  const handleShare = async (url) => {
-    if (!url) return;
-    try {
-      await navigator.clipboard.writeText(url);
-      alert("Recipe link copied!");
-    } catch (err) {
-      console.error("Failed to copy:", err);
-      alert("Could not copy the link.");
-    }
+  /** ----------------------------------------
+   *  COPY link to clipboard (Share Icon button)
+   * ---------------------------------------- */
+  const shareRecipe = (url) => {
+    navigator.clipboard.writeText(url);
+    alert("Recipe link copied!");
   };
 
   return (
@@ -108,7 +134,7 @@ export default function GenerateMealPlan() {
       <h2>Generate Weekly Meal Plan</h2>
 
       <div className="actions">
-        <button onClick={generate}>Generate Weekly Meal Plan</button>
+        <button className="generate" onClick={generate}>Generate Weekly Meal Plan</button>
       </div>
 
       {message && <div className="message">{message}</div>}
@@ -118,19 +144,14 @@ export default function GenerateMealPlan() {
           <div key={idx} className="day-card">
             <div className="day-header">{p.day}</div>
 
-            {/* FIXED: backend keys remain lowercase */}
-            {[
-              { key: "breakfast", label: "Breakfast" },
-              { key: "lunch", label: "Lunch" },
-              { key: "dinner", label: "Dinner" }
-            ].map(({ key, label }) => (
-              <div className="meal-row" key={key}>
-                <span className="meal-label">{label}:</span>
+            {["breakfast", "lunch", "dinner"].map((mealType) => (
+              <div className="meal-row" key={mealType}>
+                <span className="meal-label">{mealType.charAt(0).toUpperCase() + mealType.slice(1)}:</span>
                 <span
                   className="meal-text"
-                  onClick={() => p[key] && setClickedMeal(p[key])}
+                  onClick={() => p[mealType] && setClickedMeal(p[mealType])}
                 >
-                  {p[key] ? p[key].title : <em>No {label}</em>}
+                  {p[mealType] ? p[mealType].title : <em>No {mealType}</em>}
                 </span>
               </div>
             ))}
@@ -138,13 +159,18 @@ export default function GenerateMealPlan() {
         ))}
       </div>
 
+      {/* --------------------- MODAL ---------------------- */}
       {clickedMeal && (
         <div className="modal-overlay" onClick={() => setClickedMeal(null)}>
-          <div className="modal-content meal-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>{clickedMeal.title}</h3>
 
             {clickedMeal.image && (
-              <img src={clickedMeal.image} alt="" className="meal-image" />
+              <img
+                src={clickedMeal.image}
+                alt="meal"
+                style={{ width: "100%", borderRadius: "8px", marginBottom: "10px" }}
+              />
             )}
 
             {clickedMeal.sourceUrl && (
@@ -155,19 +181,18 @@ export default function GenerateMealPlan() {
               </p>
             )}
 
-            {/* SHARE BUTTON WITH ICON */}
+            {/* SHARE BUTTON */}
             {clickedMeal.sourceUrl && (
               <button
-                className="share-btn"
-                onClick={() => handleShare(clickedMeal.sourceUrl)}
+                className="share-button"
+                onClick={() => shareRecipe(clickedMeal.sourceUrl)}
               >
-                📤 Share Recipe
+                🔗 Share Recipe
               </button>
             )}
 
-            {/* ALTERNATIVE MEAL BUTTON */}
+            {/* Alternative meal */}
             <button
-              className="alternative-btn"
               onClick={() => {
                 const parentDay = plan.find((d) =>
                   ["breakfast", "lunch", "dinner"].some(
@@ -180,12 +205,10 @@ export default function GenerateMealPlan() {
                 }
               }}
             >
-              🔁 Alternative Meal
+              Alternative Meal
             </button>
 
-            <button className="close-btn" onClick={() => setClickedMeal(null)}>
-              Close
-            </button>
+            <button className="close-btn" onClick={() => setClickedMeal(null)}>Close</button>
           </div>
         </div>
       )}
