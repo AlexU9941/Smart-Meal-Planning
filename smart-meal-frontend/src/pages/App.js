@@ -72,7 +72,7 @@ function App() {
     // Main app pages
     switch (page) {
       case "home":
-        return <div>Welcome to Smart Meal Planner!</div>;
+        return <div className="page-card"><h2>Welcome to Smart Meal Planner!</h2><p>Use the sidebar to navigate through the app.</p></div>;
       case "find":
         return <FindRecipes />;
       case "health":
@@ -94,33 +94,48 @@ function App() {
       case "budget":
         return <Budget />;
       default:
-        return <div>Welcome to Smart Meal Planner!</div>;
+        return <div className="page-card"><h2>Welcome to Smart Meal Planner!</h2><p>Use the sidebar to navigate through the app.</p></div>;
     }
   };
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-     {/* <div className={`theme-${theme}`} style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}> */}
-      <h1>Smart Meal Planner</h1>
+    <div className="app-container">
+      <aside className="sidebar">
+        <h2>Smart Meal Planner</h2>
+        {userSignedIn ? (
+          <>
+            <button className={`nav-button ${page === 'home' ? 'active' : ''}`} onClick={() => setPage('home')}>Home</button>
+            <button className={`nav-button ${page === 'find' ? 'active' : ''}`} onClick={() => setPage('find')}>Find Recipes</button>
+            <button className={`nav-button ${page === 'health' ? 'active' : ''}`} onClick={() => setPage('health')}>Health Info</button>
+            <button className={`nav-button ${page === 'customize' ? 'active' : ''}`} onClick={() => setPage('customize')}>Customize Profile</button>
+            <button className={`nav-button ${page === 'generate' ? 'active' : ''}`} onClick={() => setPage('generate')}>Generate Meal Plan</button>
+            <button className={`nav-button ${page === 'ingredient' ? 'active' : ''}`} onClick={() => setPage('ingredient')}>Manage Ingredients</button>
+            <button className={`nav-button ${page === 'budget' ? 'active' : ''}`} onClick={() => setPage('budget')}>Manage Budget</button>
+            <button className={`nav-button ${page === 'grocery' ? 'active' : ''}`} onClick={() => setPage('grocery')}>Kroger Grocery</button>
+            <button className={`nav-button ${page === 'nutrition' ? 'active' : ''}`} onClick={() => setPage('nutrition')}>Nutrition Tracker</button>
+            <button className={`nav-button ${page === 'track' ? 'active' : ''}`} onClick={() => setPage('track')}>Track Health</button>
+            <button className={`nav-button ${page === 'personal' ? 'active' : ''}`} onClick={() => setPage('personal')}>Personal Recipes</button>
+            <div style={{ marginTop: 'auto' }}>
+              <button className="nav-button" onClick={handleSignOut}>Sign Out</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <button className={`nav-button ${page === 'signin' ? 'active' : ''}`} onClick={() => setPage('signin')}>Sign In</button>
+            <button className={`nav-button ${page === 'create' ? 'active' : ''}`} onClick={() => setPage('create')}>Create Account</button>
+            <button className={`nav-button ${page === 'recover' ? 'active' : ''}`} onClick={() => setPage('recover')}>Recover Password</button>
+          </>
+        )}
+      </aside>
 
-      {userSignedIn && (
-        <nav style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem" }}>
-          <button onClick={() => setPage("home")}>Home</button>
-          <button onClick={() => setPage("find")}>Find Recipes</button>
-          <button onClick={() => setPage("health")}>Health Info</button>
-          <button onClick={() => setPage("customize")}>Customize Profile</button>
-          <button onClick={() => setPage("generate")}>Generate Meal Plan</button>
-          <button onClick={() => setPage("ingredient")}>Manage Ingredients</button>
-          <button onClick={() => setPage("budget")}>Manage Budget</button> 
-          <button onClick={() => setPage("grocery")}>Kroger Grocery List</button>
-          <button onClick={() => setPage("nutrition")}>Nutrition Tracker</button>
-          <button onClick={() => setPage("track")}>Track Health</button>
-          <button onClick={() => setPage("personal")}>Personal Recipes</button>
-          <button onClick={handleSignOut}>Sign Out</button>
-        </nav>
-      )}
+      <main className="main-content">
+        <div className="header-bar">
+          <h1>Smart Meal Planner</h1>
+          <div>{userSignedIn ? <span style={{ color: '#666' }}>Signed in</span> : null}</div>
+        </div>
 
-      {renderPage()}
+        {renderPage()}
+      </main>
     </div>
   );
 }

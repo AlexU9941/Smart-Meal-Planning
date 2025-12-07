@@ -101,14 +101,14 @@ const FindRecipes = () => {
   };
 
   return (
-    <div className="find-recipes">
+    <div className="page-card find-recipes">
       <h2>Find Recipes</h2>
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
         <input type="text" placeholder="Recipe Name" value={name} onChange={e => setName(e.target.value)} />
         <input type="text" placeholder="Estimated Budget" value={budget} onChange={e => setBudget(e.target.value)} />
         <button onClick={handleSearch}>Search</button>
         <div style={{ position: 'relative' }}>
-          <button onClick={toggleFilter}>{showFilter ? 'Close Filters' : 'Filters ▾'}</button>
+          <button onClick={toggleFilter} className="secondary">{showFilter ? 'Close Filters' : 'Filters ▾'}</button>
           {showFilter && (
             <div style={{ position: 'absolute', top: '36px', right: 0, width: 420, background: '#fff', border: '1px solid #ddd', padding: 12, boxShadow: '0 4px 12px rgba(0,0,0,0.08)', zIndex: 100 }}>
               <div style={{ display: 'flex', gap: 12 }}>
@@ -153,8 +153,8 @@ const FindRecipes = () => {
               </div>
 
               <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 8 }}>
-                <button onClick={clearFilters}>Clear</button>
-                <button onClick={applyFilters} style={{ background: '#1976d2', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: 6 }}>Apply</button>
+                <button className="secondary" onClick={clearFilters}>Clear</button>
+                <button onClick={applyFilters}>Apply</button>
               </div>
             </div>
           )}

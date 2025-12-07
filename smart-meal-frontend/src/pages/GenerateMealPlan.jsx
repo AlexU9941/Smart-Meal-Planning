@@ -130,7 +130,7 @@ export default function GenerateMealPlan() {
   };
 
   return (
-    <div className="generate-meal-plan">
+    <div className="page-card generate-meal-plan">
       <h2>Generate Weekly Meal Plan</h2>
 
       <div className="actions">
@@ -158,12 +158,6 @@ export default function GenerateMealPlan() {
           </div>
         ))}
       </div>
-
-      {/* --------------------- MODAL ---------------------- */}
-      {clickedMeal && (
-        <div className="modal-overlay" onClick={() => setClickedMeal(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>{clickedMeal.title}</h3>
 
             {clickedMeal.image && (
               <img
@@ -210,8 +204,8 @@ export default function GenerateMealPlan() {
 
             <button className="close-btn" onClick={() => setClickedMeal(null)}>Close</button>
           </div>
-        </div>
-      )}
-    </div>
-  );
-}
+        
+      )};
+ 
+
+

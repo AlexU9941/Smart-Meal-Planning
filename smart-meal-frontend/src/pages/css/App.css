@@ -2,14 +2,23 @@
 /* using concrete colors from existing stylesheet to avoid custom property resolution issues */
 
 /* Global */
-* { box-sizing: border-box; }
+/* * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif; /* keep existing font */
+  font-family: Arial, Helvetica, sans-serif; /* keep existing font 
   background-color: #f9f9f9;
   color: #222;
-}
+} */
+
+ * { box-sizing: border-box; }
+html, #root { height: 100%; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif; 
+  background-color: #f9f9f9;
+  color: #222;
+} 
 
 /* Layout containers */
 .app-container {
@@ -202,28 +211,21 @@ button:disabled {
 .message { color: #001f3f; }
 
 
-.theme-light {
-  background-color: #ffffff !important;
+body.theme-light, body.theme-light .app-container, body.theme-light .sidebar {
+  background: #ffffff !important;
   color: #000 !important;
 }
 
-.theme-dark {
-  background-color: #110f0f !important;
-  color: #918d8d !important;
-  /* color: #000000 !important; */
+body.theme-dark, body.theme-dark .app-container, body.theme-dark .sidebar {
+  background: #110f0f !important;
+  color: #817676 !important;
 }
 
-.theme-colorful {
-  background: linear-gradient(135deg, #ff8a00, #e52e71);
-  color: #000 !important;
-  /* color: white !important; */
+body.theme-colorful, body.theme-colorful .app-container, body.theme-colorful .sidebar {
+  background: linear-gradient(135deg, #ff8a00, #e52e71) !important;
+  color: #000000 !important;
 }
 
-.theme-dark button,
-.theme-colorful button {
-  border: 1px solid rgba(255,255,255,0.4);
-  color: #ffffff;
-}
 
 .change-password {
   background-color: #1976d2;

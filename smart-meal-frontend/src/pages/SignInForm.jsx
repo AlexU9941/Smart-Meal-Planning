@@ -25,35 +25,40 @@ export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }
   };
 
   return (
-    <div>
-      <h2>Sign In</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="username"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        <button type="submit">Sign In</button>
-      </form>
-
-      <p>
-        Don't have an account?{" "}
-        <button onClick={switchToCreate}>Create Account</button>
-        <br />
-        Forgot password?{" "}
-        <button onClick={switchToRecover}>Recover</button>
-      </p>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Welcome Back</h2>
+        <p style={{ color: '#666' }}>Sign in to continue to Smart Meal Planner</p>
+        <form onSubmit={handleSubmit} className="auth-box">
+          <input
+            type="username"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 6 }}>
+            <button type="submit">Sign In</button>
+          </div>
+        </form>
+        <p style={{ marginTop: 10 }}>
+          Don't have an account?{" "}
+          <button className="secondary" onClick={switchToCreate}>Create Account</button>
+        </p>
+        <p>
+          Forgot your password?{" "}
+          <button className="ghost" onClick={switchToRecover}>
+            Recover Password
+          </button>
+        </p>
+      </div>
     </div>
   );
 }

@@ -208,10 +208,10 @@ const NutritionalTracker = () => {
   };
 
   return (
-    <div className="generate-meal-plan">
+    <div className="page-card generate-meal-plan">
       <h2>Nutrition Tracker</h2>
       <div className="actions">
-        <button onClick={simulatePopulateNutrition}>Simulate Populate Nutrition (for testing)</button>
+        <button className="generate" onClick={simulatePopulateNutrition}>Simulate Populate Nutrition (for testing)</button>
       </div>
       {error && <div className="message" style={{ color: "red" }}>{error}</div>}
 
