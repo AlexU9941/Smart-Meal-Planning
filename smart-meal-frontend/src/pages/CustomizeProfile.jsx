@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/customizeProfile.css";
 
-
 //const STORAGE_KEY = "userProfile";
 const MAX_BIO_LENGTH = 500;
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024; // 2MB
@@ -17,7 +16,6 @@ function loadProfile(uid) {
   }
 }
 
-
 function saveProfile(uid, profile) {
   localStorage.setItem(`userProfile_${uid}`, JSON.stringify(profile));
 }
@@ -27,8 +25,7 @@ const CustomizeProfile = ({ onThemeChange }) => {
   const uid = user && user.uid ? user.uid : null;
   
   const [bio, setBio] = useState("");
-  // default to 'light' so the app doesn't receive an empty theme
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("");
   const [picture, setPicture] = useState(null); // base64 string
   const [message, setMessage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
@@ -56,20 +53,17 @@ const CustomizeProfile = ({ onThemeChange }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-
   useEffect(() => {
     if (!uid) return;
     const p = loadProfile(uid);
     setBio(p.bio);
-    setTheme(p.theme || "light");
+    setTheme(p.theme);
     setPicture(p.picture);
   }, [uid]);
 
   useEffect(() => {
-  // only notify parent when theme is a non-empty value
-  if (onThemeChange && theme) onThemeChange(theme);
+    if (onThemeChange) onThemeChange(theme);
   },  [theme, onThemeChange]);
-
 
   const handleImageChange = (e) => {
     const file = e.target.files && e.target.files[0];
@@ -107,17 +101,17 @@ const CustomizeProfile = ({ onThemeChange }) => {
 
   const changePassword = async (oldPass, newPass) => {
     try {
-    const response = await fetch("http://localhost:8080/api/user/change-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: user.username, oldPassword: oldPass, newPassword: newPass })
-    });
+      const response = await fetch("http://localhost:8080/api/user/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: user.username, oldPassword: oldPass, newPassword: newPass })
+      });
 
-    const data = await response.text();
-    setMessage(data);
-  } catch (err) {
-    setMessage("Failed to change password.");
-  }
+      const data = await response.text();
+      setMessage(data);
+    } catch (err) {
+      setMessage("Failed to change password.");
+    }
   };
 
 
