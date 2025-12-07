@@ -27,7 +27,8 @@ const CustomizeProfile = ({ onThemeChange }) => {
   const uid = user && user.uid ? user.uid : null;
   
   const [bio, setBio] = useState("");
-  const [theme, setTheme] = useState("");
+  // default to 'light' so the app doesn't receive an empty theme
+  const [theme, setTheme] = useState("light");
   const [picture, setPicture] = useState(null); // base64 string
   const [message, setMessage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
@@ -60,12 +61,13 @@ const CustomizeProfile = ({ onThemeChange }) => {
     if (!uid) return;
     const p = loadProfile(uid);
     setBio(p.bio);
-    setTheme(p.theme);
+    setTheme(p.theme || "light");
     setPicture(p.picture);
   }, [uid]);
 
   useEffect(() => {
-  if (onThemeChange) onThemeChange(theme);
+  // only notify parent when theme is a non-empty value
+  if (onThemeChange && theme) onThemeChange(theme);
   },  [theme, onThemeChange]);
 
 
