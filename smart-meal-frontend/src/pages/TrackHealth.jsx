@@ -91,57 +91,182 @@ const TrackHealth = () => {
     return result;
   };
 
-  const renderLineChart = (points) => {
-    if (!points || points.length === 0) return <div>No projection data</div>;
-    const width = 600, height = 240, margin = 30;
-    const max = Math.max(...points.map(p => p.weight));
-    const min = Math.min(...points.map(p => p.weight));
-    const range = Math.max(1, max - min);
+  // Compute daily calories array (7 days) from summary if available, otherwise estimate from plan
+  const computeDailyCalories = () => {
+    const daily = Array(7).fill(0);
+    if (summary && Array.isArray(summary.days) && summary.days.length >= 7) {
+      for (let i = 0; i < 7; i++) {
+        const d = summary.days[i];
+        daily[i] = d && d.totals && typeof d.totals.calories === 'number' ? Math.round(d.totals.calories) : 0;
+      }
+      return daily;
+    }
+
+    // fallback: use plan local data (try any meals in the day and sum their calories if present)
+    try {
+      for (let i = 0; i < 7; i++) {
+        const d = plan[i] || {};
+        // consider common meal keys
+        const mealKeys = ['breakfast','lunch','dinner','snack'];
+        mealKeys.forEach(m => {
+          const meal = d[m];
+          if (!meal) return;
+          if (meal.nutrition && meal.nutrition.calories) {
+            daily[i] += Number(meal.nutrition.calories) || 0;
+          } else if (meal.calories) {
+            daily[i] += Number(meal.calories) || 0;
+          } else if (meal.title && typeof meal.title === 'string') {
+            // rudimentary heuristic based on title length
+            daily[i] += Math.min(1000, Math.max(150, meal.title.length * 25));
+          } else {
+            // generic fallback
+            daily[i] += 400;
+          }
+        });
+        // also handle arbitrary additional meal entries
+        Object.keys(d).forEach(k => {
+          if (mealKeys.includes(k)) return;
+          const meal = d[k];
+          if (!meal || typeof meal !== 'object') return;
+          if (meal.nutrition && meal.nutrition.calories) daily[i] += Number(meal.nutrition.calories) || 0;
+          else if (meal.calories) daily[i] += Number(meal.calories) || 0;
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to compute daily calories from plan', e);
+    }
+    return daily;
+  };
+
+  // daily calories and weekly total
+  const dailyCalories = computeDailyCalories();
+  let weeklyCalories = dailyCalories.reduce((s,v) => s + v, 0);
+
+  // If backend provided a weeklyTotals, prefer it (keeps previous behavior)
+  if (summary && summary.weeklyTotals && typeof summary.weeklyTotals.calories === 'number') {
+    weeklyCalories = Math.round(summary.weeklyTotals.calories);
+  }
+
+  // Robust extraction of goalCalories from healthInfo or its estimatedCalories
+  const extractGoalCalories = () => {
+    if (!healthInfo) return 2000 * 7;
+    const est = healthInfo.estimatedCalories || {};
+    if (typeof est.weeklyCalorieGoal === 'number') return Number(est.weeklyCalorieGoal);
+    if (typeof est.dailyCalorieGoal === 'number') return Math.round(Number(est.dailyCalorieGoal) * 7);
+    if (typeof healthInfo.weeklyCalorieGoal === 'number') return Number(healthInfo.weeklyCalorieGoal);
+    if (typeof healthInfo.calorieGoal === 'number') return Math.round(Number(healthInfo.calorieGoal) * 7);
+    if (typeof healthInfo.dailyCalorieGoal === 'number') return Math.round(Number(healthInfo.dailyCalorieGoal) * 7);
+    return 2000 * 7;
+  };
+
+  const goalCalories = extractGoalCalories();
+
+  // Goal weight extraction for projection overlay (optional)
+  const goalWeight = (healthInfo && (healthInfo.goalWeight || healthInfo.targetWeight || healthInfo.desiredWeight)) ? Number(healthInfo.goalWeight || healthInfo.targetWeight || healthInfo.desiredWeight) : null;
+
+  // render daily calories bar chart (x = days, y = calories)
+  const renderDailyCaloriesChart = (daily) => {
+    const width = 700, height = 240, margin = 40;
+    const max = Math.max(...daily, 500);
+    const barW = Math.floor((width - margin*2) / daily.length) - 10;
+    const ticks = 4;
+    const yTicks = [];
+    for (let t = 0; t <= ticks; t++) yTicks.push(Math.round((t/ticks) * max));
+
     return (
-      <svg width={width} height={height} style={{ border: '1px solid #ddd' }}>
+      <svg width={width} height={height} style={{ border: '1px solid #eee', background: '#fff' }}>
+        {/* y axis ticks and labels */}
+        {yTicks.map((val, i) => {
+          const y = margin + ((max - val)/max)*(height - margin*2);
+          return (
+            <g key={i}>
+              <line x1={margin} x2={width - margin} y1={y} y2={y} stroke="#f0f0f0" />
+              <text x={6} y={y+4} fontSize={11} fill="#666">{val}</text>
+            </g>
+          );
+        })}
+
+        {/* bars */}
+        {daily.map((val, i) => {
+          const x = margin + i*(barW + 10) + 10;
+          const h = Math.round((val / max) * (height - margin*2));
+          const y = margin + (height - margin*2) - h;
+          return (
+            <g key={i}>
+              <rect x={x} y={y} width={barW} height={h} fill="#1976d2" />
+              <text x={x + barW/2} y={height - 6} fontSize={11} textAnchor="middle">{DAYS[i]}</text>
+              <text x={x + barW/2} y={y - 6} fontSize={11} textAnchor="middle" fill="#333">{val}</text>
+            </g>
+          );
+        })}
+      </svg>
+    );
+  };
+
+  // Improved projection chart with y-axis labels and optional goal weight line
+  const renderProjectionChart = (points, goalW) => {
+    if (!points || points.length === 0) return <div>No projection data</div>;
+    const width = 700, height = 320, margin = 50;
+    const weights = points.map(p=>p.weight);
+    const maxW = Math.max(...weights, goalW || -Infinity) + 5;
+    const minW = Math.min(...weights, goalW || Infinity) - 5;
+    const range = Math.max(1, maxW - minW);
+
+    // y-axis ticks
+    const yTicks = 6;
+    const yVals = [];
+    for (let i=0;i<=yTicks;i++) yVals.push(minW + (i/yTicks)*range);
+
+    return (
+      <svg width={width} height={height} style={{ border: '1px solid #ddd', background: '#fff' }}>
+        {/* y axis grid and labels */}
+        {yVals.map((val, i) => {
+          const y = margin + ((maxW - val)/range)*(height - margin*2);
+          return (
+            <g key={i}>
+              <line x1={margin} x2={width-margin} y1={y} y2={y} stroke="#f0f0f0" />
+              <text x={margin-8} y={y+4} fontSize={12} textAnchor="end">{Math.round(val*100)/100}</text>
+            </g>
+          );
+        })}
+
+        {/* goal weight horizontal line */}
+        {goalW != null && (
+          (() => {
+            const yGoal = margin + ((maxW - goalW)/range)*(height - margin*2);
+            return (
+              <g>
+                <line x1={margin} x2={width-margin} y1={yGoal} y2={yGoal} stroke="#e91e63" strokeDasharray="6 6" />
+                <text x={width-margin-6} y={yGoal-6} fontSize={12} textAnchor="end" fill="#e91e63">Goal: {goalW}</text>
+              </g>
+            );
+          })()
+        )}
+
+        {/* polyline */}
         <polyline
           fill="none"
           stroke="#3f51b5"
           strokeWidth="2"
           points={points.map((p,i)=>{
             const x = margin + (i/(points.length-1))*(width-2*margin);
-            const y = margin + ((max - p.weight)/range)*(height-2*margin);
+            const y = margin + ((maxW - p.weight)/range)*(height-2*margin);
             return `${x},${y}`;
           }).join(' ')}
         />
+
         {points.map((p,i)=>{
           const x = margin + (i/(points.length-1))*(width-2*margin);
-          const y = margin + ((max - p.weight)/range)*(height-2*margin);
-          return <circle key={i} cx={x} cy={y} r={3} fill="#3f51b5" />;
+          const y = margin + ((maxW - p.weight)/range)*(height-2*margin);
+          return (
+            <g key={i}>
+              <circle cx={x} cy={y} r={4} fill="#3f51b5" />
+              <text x={x} y={y-8} fontSize={11} textAnchor="middle">{p.weight}</text>
+              <text x={x} y={height-12} fontSize={11} textAnchor="middle">W{i+1}</text>
+            </g>
+          );
         })}
       </svg>
-    );
-  };
-
-  const renderBarComparison = (weeklyCalories, goalCalories) => {
-    const width = 500, height = 120;
-    const max = Math.max(weeklyCalories, goalCalories, 1000);
-    const w1 = Math.round((weeklyCalories / max) * (width-40));
-    const w2 = Math.round((goalCalories / max) * (width-40));
-    return (
-      <div>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <div>
-            <div>Weekly Calories</div>
-            <div style={{ width: width, height: 24, background: '#eee', position: 'relative' }}>
-              <div style={{ width: w1, height: 24, background: '#f44336' }} />
-              <div style={{ position: 'absolute', left: 6, top: 2, color: '#fff' }}>{weeklyCalories}</div>
-            </div>
-          </div>
-          <div>
-            <div>Goal Calories</div>
-            <div style={{ width: width, height: 24, background: '#eee', position: 'relative' }}>
-              <div style={{ width: w2, height: 24, background: '#4caf50' }} />
-              <div style={{ position: 'absolute', left: 6, top: 2, color: '#fff' }}>{goalCalories}</div>
-            </div>
-          </div>
-        </div>
-      </div>
     );
   };
 
@@ -156,22 +281,7 @@ const TrackHealth = () => {
 
   if (error) return <div style={{ color: 'red' }}>{error}</div>;
 
-  // compute weekly calories from summary if available, else sum local
-  let weeklyCalories = 0;
-  if (summary && summary.weeklyTotals) {
-    weeklyCalories = Math.round(summary.weeklyTotals.calories);
-  } else {
-    // sum mocked
-    plan.forEach(d => {
-      ['lunch','dinner'].forEach(k => {
-        if (d[k] && d[k].nutrition && d[k].nutrition.calories) weeklyCalories += Number(d[k].nutrition.calories);
-        else if (d[k]) weeklyCalories += (d[k].title ? d[k].title.length * 20 : 300);
-      });
-    });
-  }
-
-  const goalCalories = healthInfo && healthInfo.estimatedCalories && healthInfo.estimatedCalories.weeklyCalorieGoal ? Number(healthInfo.estimatedCalories.weeklyCalorieGoal) : (healthInfo && healthInfo.weeklyCalorieGoal ? Number(healthInfo.weeklyCalorieGoal) : (healthInfo && healthInfo.calorieGoal ? Number(healthInfo.calorieGoal) : 2000*7));
-
+  // compute projection based on dailyCalories and goalCalories computed above
   const projection = estimateWeeklyWeightChange(weeklyCalories, goalCalories, 12);
 
   return (
@@ -188,31 +298,36 @@ const TrackHealth = () => {
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
+          <strong>Daily calories (current week)</strong>
+          <div style={{ marginTop: 8 }}>{renderDailyCaloriesChart(dailyCalories)}</div>
+        </div>
+
+        <div style={{ marginBottom: '1rem' }}>
           {renderBarComparison(weeklyCalories, goalCalories)}
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
           <h4>Projected weight change over 12 weeks</h4>
-          {renderLineChart(projection)}
+          {renderProjectionChart(projection, goalWeight)}
         </div>
 
-        <div>
-          <h4>Details</h4>
-          {summary && summary.days ? (
-            <div>
-              {summary.days.map((d,i)=> (
-                <div key={i} style={{ padding: '6px', borderBottom: '1px solid #eee' }}>
-                  <strong>{d.day}</strong>
-                  <div>Calories: {Math.round(d.totals.calories)}</div>
-                  <div>Protein: {Math.round(d.totals.protein)}, Carbs: {Math.round(d.totals.carbs)}, Fat: {Math.round(d.totals.fat)}</div>
-                </div>
-              ))}
-            </div>
-          ) : <div>No detailed summary available</div>}
-        </div>
-      </div>
+       <div>
+         <h4>Details</h4>
+         {summary && summary.days ? (
+           <div>
+             {summary.days.map((d,i)=> (
+               <div key={i} style={{ padding: '6px', borderBottom: '1px solid #eee' }}>
+                 <strong>{d.day}</strong>
+                 <div>Calories: {Math.round(d.totals.calories)}</div>
+                 <div>Protein: {Math.round(d.totals.protein)}, Carbs: {Math.round(d.totals.carbs)}, Fat: {Math.round(d.totals.fat)}</div>
+               </div>
+             ))}
+           </div>
+         ) : <div>No detailed summary available</div>}
+       </div>
+     </div>
     </div>
-  );
-};
+   );
+ };
 
-export default TrackHealth;
+ export default TrackHealth;
