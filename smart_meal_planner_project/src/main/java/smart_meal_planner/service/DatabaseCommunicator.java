@@ -102,5 +102,28 @@ public class DatabaseCommunicator{
             return false;
         }
     }
+
+
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+    
+    
+    User user = userRepository.findByUsername(username);
+
+    // Verify old password
+    String hashedOld = PasswordUtils.hashPassword(oldPassword, user.getSalt());
+    if (!hashedOld.equals(user.getPassword())) {
+        throw new RuntimeException("Old password is incorrect");
+    }
+
+    // Generate new salt & hash
+    String newSalt = PasswordUtils.generateSalt();
+    String hashedNew = PasswordUtils.hashPassword(newPassword, newSalt);
+
+    user.setSalt(newSalt);
+    user.setPassword(hashedNew);
+
+    userRepository.save(user);
+    return true;
+}
 }
 

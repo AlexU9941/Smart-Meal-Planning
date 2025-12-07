@@ -17,7 +17,6 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/nutrition")
-@CrossOrigin(origins = "*")
 public class NutritionController {
 
     @Autowired
@@ -30,13 +29,24 @@ public class NutritionController {
     //     }
     //     return nutritionService.calculateMealPlanNutrition(mealPlan);
     // }
+
+    // This handles preflight requests from the browser
+    @RequestMapping(value = "/summary", method = RequestMethod.OPTIONS)
+    public void summaryOptions() {}
+    
+    // This handles preflight requests from the browser
+    @RequestMapping(value = "/track", method = RequestMethod.OPTIONS)
+    public void trackOptions() {}  
+   
     
     @PostMapping("/track")
+   
     public double[][] getNutritionDiff(@RequestBody NutritionRequest request) {
         return nutritionService.compareMealPlanToGoals(request.getMealPlan(), request.getUserGoals());
     }
 
     @PostMapping("/health-check")
+   
     public String healthCheck(@RequestBody HealthCheckRequest request) {
         if (request.getWeeklyTotals() == null) {
             throw new IllegalArgumentException("Weekly totals missing.");
@@ -46,6 +56,7 @@ public class NutritionController {
 
     // Accepts a simplified weekly plan from the frontend (array of day objects with lunch/dinner titles)
     @PostMapping("/summary")
+   
     public SummaryResponse summarize(@RequestBody FrontendWeekPlan plan) {
         // Build NutritionInfo totals per meal using simple parsing; if nutrition provided by frontend, use it
         NutritionInfo weeklyTotals = new NutritionInfo();

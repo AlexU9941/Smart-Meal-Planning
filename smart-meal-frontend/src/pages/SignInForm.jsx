@@ -1,53 +1,76 @@
-import { useState } from 'react'; 
-import axios from 'axios'; 
+import React, { useState } from "react";
+import axios from "axios";
 
+export default function SignInForm({ onSignIn, switchToCreate, switchToRecover }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-export default function SignInForm() {
-  const [formData, setFormData] = useState({ username: '', password: '' });
-  const [message, setMessage] = useState('');
-
-  const handleChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, password } = formData;
-
-    if (!username || !password) {
-      setMessage('All fields are required.');
-      return;
-    }
 
     try {
-      const res = await axios.post('http://localhost:8080/api/sign-in', formData);
-      const user = res.data;   // contains UID
+      const response = await axios.post(
+        "http://localhost:8080/api/sign-in",
+        {
+          username: username,
+          password: password,
+        },
+        {
+          withCredentials: true, // important for session-based auth
+        }
+      );
 
-      console.log("Response data:", user); // See exactly what comes back
+      console.log("Login successful:", response.data);
 
-
-      if (user.email) {
-      localStorage.setItem('email', user.email);
-      console.log("Saving email:", user.email);
-      } else {
-        console.warn("⚠️ No email returned from backend!");
+      // Store basic user info if you want it on the frontend
+      try {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      } catch (err) {
+        console.error("Failed to store user in localStorage", err);
       }
 
-      setMessage('Signed in successfully!');
-      // Redirect to home page
-    } catch (err) {
-      if (err.response?.status === 401) {
-        setMessage('Incorrect username or password.');
+      onSignIn();
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert("Invalid username or password");
       } else {
-        setMessage('Database connection failed.');
+        alert("Server error. Please try again.");
       }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="username" placeholder="Username" onChange={handleChange} />
-      <input name="password" type="password" placeholder="Password" onChange={handleChange} />
-      <button type="submit">Sign In</button>
-      <p>{message}</p>
-    </form>
+    <>
+      <div>
+        <h2>Sign In</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="username"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Sign In</button>
+        </form>
+        <p>
+          Don't have an account?{" "}
+          <button onClick={switchToCreate}>Create Account</button>
+        </p>
+      </div>
+      <p>
+        Forgot your password?{" "}
+        <button onClick={switchToRecover}>
+          Recover Password
+        </button>
+      </p>
+    </>
   );
 }

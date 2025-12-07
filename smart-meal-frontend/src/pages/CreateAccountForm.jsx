@@ -1,48 +1,67 @@
+import React, { useState } from "react";
+import axios from "axios";
 
-import { useState } from 'react';
-import axios from 'axios';
+export default function CreateAccountForm({ onSignUp, switchToSignIn }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
 
-export default function CreateAccountForm() {
-  const [formData, setFormData] = useState({ username: '', email: '', password: '' });
-  const [message, setMessage] = useState('');
-
-  const handleChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, email, password } = formData;
-
-    if (!username || !email || !password) {
-      setMessage('All fields are required.');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setMessage('Invalid email format.');
-      return;
-    }
-
+  
     try {
-      const res = await axios.post('http://localhost:8080/api/create-account', formData);
-      setMessage('Account created successfully!');
-      // Redirect to login
-    } catch (err) {
-      if (err.response?.status === 409) {
-        setMessage('Email already exists.');
+      const response = await axios.post("http://localhost:8080/api/create-account", {
+        email,
+        username,
+        password,
+      });
+
+      console.log("Account created:", response.data);
+      onSignUp();  
+      alert("Account created successfully!");
+    } 
+    catch (error) {
+      if (error.response && error.response.status === 409) {
+        alert("Username or email already exists.");
+      } else if (error.response && error.response.status === 400) {
+        alert("Invalid input. Please fill all fields.");
       } else {
-        setMessage('Database connection failed.');
+        alert("Server error. Please try again.");
       }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="username" placeholder="Username" onChange={handleChange} />
-      <input name="email" placeholder="Email" onChange={handleChange} />
-      <input name="password" type="password" placeholder="Password" onChange={handleChange} />
-      <button type="submit">Create Account</button>
-      <p>{message}</p>
-    </form>
+    <div>
+      <h2>Create Account</h2>
+      <form onSubmit={handleSubmit}>
+         <input
+          type="username"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Create Account</button>
+      </form>
+      <p>
+        Already have an account?{" "}
+        <button onClick={switchToSignIn}>Sign In</button>
+      </p>
+    </div>
   );
 }

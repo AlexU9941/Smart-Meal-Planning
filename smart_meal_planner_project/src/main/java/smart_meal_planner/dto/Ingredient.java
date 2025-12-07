@@ -1,9 +1,16 @@
-package smart_meal_planner.recipe;
+package smart_meal_planner.dto;
 
 public class Ingredient {
     private String name;
-    private double amount;
+    private Double amount;
     private String unit;
+
+    public Ingredient() {
+    }
+
+    public Ingredient(String name) {
+    this.name = name;
+    }
 
     public String getName() {
         return name;

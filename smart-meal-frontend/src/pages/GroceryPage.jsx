@@ -1,67 +1,105 @@
-import React, { useState } from "react";
-import ProviderSelector from "./ProviderSelector";
-import GrocerySearch from "./GrocerySearch";
+import React, { useState, useEffect } from "react";
+import ConnectKroger from "./ConnectKroger";
+import SearchProducts from "./SearchProducts";
 
-export default function GroceryPage() {
-    const [provider, setProvider] = useState(null);
-    const [accessToken, setAccessToken] = useState(null);
-    const [cart, setCart] = useState([]);
+const GroceryPage = () => {
+  const [connected, setConnected] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
 
-    async function startProviderAuth(provider) {
-        const url = `http://localhost:8080/api/grocery/auth/${provider}`;
-        window.location.href = url; // redirect to Kroger OAuth
-    }
+  // Load ingredients from localStorage initially
+  useEffect(() => {
+    const loadIngredients = () => {
+      const saved = localStorage.getItem("mealPlanIngredients");
+      setIngredients(saved ? JSON.parse(saved) : []);
+    };
 
-    function addItem(item) {
-        setCart(prev => [...prev, item]);
-    }
+    loadIngredients();
 
-    async function checkout() {
-        const res = await fetch(
-            `http://localhost:8080/api/grocery/checkout/${provider}`, 
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    items: cart.map(i => i.productId),
-                    token: accessToken
-                })
-            }
-        );
+    // Listen for changes to localStorage in case meal plan was updated in another tab
+    const handleStorage = (event) => {
+      if (event.key === "mealPlanIngredients") {
+        loadIngredients();
+      }
+    };
 
-        const data = await res.text(); // checkout redirect URL
-        window.location.href = data;
-    }
+    window.addEventListener("storage", handleStorage);
 
-    return (
-        <div style={{ padding: "20px" }}>
-            <h2>Grocery Integration</h2>
+    // Custom event for same-tab updates
+    const handleMealPlanUpdated = () => loadIngredients();
+    window.addEventListener("mealPlanUpdated", handleMealPlanUpdated);
 
-            <ProviderSelector 
-                onSelect={(prov) => {
-                    setProvider(prov);
-                    startProviderAuth(prov);
-                }} 
-            />
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("mealPlanUpdated", handleMealPlanUpdated);
+    };
+  }, []);
 
-            {provider && accessToken && (
-                <GrocerySearch 
-                    provider={provider}
-                    accessToken={accessToken}
-                    onAdd={addItem}
-                />
-            )}
+  return (
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <h1>Kroger Grocery List</h1>
 
-            {cart.length > 0 && (
-                <div>
-                    <h3>Your Cart</h3>
-                    {cart.map(item => (
-                        <p key={item.productId}>{item.name}</p>
-                    ))}
-
-                    <button onClick={checkout}>Checkout</button>
-                </div>
-            )}
+      {/* DISPLAY INGREDIENTS */}
+      {!ingredients.length ? (
+        <p style={{ fontSize: "1.1rem" }}>
+          No meal plan generated yet. Go to <strong>Generate Meal Plan</strong> first!
+        </p>
+      ) : (
+        <div
+          style={{
+            background: "#eef7ff",
+            padding: "15px",
+            borderRadius: "8px",
+            marginBottom: "20px",
+          }}
+        >
+          <h3>Ingredients Needed:</h3>
+          <ul>
+            {ingredients.map((ing, idx) => (
+              <li key={idx}>{ing}</li>
+            ))}
+          </ul>
         </div>
-    );
-}
+      )}
+
+      {/* STEP 1: KROGER OAUTH */}
+      <ConnectKroger onConnected={() => setConnected(true)} />
+
+      {/* STEP 2: SEARCH KROGER AFTER CONNECTING */}
+      {connected && ingredients.length > 0 && (
+        <div style={{ marginTop: "25px" }}>
+          <h3>Searching Kroger products for your ingredients…</h3>
+          <SearchProducts ingredients={ingredients} autoSearch={true} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default GroceryPage;
+
+
+/*import React, { useState } from "react";
+import ConnectKroger from "./ConnectKroger";
+import SearchProducts from "./SearchProducts";
+
+const GroceryPage = () => {
+  const [connected, setConnected] = useState(false);
+
+  return (
+    <div style={{ padding: "20px" }}>
+      {Step 1: Kroger OAuth Connect}
+      <ConnectKroger onConnected={() => setConnected(true)} />
+
+      {Step 2: Search products AFTER connection}
+      {connected && (
+        <div style={{ marginTop: "30px" }}>
+          <SearchProducts />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default GroceryPage;
+*/
+

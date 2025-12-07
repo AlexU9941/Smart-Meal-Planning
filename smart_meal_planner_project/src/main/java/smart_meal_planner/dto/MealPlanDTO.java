@@ -4,7 +4,16 @@ import java.util.List;
 
 public class MealPlanDTO {
 
-    private List<MealDayDTO> days;
+    private Long planId;               // optional, can be null when creating
+    private List<MealDayDTO> days;     // 7 days typically
+
+    public Long getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(Long planId) {
+        this.planId = planId;
+    }
 
     public List<MealDayDTO> getDays() {
         return days;
@@ -14,23 +23,36 @@ public class MealPlanDTO {
         this.days = days;
     }
 
+    // ================================================================
+    //                Inner DTO for a single day
+    // ================================================================
     public static class MealDayDTO {
-        private Integer lunchId;  // just the recipe IDs
-        private Integer dinnerId;
 
-        public Integer getLunchId() {
+        private Long breakfastId; // NEW
+        private Long lunchId;
+        private Long dinnerId;
+
+        public Long getBreakfastId() {
+            return breakfastId;
+        }
+
+        public void setBreakfastId(Long breakfastId) {
+            this.breakfastId = breakfastId;
+        }
+
+        public Long getLunchId() {
             return lunchId;
         }
 
-        public void setLunchId(Integer lunchId) {
+        public void setLunchId(Long lunchId) {
             this.lunchId = lunchId;
         }
 
-        public Integer getDinnerId() {
+        public Long getDinnerId() {
             return dinnerId;
         }
 
-        public void setDinnerId(Integer dinnerId) {
+        public void setDinnerId(Long dinnerId) {
             this.dinnerId = dinnerId;
         }
     }

@@ -1,6 +1,6 @@
 package smart_meal_planner.model;
+
 import jakarta.persistence.*;
-import smart_meal_planner.recipe.RecipeResult;
 
 @Entity
 @Table(name = "meal_day")
@@ -10,21 +10,36 @@ public class MealDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "day")
+    private String day;   // <-- REQUIRED
+
+    @ManyToOne
+    @JoinColumn(name = "breakfast_id")
+    private RecipeEntity breakfast;
+
+    @ManyToOne
+    @JoinColumn(name = "lunch_id")
+    private RecipeEntity lunch;
+
+    @ManyToOne
+    @JoinColumn(name = "dinner_id")
+    private RecipeEntity dinner;
+
     @ManyToOne
     @JoinColumn(name = "meal_plan_id")
     private MealPlan mealPlan;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private RecipeEntity lunch;
-    
-    @ManyToOne(cascade = CascadeType.ALL)
-    private RecipeEntity dinner;
+    // ---------- GETTERS ----------
+    public Long getId() {
+        return id;
+    }
 
-    public MealDay() {}
+    public String getDay() {
+        return day;
+    }
 
-    public MealDay(RecipeEntity lunch, RecipeEntity dinner) {
-        this.lunch = lunch;
-        this.dinner = dinner;
+    public RecipeEntity getBreakfast() {
+        return breakfast;
     }
 
     public RecipeEntity getLunch() {
@@ -39,24 +54,28 @@ public class MealDay {
         return mealPlan;
     }
 
-    public void setMealPlan(MealPlan mealPlan) {
-        this.mealPlan = mealPlan;
+    // ---------- SETTERS ----------
+    public void setId(Long id) {
+        this.id = id;
     }
-     
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public void setBreakfast(RecipeEntity breakfast) {
+        this.breakfast = breakfast;
+    }
+
     public void setLunch(RecipeEntity lunch) {
-    this.lunch = lunch;
+        this.lunch = lunch;
     }
 
     public void setDinner(RecipeEntity dinner) {
         this.dinner = dinner;
     }
 
-    public Long getId() {
-        return id;
+    public void setMealPlan(MealPlan mealPlan) {
+        this.mealPlan = mealPlan;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 }

@@ -1,6 +1,7 @@
 package smart_meal_planner.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smart_meal_planner.model.UserCreatedRecipe;
 import smart_meal_planner.service.UserCreatedRecipeService;
@@ -15,13 +16,21 @@ public class UserCreatedRecipeController {
     @Autowired
     private UserCreatedRecipeService service;
 
+    // @PostMapping
+    // public UserCreatedRecipe addUserCreatedRecipe(@RequestBody UserCreatedRecipe recipe) {
+    //     System.out.println("Payload received: " + recipe);
+    //     System.out.println("UserId type: " + (recipe.getUserId() != null ? recipe.getUserId().getClass().getName() : "null"));
+    //     return service.saveUserCreatedRecipe(recipe);
+    // }
+
     @PostMapping
-    public UserCreatedRecipe addUserCreatedRecipe(@RequestBody UserCreatedRecipe recipe) {
-        return service.saveUserCreatedRecipe(recipe);
+    public ResponseEntity<UserCreatedRecipe> addUserCreatedRecipe(@RequestBody UserCreatedRecipe recipe) {
+        UserCreatedRecipe saved = service.saveUserCreatedRecipe(recipe);
+        return ResponseEntity.ok(saved);
     }
 
-    @GetMapping("/{userId}")
-    public List<UserCreatedRecipe> getUserCreatedRecipes(@PathVariable Long userId) {
+    @GetMapping("/{id}")
+    public List<UserCreatedRecipe> getUserCreatedRecipes(@PathVariable("id") Long userId) {
         return service.getUserCreatedRecipesByUserId(userId);
     }
-}
+ }
