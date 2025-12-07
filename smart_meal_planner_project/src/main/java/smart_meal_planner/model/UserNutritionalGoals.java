@@ -1,49 +1,45 @@
 package smart_meal_planner.model;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "user_nutrition_goals")
 public class UserNutritionalGoals {
-    
+
     @Id
-    private Long uid; 
+    private Long uid;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name="uid")
-    private User user; 
-
-    //prioritized goals - will receiver higher scoring 
-    @Column(nullable = true)
-    private double dailyCaloriesGoal; 
-     
-    @Column(nullable = true)
-    private double dailyProteinGoal; 
-    
-    @Column(nullable = true)
-    private double dailyFatGoal; 
+    @JoinColumn(name = "uid")
+    private User user;
 
     @Column(nullable = true)
-    private double dailyCarbohydratesGoal; 
-
-    //will be scored less in meal plan generation
-    @Column(nullable = true)
-    private double dailySaturatedFatGoal; 
+    private double dailyCaloriesGoal;
 
     @Column(nullable = true)
-    private double dailySugarGoal; 
+    private double dailyProteinGoal;
 
     @Column(nullable = true)
-    private double dailyCholesterolGoal; 
+    private double dailyFatGoal;
 
     @Column(nullable = true)
-    private double dailySodiumGoal; 
+    private double dailyCarbohydratesGoal;
 
-    //connect to user via email
+    @Column(nullable = true)
+    private double dailySaturatedFatGoal;
+
+    @Column(nullable = true)
+    private double dailySugarGoal;
+
+    @Column(nullable = true)
+    private double dailyCholesterolGoal;
+
+    @Column(nullable = true)
+    private double dailySodiumGoal;
+
     @Column(nullable = false, length = 255)
     private String email;
-
-
 
     public Long getUid() {
         return uid;
@@ -133,5 +129,20 @@ public class UserNutritionalGoals {
         this.email = email;
     }
 
+    // Convenience getters used by MealPlanService
+    public double getCalories() {
+        return dailyCaloriesGoal;
+    }
 
+    public double getProtein() {
+        return dailyProteinGoal;
+    }
+
+    public double getFat() {
+        return dailyFatGoal;
+    }
+
+    public double getCarbs() {
+        return dailyCarbohydratesGoal;
+    }
 }

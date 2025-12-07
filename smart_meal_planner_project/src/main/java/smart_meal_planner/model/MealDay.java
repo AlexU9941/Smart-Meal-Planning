@@ -11,7 +11,7 @@ public class MealDay {
     private Long id;
 
     @Column(name = "day")
-    private String day;   // <-- REQUIRED
+    private String day;
 
     @ManyToOne
     @JoinColumn(name = "breakfast_id")
@@ -29,7 +29,6 @@ public class MealDay {
     @JoinColumn(name = "meal_plan_id")
     private MealPlan mealPlan;
 
-    // ---------- GETTERS ----------
     public Long getId() {
         return id;
     }
@@ -54,7 +53,6 @@ public class MealDay {
         return mealPlan;
     }
 
-    // ---------- SETTERS ----------
     public void setId(Long id) {
         this.id = id;
     }
