@@ -19,9 +19,6 @@ export default function GenerateMealPlan() {
   const [message, setMessage] = useState("");
   const [clickedMeal, setClickedMeal] = useState(null);
 
-  /** ----------------------------------------
-   *  Load saved plan on page open
-   * ---------------------------------------- */
   useEffect(() => {
     const saved = localStorage.getItem("weeklyMealPlan");
     if (saved) {
@@ -37,7 +34,6 @@ export default function GenerateMealPlan() {
     }
   }, []);
 
-  /** Safe JSON handler */
   const safeJson = async (response) => {
     try {
       return await response.json();
@@ -47,19 +43,12 @@ export default function GenerateMealPlan() {
     }
   };
 
-  /** ----------------------------------------
-   *  Generate new weekly meal plan
-   * ---------------------------------------- */
   const generate = async () => {
     try {
       const response = await fetch("http://localhost:8080/meal-plans/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ingredients: [],
-          budget: 250,
-          userId: userId
-        })
+        body: JSON.stringify({ ingredients: [], budget: 250, userId })
       });
 
       const data = await safeJson(response);
@@ -78,7 +67,7 @@ export default function GenerateMealPlan() {
       }));
 
       setPlan(formatted);
-      localStorage.setItem("weeklyMealPlan", JSON.stringify(formatted)); // SAVE PLAN
+      localStorage.setItem("weeklyMealPlan", JSON.stringify(formatted));
       setMessage("Meal plan loaded.");
     } catch (err) {
       console.error("Error generating:", err);
@@ -86,16 +75,12 @@ export default function GenerateMealPlan() {
     }
   };
 
-  /** ----------------------------------------
-   *  Request alternative meal
-   * ---------------------------------------- */
   const requestAlternative = async (dayId, mealType) => {
     try {
       const res = await fetch(
         `http://localhost:8080/meal-plans/alternative?dayId=${dayId}&mealType=${mealType}`,
         { method: "POST" }
       );
-
       const updated = await safeJson(res);
       if (!updated) return;
 
@@ -103,8 +88,7 @@ export default function GenerateMealPlan() {
         const newPlan = prev.map((d) =>
           d.dayId === dayId ? { ...d, [mealType]: updated } : d
         );
-
-        localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan)); // SAVE UPDATED PLAN
+        localStorage.setItem("weeklyMealPlan", JSON.stringify(newPlan));
         return newPlan;
       });
 
@@ -121,9 +105,6 @@ export default function GenerateMealPlan() {
     return null;
   };
 
-  /** ----------------------------------------
-   *  COPY link to clipboard (Share Icon button)
-   * ---------------------------------------- */
   const shareRecipe = (url) => {
     navigator.clipboard.writeText(url);
     alert("Recipe link copied!");
@@ -159,6 +140,12 @@ export default function GenerateMealPlan() {
         ))}
       </div>
 
+      {/* --------------------- MODAL ---------------------- */}
+      {clickedMeal && (
+        <div className="modal-overlay" onClick={() => setClickedMeal(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>{clickedMeal.title}</h3>
+
             {clickedMeal.image && (
               <img
                 src={clickedMeal.image}
@@ -175,7 +162,6 @@ export default function GenerateMealPlan() {
               </p>
             )}
 
-            {/* SHARE BUTTON */}
             {clickedMeal.sourceUrl && (
               <button
                 className="share-button"
@@ -185,7 +171,6 @@ export default function GenerateMealPlan() {
               </button>
             )}
 
-            {/* Alternative meal */}
             <button
               onClick={() => {
                 const parentDay = plan.find((d) =>
@@ -204,8 +189,10 @@ export default function GenerateMealPlan() {
 
             <button className="close-btn" onClick={() => setClickedMeal(null)}>Close</button>
           </div>
-        
-      )};
- 
+        </div>
+      )}
+    </div>
+  );
+}
 
 
